@@ -1,3 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zonely - Play Now</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    
+    <script>
+        // This line fixes the "exports is not defined" error
+        window.exports = {};
+        window.module = {};
+    </script>
+    <style>
+        body { background-color: #08080d; color: white; margin: 0; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // Destructure hooks so you don't need 'React.' prefix
+        const { useState, useEffect, useRef, useCallback, useMemo } = React;
+        const { Search, Gamepad2, Trophy, Star, Clock, Flame, Users, ChevronRight, ChevronLeft, Play, Info, Share2, Heart, Maximize2, X, Menu } = LucideReact;
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
  
 // ─── PROGRAMMATIC GAME DATABASE (1200+ games) ─────────────────────────────
@@ -553,4 +581,12 @@ export default function Zonely(){
     </div></div>}
   </div></>);
 }
+     // 1. REMOVE the "export default Zonely" line if it exists in your code.
+        
+        // 2. Render the component
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Zonely />);
+    </script>
+</body>
+</html>
  
