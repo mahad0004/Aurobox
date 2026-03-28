@@ -1,35 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zonely - Game Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/lucide-react@latest"></script>
-    <style>
-        body { margin: 0; background-color: #08080d; color: white; }
-    </style>
-</head>
-<body>
-    <div id="root"></div>
-    <script type="text/babel">
-        // Global variables for the browser
-        const { useState, useEffect, useRef, useCallback, useMemo } = React;
-        const { 
-            Search, Gamepad2, Trophy, Star, Clock, Flame, Users, 
-            ChevronRight, ChevronLeft, Play, Info, Share2, Heart, 
-            Maximize2, X, Menu, ExternalLink, Filter 
-        } = LucideReact;
-
-        /* IMPORTANT: When you paste your code below, 
-           DELETE the line that looks like:
-        
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 // ─── PROGRAMMATIC GAME DATABASE (1200+ games) ─────────────────────────────
+
 const BASE_GAMES = [
   {t:"Bloxd.io",c:["io","mp","tp","ft"],tg:["minecraft","block"],th:"bnz5l5c4fmgp8c26x7kldqnx30z10g33",u:"https://bloxd.io/",d:"Multiplayer block-building game.",dv:"Arthur",y:2022,tc:"WebGL",ct:"WASD move, Mouse look"},
   {t:"Hexanaut.io",c:["io","mp","ft"],tg:["territory","capture"],th:"pq4c7cg49uyq7x66z8p3w0j1opv5t6e2",u:"https://hexanaut.io/",d:"Capture territory by drawing lines.",dv:"Exodragon Games",y:2022,tc:"HTML5",ct:"Mouse move and draw"},
@@ -83,6 +55,7 @@ function generateDB() {
       url: g.u, desc: g.d, dev: g.dv, yr: g.y, tech: g.tc, ctrl: g.ct
     });
   });
+
   // Generate games from templates
   const thumbPool = [
     "bnz5l5c4fmgp8c26x7kldqnx30z10g33","pq4c7cg49uyq7x66z8p3w0j1opv5t6e2",
@@ -157,62 +130,77 @@ const CATS=[
 ];
 
 const Logo=({s=32})=>(
-<svg width={s} height={s} viewBox="0 0 100 100" fill="none"><g strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"><path d="M20 30 L50 60 L80 30" stroke="white"/><path d="M20 70 L50 40 L80 70" stroke="#a78bfa"/></g></svg>);
+  <svg width={s} height={s} viewBox="0 0 100 100" fill="none"><g strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"><path d="M20 30 L50 60 L80 30" stroke="white"/><path d="M20 70 L50 40 L80 70" stroke="#a78bfa"/></g></svg>
+);
 
-const I=({n,s=20,c="currentColor"})=>{const m={
-  star:<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>,
-  trophy:<><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></>,
-  users:<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
-  flame:<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>,
-  handshake:<><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.68.05l2.37-1.05a1 1 0 0 1 1.36 1.36l-1.05 2.37a2 2 0 0 0 .05 1.68l.28.47a5.79 5.79 0 0 1-.87 7.06L18 20.14"/><path d="M9.19 14.37a1 1 0 1 0-3 3L8 19.19"/><path d="M3.84 6.37a1 1 0 0 1 1.36-1.36l2.37 1.05a2 2 0 0 0 1.68-.05l.47-.28"/></>,
-  sparkle:<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></>,
-  car:<><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></>,
-  crosshair:<><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></>,
-  puzzle:<path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/>,
-  compass:<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>,
-  pointer:<><path d="M22 14a8 8 0 0 1-8 8"/><path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/><path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 16"/></>,
-  medal:<><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></>,
-  globe:<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>,
-  broadcast:<><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></>,
-  zap:<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>,
-  monitor:<><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></>,
-  swords:<><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><line x1="19" y1="21" x2="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" y1="14" x2="9" y2="18"/><line x1="7" y1="17" x2="4" y2="20"/><line x1="3" y1="19" x2="5" y2="21"/></>,
-  search:<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>,
-  x:<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>,
-  chevronLeft:<polyline points="15 18 9 12 15 6"/>,chevronRight:<polyline points="9 6 15 12 9 18"/>,
-  heart:<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>,
-  heartFilled:<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" fill="currentColor"/>,
-  thumbsUp:<><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></>,
-  share:<><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></>,
-  gamepad:<><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258A4 4 0 0 0 17.32 5z"/></>,
-  bell:<><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></>,
-  home:<><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>,
-  arrowLeft:<><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></>,
-  maximize:<><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></>,
-  play:<polygon points="5 3 19 12 5 21 5 3"/>,
-  user:<><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>,
-  shrink:<><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></>,
-  trending:<><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></>,
-  clock:<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
-  google:<><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" stroke="none"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" stroke="none"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" stroke="none"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" stroke="none"/></>,
-  settings:<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></>,
-  logout:<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>,
-  menu:<><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></>,
-};return <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{m[n]||null}</svg>};
+const I=({n,s=20,c="currentColor"})=>{
+  const m={
+    star:<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>,
+    trophy:<><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></>,
+    users:<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
+    flame:<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>,
+    handshake:<><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.68.05l2.37-1.05a1 1 0 0 1 1.36 1.36l-1.05 2.37a2 2 0 0 0 .05 1.68l.28.47a5.79 5.79 0 0 1-.87 7.06L18 20.14"/><path d="M9.19 14.37a1 1 0 1 0-3 3L8 19.19"/><path d="M3.84 6.37a1 1 0 0 1 1.36-1.36l2.37 1.05a2 2 0 0 0 1.68-.05l.47-.28"/></>,
+    sparkle:<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></>,
+    car:<><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></>,
+    crosshair:<><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></>,
+    puzzle:<path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/>,
+    compass:<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>,
+    pointer:<><path d="M22 14a8 8 0 0 1-8 8"/><path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/><path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 16"/></>,
+    medal:<><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></>,
+    globe:<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>,
+    broadcast:<><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></>,
+    zap:<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>,
+    monitor:<><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></>,
+    swords:<><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><line x1="19" y1="21" x2="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" y1="14" x2="9" y2="18"/><line x1="7" y1="17" x2="4" y2="20"/><line x1="3" y1="19" x2="5" y2="21"/></>,
+    search:<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>,
+    x:<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>,
+    chevronLeft:<polyline points="15 18 9 12 15 6"/>,
+    chevronRight:<polyline points="9 6 15 12 9 18"/>,
+    heart:<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>,
+    heartFilled:<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" fill="currentColor"/>,
+    thumbsUp:<><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></>,
+    share:<><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></>,
+    gamepad:<><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258A4 4 0 0 0 17.32 5z"/></>,
+    bell:<><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></>,
+    home:<><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>,
+    arrowLeft:<><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></>,
+    maximize:<><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></>,
+    play:<polygon points="5 3 19 12 5 21 5 3"/>,
+    user:<><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>,
+    shrink:<><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></>,
+    trending:<><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></>,
+    clock:<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
+    google:<><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" stroke="none"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" stroke="none"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" stroke="none"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" stroke="none"/></>,
+    settings:<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></>,
+    logout:<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>,
+    menu:<><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></>,
+  };
+  return <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{m[n]||null}</svg>
+};
 
-const CSS=`@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+const CSS=`
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 *{margin:0;padding:0;box-sizing:border-box}
+
 :root{--b0:#08080d;--b1:#0e0e16;--b2:#161622;--b3:#111119;--bh:#1c1c2e;--p:#7c3aed;--pl:#a78bfa;--pd:#5b21b6;--pg:rgba(124,58,237,.25);--ps:rgba(124,58,237,.08);--t1:#eaeaf2;--t2:#8888a4;--t3:#505068;--bd:rgba(255,255,255,.05);--sc:72px;--se:240px;--hh:56px}
+
 html,body,#root{height:100%;overflow:hidden}
+
 body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webkit-font-smoothing:antialiased}
+
 ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+
 .Z{display:flex;height:100vh;height:100dvh;overflow:hidden}
+
 .M{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
 .C{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
 
 /* Mobile menu */
 .mob-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;backdrop-filter:blur(4px)}
 .mob-sb{position:fixed;left:0;top:0;bottom:0;width:280px;background:var(--b1);z-index:999;overflow-y:auto;animation:slR .25s ease;border-right:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom)}
+
 @keyframes slR{from{transform:translateX(-100%)}to{transform:translateX(0)}}
 
 /* Sidebar desktop */
@@ -223,17 +211,21 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 .Sn{font-size:20px;font-weight:800;letter-spacing:-.5px;white-space:nowrap;opacity:0;transition:opacity .25s}
 .S:hover .Sn{opacity:1}.Sn span{color:var(--pl)}
 .mob-sb .Sn{opacity:1}
+
 .Sb{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 0 16px}
 .Sla{padding:16px 0 6px 20px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);white-space:nowrap;opacity:0;transition:opacity .25s}
 .S:hover .Sla{opacity:1}.mob-sb .Sla{opacity:1}
+
 .Si{display:flex;align-items:center;gap:12px;height:42px;padding:0 14px 0 20px;cursor:pointer;transition:all .15s;white-space:nowrap;color:var(--t2);position:relative;margin:1px 0}
 .Si:hover{background:var(--ps);color:var(--t1)}.Si.on{color:var(--pl);background:var(--ps)}
 .Si.on::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;background:var(--p);border-radius:0 4px 4px 0}
 .Sic{width:20px;height:20px;min-width:20px;display:flex;align-items:center;justify-content:center;transition:transform .15s}
 .Si:hover .Sic{transform:scale(1.15)}
+
 .Stx{font-size:13px;font-weight:500;opacity:0;transition:opacity .25s;overflow:hidden}
 .S:hover .Stx{opacity:1}.mob-sb .Stx{opacity:1}
 .Sdv{height:1px;background:var(--bd);margin:6px 16px}
+
 .Si[data-t]::after{content:attr(data-t);position:absolute;left:calc(var(--sc)+6px);top:50%;transform:translateY(-50%);padding:4px 10px;background:#1a1a2e;border:1px solid var(--bd);border-radius:6px;font-size:11px;font-weight:500;color:var(--t1);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,.5)}
 .S:not(:hover) .Si:hover::after{opacity:1}
 
@@ -243,16 +235,19 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 .H-logo{display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0;margin-right:4px}
 .H-logo-txt{font-size:18px;font-weight:800;letter-spacing:-.5px;white-space:nowrap}
 .H-logo-txt span{color:var(--pl)}
+
 .Hs{flex:1;max-width:500px;position:relative}
 .Hs input{width:100%;height:40px;background:var(--b2);border:1px solid var(--bd);border-radius:20px;padding:0 16px 0 40px;color:var(--t1);font-family:inherit;font-size:13px;outline:none;transition:border .15s,box-shadow .15s}
 .Hs input:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pg)}
 .Hs input::placeholder{color:var(--t3)}
 .Hsi{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t3)}
+
 .Sdd{position:absolute;top:calc(100%+6px);left:0;right:0;background:var(--b1);border:1px solid var(--bd);border-radius:10px;max-height:380px;overflow-y:auto;z-index:200;box-shadow:0 16px 48px rgba(0,0,0,.6)}
 .Sri{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;transition:background .15s}
 .Sri:hover{background:var(--bh)}
 .Srt{width:48px;height:36px;border-radius:6px;object-fit:cover;background:var(--b2)}
 .Srn{font-size:13px;font-weight:500}.Src{font-size:11px;color:var(--t3);margin-top:1px}
+
 .Ha{display:flex;align-items:center;gap:2px;flex-shrink:0}
 .Hb{width:40px;height:40px;border-radius:10px;background:transparent;border:none;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;position:relative}
 .Hb:hover{background:var(--b2);color:var(--pl)}.Hb.on{color:var(--p)}
@@ -270,6 +265,7 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 .sec{padding:20px 0 8px}.sec-h{padding:0 16px 12px}.sec-t{font-size:17px;font-weight:700}
 .rw{position:relative;padding:0 16px}.rw:hover .arr{opacity:1}
 .rl{display:flex;gap:12px;overflow-x:auto;scroll-behavior:smooth;padding-bottom:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.rl::-webkit-scrollbar{display:none}
+
 .arr{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.9);border:1px solid var(--bd);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;opacity:0;transition:all .15s}
 .arr:hover{background:var(--p);transform:translateY(-50%) scale(1.08)}
 .arr.l{left:4px}.arr.r{right:4px}
@@ -277,14 +273,20 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 /* Card */
 .cd{flex-shrink:0;width:170px;cursor:pointer;position:relative;border-radius:10px;overflow:hidden;background:var(--b3);transition:transform .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
 .cd:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 32px rgba(0,0,0,.4),0 0 0 1px var(--pg);z-index:5}
+
 @media(hover:none){.cd:hover{transform:none;box-shadow:none}.cd:active{transform:scale(.97)}}
+
 .cd-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:linear-gradient(135deg,#16162a,#2d1b69)}
 .cd-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 40%,transparent 100%);opacity:0;transition:opacity .2s;display:flex;flex-direction:column;justify-content:flex-end;padding:12px}
 .cd:hover .cd-ov{opacity:1}
+
 @media(hover:none){.cd .cd-ov{opacity:1;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%)}}
+
 .cd-pl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;opacity:0;transition:all .2s;box-shadow:0 4px 20px var(--pg)}
 .cd:hover .cd-pl{opacity:1}
+
 @media(hover:none){.cd .cd-pl{width:36px;height:36px;opacity:.9}}
+
 .cd-n{font-size:12px;font-weight:600;color:white}.cd-tg{font-size:10px;color:var(--t3);margin-top:1px}
 .cd-b{padding:6px 8px}.cd-bn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
@@ -294,22 +296,28 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 /* Game Page */
 .gp{display:flex;flex-direction:column;min-height:100%;animation:fu .3s ease}
 @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
 .gp-t{display:flex}.gp-ad{width:140px;flex-shrink:0;padding:12px;position:sticky;top:0;height:fit-content;align-self:flex-start}
 .ad-p{width:100px;height:280px;background:var(--b2);border-radius:10px;border:1px dashed var(--bd);display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:10px;writing-mode:vertical-rl}
+
 .gp-c{flex:1;min-width:0;padding:12px}
 .gp-if{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;position:relative}
 .gp-if iframe{width:100%;height:100%;border:none}
 .gp-if.fs{position:fixed;inset:0;z-index:9999;border-radius:0;aspect-ratio:unset}
+
 .gp-ac{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .gb{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--b2);border:1px solid var(--bd);border-radius:20px;color:var(--t1);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all .15s}
 .gb:hover{background:var(--ps);border-color:var(--p);color:var(--pl)}.gb.on{color:var(--p);border-color:var(--p);background:var(--ps)}
+
 .gd{margin-top:20px;padding:20px;background:var(--b1);border-radius:12px;border:1px solid var(--bd)}
 .gd h2{font-size:20px;font-weight:700;margin-bottom:10px}
 .gd p{font-size:13px;color:var(--t2);line-height:1.7}
+
 .gm{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px}
 .gmi{padding:10px 14px;background:var(--b2);border-radius:10px}
 .gml{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
 .gmv{font-size:13px;font-weight:600}
+
 .gs{width:260px;flex-shrink:0;padding:12px;overflow-y:auto;max-height:calc(100vh - var(--hh))}
 .smt{font-size:14px;font-weight:700;margin-bottom:12px;padding:0 4px}
 .smi{display:flex;gap:8px;padding:6px;border-radius:10px;cursor:pointer;transition:background .15s;margin-bottom:4px}
@@ -321,11 +329,13 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 /* Popups */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;animation:fi .2s ease;backdrop-filter:blur(4px);padding:16px}
 @keyframes fi{from{opacity:0}to{opacity:1}}
+
 .pp{background:var(--b1);border:1px solid var(--bd);border-radius:14px;padding:24px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto;animation:si .25s ease}
 @keyframes si{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
 .pp-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .pp-h h3{font-size:17px;font-weight:700}
 .xb{background:none;border:none;color:var(--t2);cursor:pointer;padding:4px}.xb:hover{color:var(--t1)}
+
 .bk{display:flex;align-items:center;gap:6px;padding:8px 16px;background:none;border:none;color:var(--t2);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;transition:color .15s}
 .bk:hover{color:var(--pl)}
 
@@ -378,19 +388,35 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 }
 `;
 
-const Row=({title,games,onSelect,count})=>{const r=useRef(null);const sc=d=>{if(r.current)r.current.scrollBy({left:d*500,behavior:"smooth"})};if(!games.length)return null;return(
-<div className="sec"><div className="sec-h"><div className="sec-t">{title}<span className="gc">{count||games.length}</span></div></div><div className="rw">
-<button className="arr l" onClick={()=>sc(-1)}><I n="chevronLeft" s={16}/></button>
-<div className="rl" ref={r}>{games.map(g=><Card key={g.id} g={g} onClick={()=>onSelect(g)}/>)}</div>
-<button className="arr r" onClick={()=>sc(1)}><I n="chevronRight" s={16}/></button>
-</div></div>)};
+const Row=({title,games,onSelect,count})=>{
+  const r=useRef(null);
+  const sc=d=>{if(r.current)r.current.scrollBy({left:d*500,behavior:"smooth"})};
+  if(!games.length)return null;
+  return(
+    <div className="sec">
+      <div className="sec-h">
+        <div className="sec-t">{title}<span className="gc">{count||games.length}</span></div>
+      </div>
+      <div className="rw">
+        <button className="arr l" onClick={()=>sc(-1)}><I n="chevronLeft" s={16}/></button>
+        <div className="rl" ref={r}>{games.map(g=><Card key={g.id} g={g} onClick={()=>onSelect(g)}/>)}</div>
+        <button className="arr r" onClick={()=>sc(1)}><I n="chevronRight" s={16}/></button>
+      </div>
+    </div>
+  )
+};
 
 const Card=({g,onClick})=>(
-<div className="cd" onClick={onClick}>
-<img className="cd-img" src={g.thumb} alt={g.title} loading="lazy" onError={e=>{e.target.src="";e.target.style.background="linear-gradient(135deg,#16162a,#5b21b6)"}}/>
-<div className="cd-ov"><div className="cd-pl"><I n="play" s={18} c="white"/></div><div className="cd-n">{g.title}</div><div className="cd-tg">{g.cat[0]}</div></div>
-<div className="cd-b"><div className="cd-bn">{g.title}</div></div>
-</div>);
+  <div className="cd" onClick={onClick}>
+    <img className="cd-img" src={g.thumb} alt={g.title} loading="lazy" onError={e=>{e.target.src="";e.target.style.background="linear-gradient(135deg,#16162a,#5b21b6)"}}/>
+    <div className="cd-ov">
+      <div className="cd-pl"><I n="play" s={18} c="white"/></div>
+      <div className="cd-n">{g.title}</div>
+      <div className="cd-tg">{g.cat[0]}</div>
+    </div>
+    <div className="cd-b"><div className="cd-bn">{g.title}</div></div>
+  </div>
+);
 
 export default function Zonely(){
   const[pg,sP]=useState("home");
@@ -410,184 +436,242 @@ export default function Zonely(){
   const[srPage,sSrPage]=useState(false);
   const[srQ,sSrQ]=useState("");
   const[mobMenu,sMob]=useState(false);
-  const sRef=useRef(null);const cRef=useRef(null);
-
+  
+  const sRef=useRef(null);
+  const cRef=useRef(null);
+  
   const open=useCallback(g=>{sG(g);sP("game");sSf(false);sSrPage(false);sMob(false);if(cRef.current)cRef.current.scrollTop=0},[]);
   const home=useCallback(()=>{sP("home");sG(null);sFs(false);sSrPage(false);sMob(false)},[]);
   const tF=useCallback(g=>{sF(p=>p.find(f=>f.id===g.id)?p.filter(f=>f.id!==g.id):[...p,g])},[]);
   const tL=useCallback(id=>{sLk(p=>({...p,[id]:!p[id]}))},[]);
   const isF=useCallback(id=>fav.some(f=>f.id===id),[fav]);
-
-  const res=useMemo(()=>{const s=(srPage?srQ:q).toLowerCase().trim();if(!s)return[];return DB.filter(g=>g.title.toLowerCase().includes(s)||g.tags.some(t=>t.includes(s))||g.cat.some(c=>c.includes(s))||g.desc.toLowerCase().includes(s)).slice(0,200)},[q,srQ,srPage]);
+  
+  const res=useMemo(()=>{
+    const s=(srPage?srQ:q).toLowerCase().trim();
+    if(!s)return[];
+    return DB.filter(g=>g.title.toLowerCase().includes(s)||g.tags.some(t=>t.includes(s))||g.cat.some(c=>c.includes(s))||g.desc.toLowerCase().includes(s)).slice(0,200)
+  },[q,srQ,srPage]);
+  
   const dropRes=useMemo(()=>res.slice(0,8),[res]);
-
   const getG=useCallback((id,max=30)=>DB.filter(g=>g.cat.includes(id)).slice(0,max),[]);
-  const sim=useMemo(()=>{if(!gm)return[];return DB.filter(g=>g.id!==gm.id&&g.cat.some(c=>gm.cat.includes(c))).slice(0,20)},[gm]);
-
+  const sim=useMemo(()=>{
+    if(!gm)return[];
+    return DB.filter(g=>g.id!==gm.id&&g.cat.some(c=>gm.cat.includes(c))).slice(0,20)
+  },[gm]);
+  
   const homeRows=[{id:"top-picks",l:"Top Picks for You"},{id:"featured",l:"Featured Games"},{id:"cant-stop",l:"Can't Stop Playing"},{id:"new",l:"New Games"},{id:"shooting",l:"Shooting Games"},{id:"action",l:"Action Games"},{id:"driving",l:"Driving Games"},{id:"puzzle",l:"Puzzle Games"},{id:"adventure",l:"Adventure"},{id:"sports",l:"Sports Games"},{id:"io",l:"IO Games"}];
-
+  
   const doSearch=()=>{if(q.trim()){sSrQ(q);sSrPage(true);sP("search");sQf(false);if(cRef.current)cRef.current.scrollTop=0}};
-
-  useEffect(()=>{const h=e=>{if(sRef.current&&!sRef.current.contains(e.target))sQf(false);const hp=document.querySelector('.hp-wrap');if(hp&&!hp.contains(e.target)){sProf(false);sNotif(false)}};document.addEventListener("mousedown",h);return()=>document.removeEventListener("mousedown",h)},[]);
-
+  
+  useEffect(()=>{
+    const h=e=>{
+      if(sRef.current&&!sRef.current.contains(e.target))sQf(false);
+      const hp=document.querySelector('.hp-wrap');
+      if(hp&&!hp.contains(e.target)){sProf(false);sNotif(false)}
+    };
+    document.addEventListener("mousedown",h);
+    return()=>document.removeEventListener("mousedown",h)
+  },[]);
+  
   const signIn=()=>{sU({name:"Player",email:"player@gmail.com",initial:"P"});sLogin(false)};
   const signOut=()=>{sU(null);sProf(false)};
   const isGrid=cat!=="all"&&pg==="home";
   const gridGames=isGrid?DB.filter(g=>g.cat.includes(cat)):[];
   const gridLabel=CATS.find(c=>c.id===cat)?.label||"";
-
+  
   const SidebarContent=({mobile})=>(
     <>
-      <div className="St" onClick={()=>{sC("all");home()}}><div className="Sl"><Logo s={24}/></div><div className="Sn">Zone<span>ly</span></div></div>
+      <div className="St" onClick={()=>{sC("all");home()}}>
+        <div className="Sl"><Logo s={24}/></div>
+        <div className="Sn">Zone<span>ly</span></div>
+      </div>
       <div className="Sb">
         <div className="Sla">Navigate</div>
         {[{id:"all",n:"Home",ic:"home"},{id:"top-picks",n:"Trending",ic:"trending"},{id:"new",n:"Recently Added",ic:"clock"}].map(x=>
           <div key={x.id} className={`Si ${(x.id==="all"?(pg==="home"&&cat==="all"):cat===x.id&&pg==="home")?"on":""}`} data-t={x.n} onClick={()=>{sC(x.id==="all"?"all":x.id);sP("home");sG(null);sSrPage(false);sMob(false);if(cRef.current)cRef.current.scrollTop=0}}>
-            <div className="Sic"><I n={x.ic} s={18} c={(x.id==="all"?(pg==="home"&&cat==="all"):cat===x.id)?"#a78bfa":"#8888a4"}/></div><span className="Stx">{x.n}</span>
+            <div className="Sic"><I n={x.ic} s={18} c={(x.id==="all"?(pg==="home"&&cat==="all"):cat===x.id)?"#a78bfa":"#8888a4"}/></div>
+            <span className="Stx">{x.n}</span>
           </div>
         )}
         <div className="Sdv"/>
         <div className="Sla">Categories</div>
-        {CATS.map(c=><div key={c.id} className={`Si ${cat===c.id&&pg==="home"?"on":""}`} data-t={c.label} onClick={()=>{sC(c.id);sP("home");sG(null);sSrPage(false);sMob(false);if(cRef.current)cRef.current.scrollTop=0}}>
-          <div className="Sic"><I n={c.icon} s={18} c={cat===c.id?"#a78bfa":"#8888a4"}/></div><span className="Stx">{c.label}</span>
-        </div>)}
+        {CATS.map(c=>(
+          <div key={c.id} className={`Si ${cat===c.id&&pg==="home"?"on":""}`} data-t={c.label} onClick={()=>{sC(c.id);sP("home");sG(null);sSrPage(false);sMob(false);if(cRef.current)cRef.current.scrollTop=0}}>
+            <div className="Sic"><I n={c.icon} s={18} c={cat===c.id?"#a78bfa":"#8888a4"}/></div>
+            <span className="Stx">{c.label}</span>
+          </div>
+        ))}
       </div>
     </>
   );
 
-  return(<><style>{CSS}</style><div className="Z">
-    {/* Desktop Sidebar */}
-    <nav className="S"><SidebarContent/></nav>
-
-    {/* Mobile Sidebar */}
-    {mobMenu&&<><div className="mob-ov" onClick={()=>sMob(false)}/><nav className="mob-sb"><SidebarContent mobile/></nav></>}
-
-    <div className="M">
-      <header className="H">
-        <button className="H-menu" onClick={()=>sMob(true)}><I n="menu" s={22}/></button>
-        <div className="H-logo" onClick={()=>{sC("all");home()}}>
-          <div className="Sl"><Logo s={20}/></div>
-          <div className="H-logo-txt">Zone<span>ly</span></div>
-        </div>
-        <div className="Hs" ref={sRef}>
-          <div className="Hsi"><I n="search" s={15}/></div>
-          <input type="text" placeholder="Search games..." value={q} onChange={e=>sQ(e.target.value)} onFocus={()=>sQf(true)} onKeyDown={e=>{if(e.key==="Enter")doSearch()}}/>
-          {qf&&q.trim()&&dropRes.length>0&&!srPage&&(
-            <div className="Sdd">{dropRes.map(g=>(
-              <div key={g.id} className="Sri" onClick={()=>{open(g);sQ("")}}>
-                <img className="Srt" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/>
-                <div style={{flex:1}}><div className="Srn">{g.title}</div><div className="Src">{g.cat.slice(0,2).join(" / ")}</div></div>
+  return(
+    <>
+      <style>{CSS}</style>
+      <div className="Z">
+        {/* Desktop Sidebar */}
+        <nav className="S"><SidebarContent/></nav>
+        
+        {/* Mobile Sidebar */}
+        {mobMenu&&<>
+          <div className="mob-ov" onClick={()=>sMob(false)}/>
+          <nav className="mob-sb"><SidebarContent mobile/></nav>
+        </>}
+        
+        <div className="M">
+          <header className="H">
+            <button className="H-menu" onClick={()=>sMob(true)}><I n="menu" s={22}/></button>
+            <div className="H-logo" onClick={()=>{sC("all");home()}}>
+              <div className="Sl"><Logo s={20}/></div>
+              <div className="H-logo-txt">Zone<span>ly</span></div>
+            </div>
+            
+            <div className="Hs" ref={sRef}>
+              <div className="Hsi"><I n="search" s={15}/></div>
+              <input type="text" placeholder="Search games..." value={q} onChange={e=>sQ(e.target.value)} onFocus={()=>sQf(true)} onKeyDown={e=>{if(e.key==="Enter")doSearch()}}/>
+              {qf&&q.trim()&&dropRes.length>0&&!srPage&&(
+                <div className="Sdd">
+                  {dropRes.map(g=>(
+                    <div key={g.id} className="Sri" onClick={()=>{open(g);sQ("")}}>
+                      <img className="Srt" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/>
+                      <div style={{flex:1}}>
+                        <div className="Srn">{g.title}</div>
+                        <div className="Src">{g.cat.slice(0,2).join(" / ")}</div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="dd-i" style={{borderTop:"1px solid var(--bd)",justifyContent:"center",color:"var(--pl)",fontWeight:600}} onClick={doSearch}>
+                    <I n="search" s={13} c="#a78bfa"/> View all {res.length} results
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="Ha hp-wrap" style={{position:"relative"}}>
+              <button className={`Hb ${sf?"on":""}`} onClick={()=>sSf(!sf)} title="Favorites">
+                <I n={sf?"heartFilled":"heart"} s={18} c={sf?"#7c3aed":undefined}/>
+                {fav.length>0&&<span className="dot"/>}
+              </button>
+              <button className={`Hb ${showNotif?"on":""}`} onClick={()=>{sNotif(!showNotif);sProf(false)}} title="Notifications">
+                <I n="bell" s={18}/>
+                <span className="dot"/>
+              </button>
+              {showNotif&&<div className="dd" style={{right:40}}>
+                <div className="dd-h">Notifications<button className="xb" onClick={()=>sNotif(false)}><I n="x" s={16}/></button></div>
+                <div className="dd-i"><I n="sparkle" s={14} c="#a78bfa"/><span>New games added this week!</span></div>
+                <div className="dd-i"><I n="trophy" s={14} c="#eab308"/><span>Krunker.io is trending</span></div>
+                <div className="dd-i"><I n="flame" s={14} c="#ef4444"/><span>Shell Shockers: new update</span></div>
+              </div>}
+              
+              <button className="Hp" onClick={()=>{if(!user)sLogin(true);else{sProf(!showProf);sNotif(false)}}} title="Profile">
+                {user?user.initial:<I n="user" s={16} c="white"/>}
+              </button>
+              
+              {showProf&&user&&<div className="dd" style={{right:0,minWidth:240}}>
+                <div className="dd-h" style={{gap:10}}>
+                  <div className="g-avatar">{user.initial}</div>
+                  <div>
+                    <div style={{fontWeight:600,fontSize:13}}>{user.name}</div>
+                    <div style={{fontSize:11,color:"var(--t3)"}}>{user.email}</div>
+                  </div>
+                </div>
+                <div className="dd-i" onClick={()=>sProf(false)}><I n="settings" s={14}/> Settings</div>
+                <div className="dd-i" onClick={()=>{sSf(true);sProf(false)}}><I n="heart" s={14}/> Favorites ({fav.length})</div>
+                <div className="dd-i" style={{color:"#ef4444"}} onClick={signOut}><I n="logout" s={14} c="#ef4444"/> Sign Out</div>
+              </div>}
+            </div>
+          </header>
+          
+          <div className="C" ref={cRef}>
+            {pg==="home"&&!isGrid&&cat==="all"&&(
+              <>{homeRows.map(r=><Row key={r.id} title={r.l} games={getG(r.id)} onSelect={open} count={DB.filter(g=>g.cat.includes(r.id)).length}/>)}</>
+            )}
+            
+            {pg==="home"&&isGrid&&(
+              <div className="sr-pg">
+                <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:4}}>
+                  <I n={CATS.find(c=>c.id===cat)?.icon||"star"} s={22} c="#a78bfa"/>
+                  <h2>{gridLabel} Games</h2>
+                  <span className="gc">{gridGames.length}</span>
+                </div>
+                <p>{gridGames.length} games available</p>
+                <div className="grid">{gridGames.slice(0,120).map(g=><Card key={g.id} g={g} onClick={()=>open(g)}/>)}</div>
               </div>
-            ))}
-            <div className="dd-i" style={{borderTop:"1px solid var(--bd)",justifyContent:"center",color:"var(--pl)",fontWeight:600}} onClick={doSearch}>
-              <I n="search" s={13} c="#a78bfa"/> View all {res.length} results
-            </div></div>
-          )}
-        </div>
-        <div className="Ha hp-wrap" style={{position:"relative"}}>
-          <button className={`Hb ${sf?"on":""}`} onClick={()=>sSf(!sf)} title="Favorites"><I n={sf?"heartFilled":"heart"} s={18} c={sf?"#7c3aed":undefined}/>{fav.length>0&&<span className="dot"/>}</button>
-          <button className={`Hb ${showNotif?"on":""}`} onClick={()=>{sNotif(!showNotif);sProf(false)}} title="Notifications"><I n="bell" s={18}/><span className="dot"/></button>
-          {showNotif&&<div className="dd" style={{right:40}}>
-            <div className="dd-h">Notifications<button className="xb" onClick={()=>sNotif(false)}><I n="x" s={16}/></button></div>
-            <div className="dd-i"><I n="sparkle" s={14} c="#a78bfa"/><span>New games added this week!</span></div>
-            <div className="dd-i"><I n="trophy" s={14} c="#eab308"/><span>Krunker.io is trending</span></div>
-            <div className="dd-i"><I n="flame" s={14} c="#ef4444"/><span>Shell Shockers: new update</span></div>
-          </div>}
-          <button className="Hp" onClick={()=>{if(!user)sLogin(true);else{sProf(!showProf);sNotif(false)}}} title="Profile">
-            {user?user.initial:<I n="user" s={16} c="white"/>}
-          </button>
-          {showProf&&user&&<div className="dd" style={{right:0,minWidth:240}}>
-            <div className="dd-h" style={{gap:10}}><div className="g-avatar">{user.initial}</div><div><div style={{fontWeight:600,fontSize:13}}>{user.name}</div><div style={{fontSize:11,color:"var(--t3)"}}>{user.email}</div></div></div>
-            <div className="dd-i" onClick={()=>sProf(false)}><I n="settings" s={14}/> Settings</div>
-            <div className="dd-i" onClick={()=>{sSf(true);sProf(false)}}><I n="heart" s={14}/> Favorites ({fav.length})</div>
-            <div className="dd-i" style={{color:"#ef4444"}} onClick={signOut}><I n="logout" s={14} c="#ef4444"/> Sign Out</div>
-          </div>}
-        </div>
-      </header>
-
-      <div className="C" ref={cRef}>
-        {pg==="home"&&!isGrid&&cat==="all"&&(
-          <>{homeRows.map(r=><Row key={r.id} title={r.l} games={getG(r.id)} onSelect={open} count={DB.filter(g=>g.cat.includes(r.id)).length}/>)}</>
-        )}
-        {pg==="home"&&isGrid&&(
-          <div className="sr-pg">
-            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:4}}><I n={CATS.find(c=>c.id===cat)?.icon||"star"} s={22} c="#a78bfa"/><h2>{gridLabel} Games</h2><span className="gc">{gridGames.length}</span></div>
-            <p>{gridGames.length} games available</p>
-            <div className="grid">{gridGames.slice(0,120).map(g=><Card key={g.id} g={g} onClick={()=>open(g)}/>)}</div>
-          </div>
-        )}
-        {pg==="search"&&srPage&&(
-          <div className="sr-pg">
-            <button className="bk" onClick={()=>{sSrPage(false);sP("home");sC("all")}}><I n="arrowLeft" s={16}/> Back</button>
-            <h2>Results for "{srQ}"</h2><p>{res.length} games found</p>
-            {res.length>0?<div className="grid">{res.map(g=><Card key={g.id} g={g} onClick={()=>open(g)}/>)}</div>
-            :<div style={{textAlign:"center",padding:48,color:"var(--t3)"}}>No games found.</div>}
-          </div>
-        )}
-        {pg==="game"&&gm&&(
-          <div className="gp">
-            <button className="bk" onClick={()=>{if(srPage)sP("search");else home()}}><I n="arrowLeft" s={16}/> Back</button>
-            <div className="gp-t">
-              <div className="gp-ad"><div className="ad-p">AD</div></div>
-              <div className="gp-c">
-                <div className={`gp-if ${fs?"fs":""}`}>
-                  <iframe src={gm.url} title={gm.title} allow="autoplay; fullscreen; gamepad" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"/>
-                  {fs&&<button style={{position:"absolute",top:10,right:10,zIndex:10000}} className="gb" onClick={()=>sFs(false)}><I n="shrink" s={14}/> Exit</button>}
-                </div>
-                <div className="gp-ac">
-                  <button className={`gb ${lk[gm.id]?"on":""}`} onClick={()=>tL(gm.id)}><I n={lk[gm.id]?"heartFilled":"thumbsUp"} s={14} c={lk[gm.id]?"#7c3aed":undefined}/>{lk[gm.id]?"Liked":"Like"}</button>
-                  <button className="gb" onClick={()=>sSc(true)}><I n="gamepad" s={14}/> Controls</button>
-                  <button className={`gb ${isF(gm.id)?"on":""}`} onClick={()=>tF(gm)}><I n={isF(gm.id)?"heartFilled":"heart"} s={14} c={isF(gm.id)?"#7c3aed":undefined}/>{isF(gm.id)?"Saved":"Save"}</button>
-                  <button className="gb" onClick={()=>{if(navigator.share)navigator.share({title:gm.title,url:window.location.href})}}><I n="share" s={14}/> Share</button>
-                  <button className="gb" onClick={()=>sFs(true)}><I n="maximize" s={14}/> Fullscreen</button>
-                </div>
-                <div className="gd"><h2>{gm.title}</h2><p>{gm.desc}</p>
-                  <div className="gm">
-                    <div className="gmi"><div className="gml">Developer</div><div className="gmv">{gm.dev}</div></div>
-                    <div className="gmi"><div className="gml">Released</div><div className="gmv">{gm.yr}</div></div>
-                    <div className="gmi"><div className="gml">Technology</div><div className="gmv">{gm.tech}</div></div>
-                    <div className="gmi"><div className="gml">Category</div><div className="gmv">{gm.cat.slice(0,3).join(", ")}</div></div>
+            )}
+            
+            {pg==="search"&&srPage&&(
+              <div className="sr-pg">
+                <button className="bk" onClick={()=>{sSrPage(false);sP("home");sC("all")}}><I n="arrowLeft" s={16}/> Back</button>
+                <h2>Results for "{srQ}"</h2><p>{res.length} games found</p>
+                {res.length>0?<div className="grid">{res.map(g=><Card key={g.id} g={g} onClick={()=>open(g)}/>)}</div>
+                :<div style={{textAlign:"center",padding:48,color:"var(--t3)"}}>No games found.</div>}
+              </div>
+            )}
+            
+            {pg==="game"&&gm&&(
+              <div className="gp">
+                <button className="bk" onClick={()=>{if(srPage)sP("search");else home()}}><I n="arrowLeft" s={16}/> Back</button>
+                <div className="gp-t">
+                  <div className="gp-ad"><div className="ad-p">AD</div></div>
+                  <div className="gp-c">
+                    <div className={`gp-if ${fs?"fs":""}`}>
+                      <iframe src={gm.url} title={gm.title} allow="autoplay; fullscreen; gamepad" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"/>
+                      {fs&&<button style={{position:"absolute",top:10,right:10,zIndex:10000}} className="gb" onClick={()=>sFs(false)}><I n="shrink" s={14}/> Exit</button>}
+                    </div>
+                    <div className="gp-ac">
+                      <button className={`gb ${lk[gm.id]?"on":""}`} onClick={()=>tL(gm.id)}><I n={lk[gm.id]?"heartFilled":"thumbsUp"} s={14} c={lk[gm.id]?"#7c3aed":undefined}/>{lk[gm.id]?"Liked":"Like"}</button>
+                      <button className="gb" onClick={()=>sSc(true)}><I n="gamepad" s={14}/> Controls</button>
+                      <button className={`gb ${isF(gm.id)?"on":""}`} onClick={()=>tF(gm)}><I n={isF(gm.id)?"heartFilled":"heart"} s={14} c={isF(gm.id)?"#7c3aed":undefined}/>{isF(gm.id)?"Saved":"Save"}</button>
+                      <button className="gb" onClick={()=>{if(navigator.share)navigator.share({title:gm.title,url:window.location.href})}}><I n="share" s={14}/> Share</button>
+                      <button className="gb" onClick={()=>sFs(true)}><I n="maximize" s={14}/> Fullscreen</button>
+                    </div>
+                    <div className="gd">
+                      <h2>{gm.title}</h2><p>{gm.desc}</p>
+                      <div className="gm">
+                        <div className="gmi"><div className="gml">Developer</div><div className="gmv">{gm.dev}</div></div>
+                        <div className="gmi"><div className="gml">Released</div><div className="gmv">{gm.yr}</div></div>
+                        <div className="gmi"><div className="gml">Technology</div><div className="gmv">{gm.tech}</div></div>
+                        <div className="gmi"><div className="gml">Category</div><div className="gmv">{gm.cat.slice(0,3).join(", ")}</div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="gs">
+                    <div className="smt">More Like This</div>
+                    {sim.map(g=>(
+                      <div key={g.id} className="smi" onClick={()=>open(g)}>
+                        <img className="smth" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/>
+                        <div className="smif"><div className="smn">{g.title}</div><div className="smc">{g.cat[0]}</div></div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-              <div className="gs"><div className="smt">More Like This</div>{sim.map(g=>(
-                <div key={g.id} className="smi" onClick={()=>open(g)}>
-                  <img className="smth" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/>
-                  <div className="smif"><div className="smn">{g.title}</div><div className="smc">{g.cat[0]}</div></div>
-                </div>
-              ))}</div>
-            </div>
+            )}
           </div>
-        )}
+        </div>
+        
+        {sf&&<div className="fp">
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
+            <h3 style={{fontSize:16,fontWeight:700}}>My Favorites</h3>
+            <button className="xb" onClick={()=>sSf(false)}><I n="x" s={18}/></button>
+          </div>
+          {fav.length===0?<div style={{textAlign:"center",padding:"40px 16px",color:"var(--t3)"}}><I n="heart" s={36} c="#505068"/><p style={{marginTop:10,fontSize:13}}>No favorites yet</p></div>
+          :fav.map(g=><div key={g.id} className="smi" onClick={()=>{open(g);sSf(false)}}><img className="smth" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/><div className="smif"><div className="smn">{g.title}</div><div className="smc">{g.cat[0]}</div></div></div>)}
+        </div>}
+        
+        {sc&&gm&&<div className="ov" onClick={()=>sSc(false)}><div className="pp" onClick={e=>e.stopPropagation()}>
+          <div className="pp-h"><h3>Controls</h3><button className="xb" onClick={()=>sSc(false)}><I n="x" s={18}/></button></div>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}><I n="gamepad" s={22} c="#7c3aed"/><span style={{fontSize:15,fontWeight:600}}>{gm.title}</span></div>
+          <p style={{fontSize:13,color:"var(--t2)",lineHeight:1.8}}>{gm.ctrl}</p>
+        </div></div>}
+        
+        {showLogin&&<div className="ov" onClick={()=>sLogin(false)}><div className="pp" onClick={e=>e.stopPropagation()} style={{textAlign:"center"}}>
+          <div className="pp-h"><h3>Sign in to Zonely</h3><button className="xb" onClick={()=>sLogin(false)}><I n="x" s={18}/></button></div>
+          <p style={{color:"var(--t2)",fontSize:13,marginBottom:6}}>Save favorites, track progress, and more.</p>
+          <button className="g-btn" onClick={signIn}><I n="google" s={18}/> Continue with Google</button>
+          <p style={{fontSize:11,color:"var(--t3)",marginTop:10}}>By signing in you agree to our Terms</p>
+        </div></div>}
       </div>
-    </div>
-
-    {sf&&<div className="fp">
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}><h3 style={{fontSize:16,fontWeight:700}}>My Favorites</h3><button className="xb" onClick={()=>sSf(false)}><I n="x" s={18}/></button></div>
-      {fav.length===0?<div style={{textAlign:"center",padding:"40px 16px",color:"var(--t3)"}}><I n="heart" s={36} c="#505068"/><p style={{marginTop:10,fontSize:13}}>No favorites yet</p></div>
-      :fav.map(g=><div key={g.id} className="smi" onClick={()=>{open(g);sSf(false)}}><img className="smth" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/><div className="smif"><div className="smn">{g.title}</div><div className="smc">{g.cat[0]}</div></div></div>)}
-    </div>}
-
-    {sc&&gm&&<div className="ov" onClick={()=>sSc(false)}><div className="pp" onClick={e=>e.stopPropagation()}>
-      <div className="pp-h"><h3>Controls</h3><button className="xb" onClick={()=>sSc(false)}><I n="x" s={18}/></button></div>
-      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}><I n="gamepad" s={22} c="#7c3aed"/><span style={{fontSize:15,fontWeight:600}}>{gm.title}</span></div>
-      <p style={{fontSize:13,color:"var(--t2)",lineHeight:1.8}}>{gm.ctrl}</p>
-    </div></div>}
-
-    {showLogin&&<div className="ov" onClick={()=>sLogin(false)}><div className="pp" onClick={e=>e.stopPropagation()} style={{textAlign:"center"}}>
-      <div className="pp-h"><h3>Sign in to Zonely</h3><button className="xb" onClick={()=>sLogin(false)}><I n="x" s={18}/></button></div>
-      <p style={{color:"var(--t2)",fontSize:13,marginBottom:6}}>Save favorites, track progress, and more.</p>
-      <button className="g-btn" onClick={signIn}><I n="google" s={18}/> Continue with Google</button>
-      <p style={{fontSize:11,color:"var(--t3)",marginTop:10}}>By signing in you agree to our Terms</p>
-    </div></div>}
-  </div></>);
+    </>
+  );
 }
-
-// Rendering logic
-        const rootElement = document.getElementById('root');
-        const root = ReactDOM.createRoot(rootElement);
-        // Ensure this matches the name of the main component in your doc
-        root.render(<Zonely />); 
-    </script>
-</body>
-</html>
