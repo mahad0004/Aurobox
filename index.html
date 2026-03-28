@@ -1,3 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Game Website</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #111827; color: white; margin: 0; font-family: sans-serif; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Use React hooks from the global React object
+        const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+        // --- YOUR ORIGINAL CODE STARTS HERE ---
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 // ─── GAME DATABASE ──────────────────────────────────────────────────────────
@@ -477,3 +499,33 @@ export default function Zonely() {
     </div></>
   );
 }
+      // --- YOUR ORIGINAL CODE ENDS HERE ---
+
+        function App() {
+          return (
+            <div className="p-6">
+              <h1 className="text-3xl font-bold mb-6 text-center text-blue-400">Mujtaba's Game Portal</h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {GAME_DATABASE.map(game => (
+                  <div key={game.id} className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform">
+                    <img src={game.thumb} alt={game.title} className="w-full h-40 object-cover" />
+                    <div className="p-4">
+                      <h2 className="text-xl font-bold">{game.title}</h2>
+                      <p className="text-gray-400 text-sm h-12 overflow-hidden">{game.desc}</p>
+                      <a href={game.url} target="_blank" className="mt-4 block text-center bg-blue-600 hover:bg-blue-500 py-2 rounded-lg font-semibold">
+                        Play Now
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        // Final Step: Render the App into the "root" div
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
