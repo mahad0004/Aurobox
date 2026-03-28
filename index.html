@@ -5,17 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zonely - Play Free Online Games</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { margin: 0; padding: 0; background-color: #08080d; }
+        body { margin: 0; padding: 0; background-color: #08080d; color: white; overflow-x: hidden; }
+        /* Prevent layout shift before React loads */
+        #root { min-height: 100vh; }
     </style>
 </head>
 <body>
     <div id="root"></div>
+
     <script type="text/babel">
-        // Your React code starts here
+        // --- PASTE YOUR GOOGLE DOC CODE BELOW THIS LINE ---
+
+        const Zonely = () => {
+            // ... all your code from the doc goes here ...
+            return (
+                <div className="min-h-screen bg-[#08080d] text-white">
+                    <h1 className="text-4xl p-10">Welcome to Zonely</h1>
+                    {/* Rest of your component */}
+                </div>
+            );
+        };
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 // ─── PROGRAMMATIC GAME DATABASE (1200+ games) ─────────────────────────────
@@ -571,7 +585,9 @@ export default function Zonely(){
     </div></div>}
   </div></>);
 }
-        // Rendering the main component
+        // --- PASTE YOUR GOOGLE DOC CODE ABOVE THIS LINE ---
+
+        // 5. THE RENDER COMMAND (Crucial for showing the screen)
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<Zonely />);
     </script>
