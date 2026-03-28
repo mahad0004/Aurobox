@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameHub - Play Free Online Games</title>
+    <title>Zonely - Play Free Online Games</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        body { background-color: #0f172a; color: white; margin: 0; font-family: sans-serif; }
+        body { margin: 0; padding: 0; background-color: #08080d; }
     </style>
 </head>
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        // Paste your JavaScript/React code here
+        // Your React code starts here
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 // ─── PROGRAMMATIC GAME DATABASE (1200+ games) ─────────────────────────────
@@ -571,9 +571,9 @@ export default function Zonely(){
     </div></div>}
   </div></>);
 }
-        // Completing the structure and rendering the app 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
-</script>
+        // Rendering the main component
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Zonely />);
+    </script>
 </body>
 </html>
