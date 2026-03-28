@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-
+ 
 // ─── PROGRAMMATIC GAME DATABASE (1200+ games) ─────────────────────────────
 const BASE_GAMES = [
   {t:"Bloxd.io",c:["io","mp","tp","ft"],tg:["minecraft","block"],th:"bnz5l5c4fmgp8c26x7kldqnx30z10g33",u:"https://bloxd.io/",d:"Multiplayer block-building game.",dv:"Arthur",y:2022,tc:"WebGL",ct:"WASD move, Mouse look"},
@@ -20,7 +20,7 @@ const BASE_GAMES = [
   {t:"Build Royale",c:["sh","mp","io","nw"],tg:["battle royale","build"],th:"h7i1j4k8l2m5n9o3p6q0r4s7t1u5v8w2",u:"https://buildroyale.io/",d:"2D battle royale with building!",dv:"Build Royale",y:2018,tc:"HTML5",ct:"WASD move, Q/E build"},
   {t:"Narrow One",c:["sh","mp","nw","fr"],tg:["archery","bow"],th:"z1a5b8c2d6e9f3g7h0i4j8k1l5m9n2o6",u:"https://narrow.one/",d:"Medieval archery multiplayer.",dv:"Pelican Party",y:2023,tc:"WebGL",ct:"WASD move, Mouse aim"},
 ];
-
+ 
 // Game name templates for generation
 const GAME_NAMES = {
   sh:["Bullet Storm","Pixel Warfare","Sniper Elite 3D","Tank Battle Online","Zombie Shooter","Army Combat","Laser Tag Arena","Space Marines","Gun Master","Warzone Strike","Counter Assault","Phantom Forces","Rapid Fire","Dead Aim","Crossfire Zone","Metal Slug","Heavy Gunner","Storm Ops","Black Ops","Elite Sniper","Mega Shooter","Turret Defense Assault","Neo Combat","Blast Zone","Shadow Strike","Tactical Ops","Night Raid","Alpha Strike","Commando Rush","Fury Fire","Desert Storm","Ice Cold Sniper","Thunder Shot","Gunfire Heroes","Pixel Combat","Battle Arena FPS","Rapid Assault","Urban Warfare","Rooftop Snipers","Militia Wars","Weapon Master","Bullet Hell","Scope Shot","Rifleman","Plasma Burst","Heavy Metal","War Brokers","Blockpost","Venge.io","Deadshot","Mini Militia","Aim Trainer Pro","Recoil","Arsenal","Bullet Force","Forward Assault","Standoff","Critical Strike","Operation Storm","Combat Reloaded","War Attack","Blitz Brigade","Gun Builder","Crossbow Master","Bow Royale","Shell Shock Live","Missile Command","Air Strike","Naval Battle","Submarine Wars","Riot Protocol","Breach Point","Iron Sights","Zero Hour","Sector 7","Red Zone","Kill Chain","Hot Zone","Overwatch Clone","Guardian Force","Pulse Rifle","Ion Cannon","Rail Gun","Gauss Rifle","Blaster Pro","Phaser Tag","Photon Beam","Particle Gun","Wave Cannon","Sonic Blaster","Cryo Gun","Flame Thrower Pro","Acid Spray","Venom Shot","Thorn Cannon","Spike Launcher","Bolt Action","Lever Action","Pump Action","Double Barrel","Sawed Off","Silenced Shot","Suppressed Fire","Ghost Gun","Stealth Kill","Shadow Ops","Covert Strike","Deep Cover","Under Siege","Fortress Assault","Bunker Buster","Trench War","Foxhole","Outpost","Watchtower","Sentry Post","Guard Tower","Pillbox","Firebase","Landing Zone","Drop Zone","Extraction Point","Rally Point","Waypoint","Checkpoint","Safe House","Black Site"],
@@ -34,14 +34,14 @@ const GAME_NAMES = {
   fg:["Street Brawl","Arena Fighter","Ring Warrior","Cage Match","Dojo Master","Kung Fu","Karate Kid","Boxing Champ","MMA Arena","Wrestling Pro","Sumo Slam","Ninja Battle","Samurai Duel","Gladiator","Spartan Fight","Viking War","Knight Combat","Dragon Fist","Tiger Claw","Eagle Strike","Snake Style","Crane Kick","Monkey Form","Praying Mantis","Iron Palm","Steel Fist","Thunder Punch","Lightning Kick","Storm Strike","Flame Punch","Ice Kick","Shadow Fight","Phantom Blow","Ghost Strike","Spirit Fist","Soul Punch","Mind Strike","Force Push","Energy Blast","Power Wave","Chi Master","Ki Warrior","Aura Fighter","Elemental Fist","Nature Strike","Earth Punch","Water Kick","Fire Strike","Wind Blow","Thunder God","Jade Dragon","Crimson Tiger","Azure Phoenix","Golden Turtle","Silver Serpent","Bronze Bull","Copper Hawk","Platinum Wolf","Obsidian Bear","Diamond Lion","Ruby Falcon","Sapphire Panther","Emerald Cobra","Topaz Shark","Amethyst Scorpion","Onyx Rhino","Pearl Crane","Opal Mantis","Garnet Viper","Turquoise Eagle","Coral Monkey","Amber Fox","Ivory Stag","Ebony Raven","Granite Gorilla","Marble Ox","Crystal Lynx","Quartz Badger","Flint Wolverine","Slate Jaguar"],
   io2:["Worms Zone","Zombs.io","Florr.io","Defly.io","Mope.io","Starve.io","Hole.io","Crowd City","Little Big Snake","Wings.io","Brutforce.io","Gats.io","YoHoHo.io","Skribbl.io","Gartic.io","Lordz.io","MooMoo.io","Zombs Royale","Fightz.io","Betrayal.io","Taming.io","Smash.io","Tornado.io","Black Hole.io","Aquapark.io","Snowball.io","Tanks.io","Copter.io","FlyOrDie.io","Wormax.io","Splix.io","Superhex.io","Powerline.io","Curve Fever","Pac-Man.io","Narwhale.io","Devast.io","Bruh.io","Spinz.io","Krew.io","ShellShockers2","EvoWorld","Stabfish","Nightpoint","Bloble.io","Doblons.io","Battledudes.io","Yohoho2","WarScrap","GoBattle","Arras.io","Digdig.io","Gulper.io","Sketchful.io","Poke.io","Oib.io","Massivematch.io","Vertix.io","Raid.land","Minigiants.io","Repuls.io","Moomooio2","Orn.io","Galaxywar.io","Tanksio2","Bumpbattle.io","Biome.io","Cellcraft.io","Stario","Nexus.io","Wavewar.io","Gridland.io","Pixelwar.io","Voxelio","Cubeslam.io","Sphereio","Dotwar.io","Lineio","Arcio","Shapewar.io"],
 };
-
+ 
 const CAT_MAP = {sh:"shooting",ac:"action",pz:"puzzle",dr:"driving",sp:"sports",ad:"adventure",sm:"simulation",cl:"clicker",fg:"fighting",io2:"io",
   io:"io",mp:"multiplayer",tp:"top-picks",ft:"featured",cs:"cant-stop",fr:"friends","2p":"2-player",nw:"new"};
 const CAT_FULL = {sh:"Shooting",ac:"Action",pz:"Puzzle",dr:"Driving",sp:"Sports",ad:"Adventure",sm:"Simulation",cl:"Clicker",fg:"Fighting"};
 const DEVS = ["GameDistribution","Poki","CrazyGames","Y8","Kizi","Miniclip","Addicting Games","Armor Games","Kongregate","Newgrounds","Madpuffers","Voodoo","RHM Interactive","TinyDobbins","Pelican Party","Blue Wizard","MarketJS","Famobi","GamePix","SoftGames","Construct","Phaser Studios","PlayCanvas","PixiJS Games","BabylonJS","ImpactJS","MelonJS","GameSnacks","HTML5 GameDevs","WebGL Studio","Cocos Games","Unity WebGL","Godot Web","Defold Games","GDevelop","Stencyl","Buildbox","GameMaker","Scratch Games","Turbulenz"];
 const DESCS = {sh:"Intense shooting action with multiple weapons and modes.",ac:"Fast-paced action gameplay with exciting challenges.",pz:"Brain-teasing puzzles that test your logic and skill.",dr:"High-speed racing and driving thrills.",sp:"Competitive sports action and athletics.",ad:"Epic adventures through mysterious worlds.",sm:"Build, manage, and simulate real-world scenarios.",cl:"Addictive clicking and idle progression.",fg:"Fierce combat and martial arts battles."};
 const CTRLS = {sh:"WASD move, Mouse aim/shoot, R reload",ac:"Arrow Keys/WASD move, Space jump",pz:"Mouse click and drag to solve",dr:"Arrow Keys steer, Space brake/drift",sp:"Mouse/Arrow Keys for actions",ad:"WASD move, E interact, Space jump",sm:"Mouse click to build and manage",cl:"Mouse click, buy upgrades",fg:"Arrow Keys move, Z/X/C attack combos"};
-
+ 
 function generateDB() {
   const games = [];
   let id = 1;
@@ -81,10 +81,10 @@ function generateDB() {
     "p6q0r3s7t1u4v8w2x5y9z3a6b0c4d7e1","l7m0n4o8p1q5r9s2t6u0v3w7x1y4z8a2",
     "p3q6r0s4t7u1v5w8x2y6z9a3b7c0d4e8","f2g5h9i3j6k0l4m7n1o5p8q2r6s9t3u7",
   ];
-
+ 
   const catKeys = Object.keys(GAME_NAMES);
   const extras = ["top-picks","featured","cant-stop","friends","2-player","new","multiplayer"];
-
+ 
   catKeys.forEach(ck => {
     const names = GAME_NAMES[ck];
     const mainCat = CAT_MAP[ck] || ck;
@@ -112,9 +112,9 @@ function generateDB() {
   });
   return games;
 }
-
+ 
 const DB = generateDB();
-
+ 
 const CATS=[
   {id:"top-picks",label:"Top Picks",icon:"star"},{id:"featured",label:"Featured",icon:"trophy"},
   {id:"2-player",label:"2 Player",icon:"users"},{id:"cant-stop",label:"Can't Stop Playing",icon:"flame"},
@@ -126,10 +126,10 @@ const CATS=[
   {id:"action",label:"Action",icon:"zap"},{id:"simulation",label:"Simulation",icon:"monitor"},
   {id:"fighting",label:"Fighting",icon:"swords"},
 ];
-
+ 
 const Logo=({s=32})=>(
 <svg width={s} height={s} viewBox="0 0 100 100" fill="none"><g strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"><path d="M20 30 L50 60 L80 30" stroke="white"/><path d="M20 70 L50 40 L80 70" stroke="#a78bfa"/></g></svg>);
-
+ 
 const I=({n,s=20,c="currentColor"})=>{const m={
   star:<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>,
   trophy:<><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></>,
@@ -170,7 +170,7 @@ const I=({n,s=20,c="currentColor"})=>{const m={
   logout:<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>,
   menu:<><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></>,
 };return <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{m[n]||null}</svg>};
-
+ 
 const CSS=`@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--b0:#08080d;--b1:#0e0e16;--b2:#161622;--b3:#111119;--bh:#1c1c2e;--p:#7c3aed;--pl:#a78bfa;--pd:#5b21b6;--pg:rgba(124,58,237,.25);--ps:rgba(124,58,237,.08);--t1:#eaeaf2;--t2:#8888a4;--t3:#505068;--bd:rgba(255,255,255,.05);--sc:72px;--se:240px;--hh:56px}
@@ -180,12 +180,12 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 .Z{display:flex;height:100vh;height:100dvh;overflow:hidden}
 .M{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .C{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
-
+ 
 /* Mobile menu */
 .mob-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;backdrop-filter:blur(4px)}
 .mob-sb{position:fixed;left:0;top:0;bottom:0;width:280px;background:var(--b1);z-index:999;overflow-y:auto;animation:slR .25s ease;border-right:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom)}
 @keyframes slR{from{transform:translateX(-100%)}to{transform:translateX(0)}}
-
+ 
 /* Sidebar desktop */
 .S{width:var(--sc);background:var(--b1);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden;transition:width .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;z-index:50}
 .S:hover{width:var(--se)}
@@ -207,7 +207,7 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 .Sdv{height:1px;background:var(--bd);margin:6px 16px}
 .Si[data-t]::after{content:attr(data-t);position:absolute;left:calc(var(--sc)+6px);top:50%;transform:translateY(-50%);padding:4px 10px;background:#1a1a2e;border:1px solid var(--bd);border-radius:6px;font-size:11px;font-weight:500;color:var(--t1);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,.5)}
 .S:not(:hover) .Si:hover::after{opacity:1}
-
+ 
 /* Header */
 .H{height:var(--hh);background:var(--b1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 12px;gap:10px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
 .H-menu{width:40px;height:40px;border-radius:10px;background:transparent;border:none;color:var(--t2);cursor:pointer;display:none;align-items:center;justify-content:center}
@@ -229,14 +229,14 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 .Hb:hover{background:var(--b2);color:var(--pl)}.Hb.on{color:var(--p)}
 .Hb .dot{position:absolute;top:7px;right:7px;width:6px;height:6px;background:var(--p);border-radius:50%}
 .Hp{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--p),#9333ea);border:none;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;font-size:14px;font-weight:700}
-
+ 
 /* Dropdowns */
 .dd{position:absolute;top:calc(100%+6px);right:0;background:var(--b1);border:1px solid var(--bd);border-radius:10px;min-width:280px;z-index:300;box-shadow:0 16px 48px rgba(0,0,0,.6);animation:pop .2s ease}
 @keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 .dd-h{padding:14px 16px;border-bottom:1px solid var(--bd);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
 .dd-i{padding:10px 16px;font-size:13px;color:var(--t2);cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:8px}
 .dd-i:hover{background:var(--bh);color:var(--t1)}
-
+ 
 /* Game Row */
 .sec{padding:20px 0 8px}.sec-h{padding:0 16px 12px}.sec-t{font-size:17px;font-weight:700}
 .rw{position:relative;padding:0 16px}.rw:hover .arr{opacity:1}
@@ -244,7 +244,7 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 .arr{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.9);border:1px solid var(--bd);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;opacity:0;transition:all .15s}
 .arr:hover{background:var(--p);transform:translateY(-50%) scale(1.08)}
 .arr.l{left:4px}.arr.r{right:4px}
-
+ 
 /* Card */
 .cd{flex-shrink:0;width:170px;cursor:pointer;position:relative;border-radius:10px;overflow:hidden;background:var(--b3);transition:transform .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
 .cd:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 32px rgba(0,0,0,.4),0 0 0 1px var(--pg);z-index:5}
@@ -258,10 +258,10 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 @media(hover:none){.cd .cd-pl{width:36px;height:36px;opacity:.9}}
 .cd-n{font-size:12px;font-weight:600;color:white}.cd-tg{font-size:10px;color:var(--t3);margin-top:1px}
 .cd-b{padding:6px 8px}.cd-bn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
+ 
 /* Grid */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:16px}
-
+ 
 /* Game Page */
 .gp{display:flex;flex-direction:column;min-height:100%;animation:fu .3s ease}
 @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -288,7 +288,7 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 .smth{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--b2)}
 .smif{flex:1;min-width:0}.smn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .smc{font-size:10px;color:var(--t3);margin-top:1px}
-
+ 
 /* Popups */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;animation:fi .2s ease;backdrop-filter:blur(4px);padding:16px}
 @keyframes fi{from{opacity:0}to{opacity:1}}
@@ -299,23 +299,23 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
 .xb{background:none;border:none;color:var(--t2);cursor:pointer;padding:4px}.xb:hover{color:var(--t1)}
 .bk{display:flex;align-items:center;gap:6px;padding:8px 16px;background:none;border:none;color:var(--t2);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;transition:color .15s}
 .bk:hover{color:var(--pl)}
-
+ 
 /* Favorites */
 .fp{position:fixed;top:0;right:0;width:340px;max-width:100vw;height:100vh;height:100dvh;background:var(--b1);border-left:1px solid var(--bd);z-index:200;overflow-y:auto;padding:16px;padding-top:calc(var(--hh)+16px);animation:sl .25s ease;box-shadow:-8px 0 40px rgba(0,0,0,.4)}
 @keyframes sl{from{transform:translateX(100%)}to{transform:translateX(0)}}
-
+ 
 /* Google Sign In */
 .g-btn{display:flex;align-items:center;gap:10px;width:100%;padding:12px 18px;background:white;border:1px solid #ddd;border-radius:10px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;color:#333;transition:all .15s;margin:14px 0}
 .g-btn:hover{box-shadow:0 4px 12px rgba(0,0,0,.15)}
 .g-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#4285F4,#34A853);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px}
-
+ 
 /* Search page */
 .sr-pg{padding:16px}.sr-pg h2{font-size:20px;font-weight:700;margin-bottom:6px}
 .sr-pg p{color:var(--t3);margin-bottom:16px;font-size:13px}
-
+ 
 /* Game count badge */
 .gc{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:var(--ps);border-radius:12px;font-size:11px;color:var(--pl);font-weight:600;margin-left:8px}
-
+ 
 /* RESPONSIVE */
 @media(min-width:1200px){.cd{width:190px}.grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
 @media(max-width:1100px){.gp-ad{display:none}.gs{width:220px}}
@@ -348,21 +348,21 @@ body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webki
   .cd-b{padding:4px 6px}.cd-bn{font-size:11px}
 }
 `;
-
+ 
 const Row=({title,games,onSelect,count})=>{const r=useRef(null);const sc=d=>{if(r.current)r.current.scrollBy({left:d*500,behavior:"smooth"})};if(!games.length)return null;return(
 <div className="sec"><div className="sec-h"><div className="sec-t">{title}<span className="gc">{count||games.length}</span></div></div><div className="rw">
 <button className="arr l" onClick={()=>sc(-1)}><I n="chevronLeft" s={16}/></button>
 <div className="rl" ref={r}>{games.map(g=><Card key={g.id} g={g} onClick={()=>onSelect(g)}/>)}</div>
 <button className="arr r" onClick={()=>sc(1)}><I n="chevronRight" s={16}/></button>
 </div></div>)};
-
+ 
 const Card=({g,onClick})=>(
 <div className="cd" onClick={onClick}>
 <img className="cd-img" src={g.thumb} alt={g.title} loading="lazy" onError={e=>{e.target.src="";e.target.style.background="linear-gradient(135deg,#16162a,#5b21b6)"}}/>
 <div className="cd-ov"><div className="cd-pl"><I n="play" s={18} c="white"/></div><div className="cd-n">{g.title}</div><div className="cd-tg">{g.cat[0]}</div></div>
 <div className="cd-b"><div className="cd-bn">{g.title}</div></div>
 </div>);
-
+ 
 export default function Zonely(){
   const[pg,sP]=useState("home");
   const[gm,sG]=useState(null);
@@ -382,31 +382,31 @@ export default function Zonely(){
   const[srQ,sSrQ]=useState("");
   const[mobMenu,sMob]=useState(false);
   const sRef=useRef(null);const cRef=useRef(null);
-
+ 
   const open=useCallback(g=>{sG(g);sP("game");sSf(false);sSrPage(false);sMob(false);if(cRef.current)cRef.current.scrollTop=0},[]);
   const home=useCallback(()=>{sP("home");sG(null);sFs(false);sSrPage(false);sMob(false)},[]);
   const tF=useCallback(g=>{sF(p=>p.find(f=>f.id===g.id)?p.filter(f=>f.id!==g.id):[...p,g])},[]);
   const tL=useCallback(id=>{sLk(p=>({...p,[id]:!p[id]}))},[]);
   const isF=useCallback(id=>fav.some(f=>f.id===id),[fav]);
-
+ 
   const res=useMemo(()=>{const s=(srPage?srQ:q).toLowerCase().trim();if(!s)return[];return DB.filter(g=>g.title.toLowerCase().includes(s)||g.tags.some(t=>t.includes(s))||g.cat.some(c=>c.includes(s))||g.desc.toLowerCase().includes(s)).slice(0,200)},[q,srQ,srPage]);
   const dropRes=useMemo(()=>res.slice(0,8),[res]);
-
+ 
   const getG=useCallback((id,max=30)=>DB.filter(g=>g.cat.includes(id)).slice(0,max),[]);
   const sim=useMemo(()=>{if(!gm)return[];return DB.filter(g=>g.id!==gm.id&&g.cat.some(c=>gm.cat.includes(c))).slice(0,20)},[gm]);
-
+ 
   const homeRows=[{id:"top-picks",l:"Top Picks for You"},{id:"featured",l:"Featured Games"},{id:"cant-stop",l:"Can't Stop Playing"},{id:"new",l:"New Games"},{id:"shooting",l:"Shooting Games"},{id:"action",l:"Action Games"},{id:"driving",l:"Driving Games"},{id:"puzzle",l:"Puzzle Games"},{id:"adventure",l:"Adventure"},{id:"sports",l:"Sports Games"},{id:"io",l:"IO Games"}];
-
+ 
   const doSearch=()=>{if(q.trim()){sSrQ(q);sSrPage(true);sP("search");sQf(false);if(cRef.current)cRef.current.scrollTop=0}};
-
+ 
   useEffect(()=>{const h=e=>{if(sRef.current&&!sRef.current.contains(e.target))sQf(false);const hp=document.querySelector('.hp-wrap');if(hp&&!hp.contains(e.target)){sProf(false);sNotif(false)}};document.addEventListener("mousedown",h);return()=>document.removeEventListener("mousedown",h)},[]);
-
+ 
   const signIn=()=>{sU({name:"Player",email:"player@gmail.com",initial:"P"});sLogin(false)};
   const signOut=()=>{sU(null);sProf(false)};
   const isGrid=cat!=="all"&&pg==="home";
   const gridGames=isGrid?DB.filter(g=>g.cat.includes(cat)):[];
   const gridLabel=CATS.find(c=>c.id===cat)?.label||"";
-
+ 
   const SidebarContent=({mobile})=>(
     <>
       <div className="St" onClick={()=>{sC("all");home()}}><div className="Sl"><Logo s={24}/></div><div className="Sn">Zone<span>ly</span></div></div>
@@ -425,14 +425,14 @@ export default function Zonely(){
       </div>
     </>
   );
-
+ 
   return(<><style>{CSS}</style><div className="Z">
     {/* Desktop Sidebar */}
     <nav className="S"><SidebarContent/></nav>
-
+ 
     {/* Mobile Sidebar */}
     {mobMenu&&<><div className="mob-ov" onClick={()=>sMob(false)}/><nav className="mob-sb"><SidebarContent mobile/></nav></>}
-
+ 
     <div className="M">
       <header className="H">
         <button className="H-menu" onClick={()=>sMob(true)}><I n="menu" s={22}/></button>
@@ -475,7 +475,7 @@ export default function Zonely(){
           </div>}
         </div>
       </header>
-
+ 
       <div className="C" ref={cRef}>
         {pg==="home"&&!isGrid&&cat==="all"&&(
           <>{homeRows.map(r=><Row key={r.id} title={r.l} games={getG(r.id)} onSelect={open} count={DB.filter(g=>g.cat.includes(r.id)).length}/>)}</>
@@ -532,19 +532,19 @@ export default function Zonely(){
         )}
       </div>
     </div>
-
+ 
     {sf&&<div className="fp">
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}><h3 style={{fontSize:16,fontWeight:700}}>My Favorites</h3><button className="xb" onClick={()=>sSf(false)}><I n="x" s={18}/></button></div>
       {fav.length===0?<div style={{textAlign:"center",padding:"40px 16px",color:"var(--t3)"}}><I n="heart" s={36} c="#505068"/><p style={{marginTop:10,fontSize:13}}>No favorites yet</p></div>
       :fav.map(g=><div key={g.id} className="smi" onClick={()=>{open(g);sSf(false)}}><img className="smth" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/><div className="smif"><div className="smn">{g.title}</div><div className="smc">{g.cat[0]}</div></div></div>)}
     </div>}
-
+ 
     {sc&&gm&&<div className="ov" onClick={()=>sSc(false)}><div className="pp" onClick={e=>e.stopPropagation()}>
       <div className="pp-h"><h3>Controls</h3><button className="xb" onClick={()=>sSc(false)}><I n="x" s={18}/></button></div>
       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}><I n="gamepad" s={22} c="#7c3aed"/><span style={{fontSize:15,fontWeight:600}}>{gm.title}</span></div>
       <p style={{fontSize:13,color:"var(--t2)",lineHeight:1.8}}>{gm.ctrl}</p>
     </div></div>}
-
+ 
     {showLogin&&<div className="ov" onClick={()=>sLogin(false)}><div className="pp" onClick={e=>e.stopPropagation()} style={{textAlign:"center"}}>
       <div className="pp-h"><h3>Sign in to Zonely</h3><button className="xb" onClick={()=>sLogin(false)}><I n="x" s={18}/></button></div>
       <p style={{color:"var(--t2)",fontSize:13,marginBottom:6}}>Save favorites, track progress, and more.</p>
@@ -553,3 +553,4 @@ export default function Zonely(){
     </div></div>}
   </div></>);
 }
+ 
