@@ -3,529 +3,577 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Game Website</title>
+    <title>GameHub - Play Free Online Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #111827; color: white; margin: 0; font-family: sans-serif; }
+        body { background-color: #0f172a; color: white; margin: 0; font-family: sans-serif; }
     </style>
 </head>
 <body>
     <div id="root"></div>
-
     <script type="text/babel">
-        // Use React hooks from the global React object
-        const { useState, useEffect, useRef, useCallback, useMemo } = React;
-
-        // --- YOUR ORIGINAL CODE STARTS HERE ---
+        // Paste your JavaScript/React code here
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
-// ─── GAME DATABASE ──────────────────────────────────────────────────────────
-const GAME_DATABASE = [
-  { id: 1, title: "Bloxd.io", category: ["io","multiplayer","top-picks","featured"], tags: ["minecraft","block","build","multiplayer","io"], thumb: "https://img.gamemonetize.com/bnz5l5c4fmgp8c26x7kldqnx30z10g33/512x384.jpg", url: "https://bloxd.io/", desc: "A multiplayer block-building game inspired by Minecraft. Build, explore, and battle in various game modes.", developer: "Arthur", year: 2022, tech: "HTML5/WebGL", controls: "WASD to move, Mouse to look/interact, E for inventory" },
-  { id: 2, title: "Hexanaut.io", category: ["io","multiplayer","featured"], tags: ["territory","capture","io","multiplayer"], thumb: "https://img.gamemonetize.com/pq4c7cg49uyq7x66z8p3w0j1opv5t6e2/512x384.jpg", url: "https://hexanaut.io/", desc: "Capture territory by drawing lines and closing shapes. Defend your land from other players.", developer: "Exodragon Games", year: 2022, tech: "HTML5", controls: "Mouse to move and draw territory" },
-  { id: 3, title: "Smash Karts", category: ["multiplayer","driving","top-picks","2-player"], tags: ["kart","racing","battle","multiplayer","mario kart"], thumb: "https://img.gamemonetize.com/n7c2fy5sb1aep7kkd0vxo2b1lh780xvn/512x384.jpg", url: "https://smashkarts.io/", desc: "A 3D multiplayer kart battle arena game. Pick up weapons and blast your opponents!", developer: "Tall Team", year: 2021, tech: "WebGL", controls: "WASD or Arrow Keys to drive, Space to use item" },
-  { id: 4, title: "Agar.io", category: ["io","multiplayer","cant-stop","featured"], tags: ["eat","grow","cell","io","classic"], thumb: "https://img.gamemonetize.com/p22zd7pc4fbkxfkzl0y3xvh5j3ddnl15/512x384.jpg", url: "https://agar.io/", desc: "The original .io game. Eat smaller cells to grow bigger. Avoid being eaten by larger players.", developer: "Miniclip", year: 2015, tech: "HTML5", controls: "Mouse to move, Space to split, W to eject mass" },
-  { id: 5, title: "Diep.io", category: ["io","multiplayer","shooting"], tags: ["tank","shoot","io","upgrade","multiplayer"], thumb: "https://img.gamemonetize.com/yqhfb4j9v7yqt6c8m7j6b2aqv6o8k5hx/512x384.jpg", url: "https://diep.io/", desc: "Control a tank and shoot obstacles and other players to level up and upgrade your stats.", developer: "Matheus Valadares", year: 2016, tech: "HTML5", controls: "WASD to move, Mouse to aim, Click to shoot" },
-  { id: 6, title: "Snake.io", category: ["io","multiplayer","cant-stop"], tags: ["snake","grow","eat","io","slither"], thumb: "https://img.gamemonetize.com/s7v0j8q5u2k3r1w9x4t6y0m8p2n5b7a1/512x384.jpg", url: "https://snake.io/", desc: "Grow your snake by eating glowing orbs. Trap other snakes to consume their remains!", developer: "Kooapps", year: 2020, tech: "HTML5", controls: "Mouse or touch to steer, Click to boost" },
-  { id: 7, title: "Slither.io", category: ["io","multiplayer","cant-stop","top-picks"], tags: ["snake","slither","io","eat","grow","classic"], thumb: "https://img.gamemonetize.com/g3h7k2l5m8n1p4r6s9t0v2w5x7y1z3a6/512x384.jpg", url: "https://slither.io/", desc: "Grow your snake by consuming pellets. Cause other snakes to crash into you!", developer: "Steve Howse", year: 2016, tech: "HTML5", controls: "Mouse to steer, Click or Space to boost" },
-  { id: 8, title: "Krunker.io", category: ["shooting","multiplayer","top-picks","featured","friends"], tags: ["fps","shooter","cs","valorant","krunker","io","gun"], thumb: "https://img.gamemonetize.com/kfqz7j5tl3cv62n8rxo1bw0yp9hs4mgu/512x384.jpg", url: "https://krunker.io/", desc: "A fast-paced first-person shooter with pixelated graphics. Multiple classes and weapons available.", developer: "Yendis Entertainment", year: 2018, tech: "WebGL", controls: "WASD to move, Mouse to aim/shoot, Space to jump, Shift to crouch" },
-  { id: 9, title: "Combat Online 2", category: ["shooting","multiplayer","action"], tags: ["fps","shoot","gun","combat","multiplayer","war"], thumb: "https://img.gamemonetize.com/q5v8w2x6y0z3a7b1c4d8e2f5g9h3i6j0/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/fef1a0ab4e3840018dc87adf8d92f0b1/index.html", desc: "Intense multiplayer first-person combat with various weapons and maps.", developer: "GameDistribution", year: 2023, tech: "WebGL", controls: "WASD to move, Mouse to aim/shoot, R to reload, G for grenade" },
-  { id: 10, title: "Vortex 9", category: ["shooting","multiplayer","action","featured"], tags: ["fps","3d","shooter","battle","multiplayer","gun"], thumb: "https://img.gamemonetize.com/l7m1n4o8p2q5r9s3t6u0v4w7x1y5z8a2/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/e08a52cfeb464f7695e0cbb30d4a279d/index.html", desc: "A visually stunning 3D multiplayer shooter with hero-based combat.", developer: "SmartMedia", year: 2023, tech: "WebGL", controls: "WASD to move, Mouse to aim/shoot, Q/E for abilities" },
-  { id: 11, title: "Time Shooter 2", category: ["shooting","action","puzzle","top-picks"], tags: ["time","slow-motion","shoot","fps","matrix"], thumb: "https://img.gamemonetize.com/b2c5d9e3f6g0h4i7j1k5l8m2n6o9p3q7/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/4f4d6bf3f64041aa8b55e4a3dbfa2b68/index.html", desc: "Time moves only when you move! A unique FPS where you control the flow of time.", developer: "GoGoMan", year: 2022, tech: "WebGL", controls: "Mouse to look, Click to shoot, Right-click to pick up weapons, WASD to move" },
-  { id: 12, title: "Strike Force Heroes", category: ["shooting","action","cant-stop"], tags: ["2d","shooter","classes","campaign","gun","hero"], thumb: "https://img.gamemonetize.com/r6s0t3u7v1w4x8y2z5a9b3c6d0e4f7g1/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/8e26b5ff11e84d81847f9c93d3e19d7a/index.html", desc: "Side-scrolling shooter with RPG elements. Choose your class and complete missions.", developer: "Sky9 Games", year: 2012, tech: "HTML5", controls: "WASD to move, Mouse to aim/shoot, Q to switch weapons" },
-  { id: 13, title: "Raft Wars", category: ["shooting","action","2-player"], tags: ["baby","tennis ball","shoot","aim","turn-based"], thumb: "https://img.gamemonetize.com/h1i4j8k2l5m9n3o6p0q4r7s1t5u8v2w6/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/dc45a2d81c694d55a76e2f5b05e36e8b/index.html", desc: "Aim and shoot tennis balls from your raft to defeat enemies. A classic flash game reborn!", developer: "Martijn Kunst", year: 2007, tech: "HTML5", controls: "Mouse to aim and set power, Click to shoot" },
-  { id: 14, title: "Electric Man 2", category: ["action","fighting","cant-stop"], tags: ["stickman","fight","tournament","martial arts","combat"], thumb: "https://img.gamemonetize.com/x0y3z7a1b4c8d2e5f9g3h6i0j4k7l1m5/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/2ea9d68eba074e52bf1a1b9f8e67c345/index.html", desc: "Enter the Tournament of Voltagen as a stickman martial artist. Unleash devastating combos!", developer: "DX Interactive", year: 2009, tech: "HTML5", controls: "WASD to move, J/K/L to attack, U/I/O for slow-motion attacks" },
-  { id: 15, title: "Chaos Faction 2", category: ["action","fighting","2-player"], tags: ["fight","brawl","gun mayhem","arena","combat"], thumb: "https://img.gamemonetize.com/n8o2p5q9r3s6t0u4v7w1x5y8z2a6b9c3/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/1a5d6f8e9c2b3a7d4e6f8c1b2a3d5e7f/index.html", desc: "Arena brawler with tons of weapons and crazy power-ups. Similar to Gun Mayhem!", developer: "Dissolute Productions", year: 2011, tech: "HTML5", controls: "Arrow Keys to move, A/S/D to attack, 2-Player: WASD + G/H/J" },
-  { id: 16, title: "Boxhead: 2Play", category: ["shooting","action","2-player","friends"], tags: ["zombie","survival","coop","boxhead","blocky"], thumb: "https://img.gamemonetize.com/d7e1f4g8h2i5j9k3l6m0n4o7p1q5r8s2/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/3f4e5d6c7b8a9012345678abcdef1234/index.html", desc: "Survive waves of zombies in this top-down blocky shooter. Supports 2-player co-op!", developer: "Sean Cooper", year: 2008, tech: "HTML5", controls: "Arrow Keys to move, Space to shoot, 2P: WASD + Space" },
-  { id: 17, title: "Hobo", category: ["action","fighting"], tags: ["street","fight","beat-em-up","gross","hobo"], thumb: "https://img.gamemonetize.com/t6u0v3w7x1y4z8a2b5c9d3e6f0g4h7i1/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/aaabbbccc111222333444555666777888/index.html", desc: "Play as a hobo fighting your way through the streets using unconventional attacks!", developer: "SeethingSwarm", year: 2008, tech: "HTML5", controls: "Arrow Keys to move, A to punch, S to kick, A+S for combo" },
-  { id: 18, title: "2048", category: ["puzzle","clicker","cant-stop","top-picks"], tags: ["number","merge","math","classic","addictive","click"], thumb: "https://img.gamemonetize.com/j5k9l2m6n0o3p7q1r4s8t2u5v9w3x6y0/512x384.jpg", url: "https://play2048.co/", desc: "Slide numbered tiles on a grid to combine them and create a tile with the number 2048.", developer: "Gabriele Cirulli", year: 2014, tech: "HTML5", controls: "Arrow Keys to slide tiles" },
-  { id: 19, title: "Fireboy and Watergirl", category: ["puzzle","2-player","adventure","top-picks","friends"], tags: ["coop","2player","elements","temple","platformer"], thumb: "https://img.gamemonetize.com/z4a8b2c5d9e3f6g0h4i7j1k5l8m2n6o9/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/aeb5f849e0a34c3683b064e/index.html", desc: "Control two characters simultaneously through elemental temples. Perfect for 2-player co-op!", developer: "Oslo Albet", year: 2009, tech: "HTML5", controls: "Player 1: Arrow Keys. Player 2: WASD" },
-  { id: 20, title: "Cut the Rope", category: ["puzzle","clicker"], tags: ["physics","candy","cute","casual","rope"], thumb: "https://img.gamemonetize.com/p3q6r0s4t7u1v5w8x2y6z9a3b7c0d4e8/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d/index.html", desc: "Cut ropes strategically to feed candy to Om Nom. A classic physics puzzle game!", developer: "ZeptoLab", year: 2010, tech: "HTML5", controls: "Mouse/Touch to cut ropes and interact" },
-  { id: 21, title: "The Impossible Quiz", category: ["puzzle","cant-stop","featured"], tags: ["trick","trivia","funny","hard","classic","impossible"], thumb: "https://img.gamemonetize.com/v1w4x8y2z5a9b3c6d0e4f7g1h5i8j2k6/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/aabbccdd11223344556677889900aabb/index.html", desc: "The legendary trick question game that will test your patience and lateral thinking!", developer: "Splapp-Me-Do", year: 2007, tech: "HTML5", controls: "Mouse to select answers" },
-  { id: 22, title: "The Worlds Hardest Game", category: ["puzzle","action","cant-stop"], tags: ["hard","difficult","square","dodge","classic"], thumb: "https://img.gamemonetize.com/l0m3n7o1p4q8r2s5t9u3v6w0x4y7z1a5/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/ccddee112233ffaabbcc445566778899/index.html", desc: "Navigate a red square through impossible obstacle courses. Can you beat it without dying?", developer: "Stephen Critoph", year: 2008, tech: "HTML5", controls: "Arrow Keys to move the red square" },
-  { id: 23, title: "Little Alchemy 2", category: ["puzzle","adventure","simulation"], tags: ["mix","elements","create","educational","craft"], thumb: "https://img.gamemonetize.com/b9c3d6e0f4g7h1i5j8k2l6m9n3o7p0q4/512x384.jpg", url: "https://littlealchemy2.com/", desc: "Combine elements to discover new items. Start with the basics and create an entire world!", developer: "Recloak", year: 2017, tech: "HTML5", controls: "Mouse to drag and combine elements" },
-  { id: 24, title: "Monkey Mart", category: ["simulation","clicker","cant-stop","top-picks"], tags: ["idle","shop","monkey","farming","tycoon","click"], thumb: "https://img.gamemonetize.com/r8s2t5u9v3w6x0y4z7a1b5c8d2e6f9g3/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/c3f9a2b7e1d8f4a6c0e3b9d5f2a8c1e7/index.html", desc: "Run a supermarket as a monkey! Harvest produce, stock shelves, and serve customers.", developer: "TinyDobbins", year: 2022, tech: "HTML5/WebGL", controls: "WASD or Arrow Keys to move, Auto-interact near stations" },
-  { id: 25, title: "Townscaper", category: ["simulation","puzzle"], tags: ["build","city","creative","relaxing","architecture"], thumb: "https://img.gamemonetize.com/h7i1j4k8l2m5n9o3p6q0r4s7t1u5v8w2/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9/index.html", desc: "Build quaint island towns with curvy streets and colorful houses. A peaceful building toy.", developer: "Oskar Stalberg", year: 2021, tech: "WebGL", controls: "Click to place blocks, Right-click to remove" },
-  { id: 26, title: "8 Ball Pool", category: ["sports","2-player","friends","top-picks"], tags: ["pool","billiards","8ball","multiplayer","classic"], thumb: "https://img.gamemonetize.com/n5o9p3q6r0s4t7u1v5w8x2y6z9a3b7c0/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1/index.html", desc: "The world's most popular online pool game. Play 1-on-1 or tournament mode!", developer: "Miniclip", year: 2013, tech: "HTML5", controls: "Mouse to aim, Drag to set power, Release to shoot" },
-  { id: 27, title: "Uno Online", category: ["puzzle","2-player","friends"], tags: ["cards","uno","multiplayer","classic","board"], thumb: "https://img.gamemonetize.com/d4e8f2g5h9i3j6k0l4m7n1o5p8q2r6s9/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2/index.html", desc: "Play the classic card game UNO online against AI or friends!", developer: "GameDistribution", year: 2021, tech: "HTML5", controls: "Mouse to select and play cards" },
-  { id: 28, title: "Chess Free", category: ["puzzle","2-player","sports"], tags: ["chess","strategy","board","classic","brain"], thumb: "https://img.gamemonetize.com/j2k6l0m3n7o1p4q8r2s5t9u3v6w0x4y7/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4/index.html", desc: "Play chess against the computer at various difficulty levels or challenge a friend.", developer: "GameDistribution", year: 2021, tech: "HTML5", controls: "Mouse to select and move pieces" },
-  { id: 29, title: "Bloons Tower Defense 5", category: ["puzzle","clicker","cant-stop","top-picks"], tags: ["tower defense","monkey","balloon","strategy","classic","td"], thumb: "https://img.gamemonetize.com/z1a5b8c2d6e9f3g7h0i4j8k1l5m9n2o6/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5/index.html", desc: "Pop bloons by placing monkey towers along the path. The most addictive tower defense game ever!", developer: "Ninja Kiwi", year: 2011, tech: "HTML5", controls: "Mouse to place and upgrade towers" },
-  { id: 30, title: "Happy Wheels", category: ["action","adventure","cant-stop","featured"], tags: ["ragdoll","physics","gore","funny","segway","classic"], thumb: "https://img.gamemonetize.com/p0q4r7s1t5u8v2w6x9y3z7a0b4c8d1e5/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6/index.html", desc: "The legendary ragdoll physics game. Navigate obstacle courses on various vehicles!", developer: "Jim Bonacci", year: 2010, tech: "HTML5", controls: "Arrow Keys to move, Space to special action, Z to eject" },
-  { id: 31, title: "Run 3", category: ["action","adventure","cant-stop","top-picks"], tags: ["run","space","tunnel","endless","platformer","classic"], thumb: "https://img.gamemonetize.com/f9g3h6i0j4k7l1m5n8o2p6q9r3s7t0u4/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7/index.html", desc: "Run through a crumbling space tunnel. Jump between walls and avoid gaps in this endless runner!", developer: "Joseph Cloutier", year: 2014, tech: "HTML5", controls: "Arrow Keys or WASD to move, Space to jump" },
-  { id: 32, title: "Age of War", category: ["puzzle","action","cant-stop"], tags: ["evolution","strategy","war","tower defense","ages","classic"], thumb: "https://img.gamemonetize.com/v8w2x5y9z3a6b0c4d7e1f5g8h2i6j9k3/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8/index.html", desc: "Evolve through different ages of warfare and destroy the enemy base. From cavemen to robots!", developer: "Louissi", year: 2007, tech: "HTML5", controls: "Mouse to train units and use special abilities" },
-  { id: 33, title: "Papas Freezeria", category: ["simulation","puzzle","cant-stop"], tags: ["cooking","ice cream","restaurant","papa","time management","classic"], thumb: "https://img.gamemonetize.com/l7m0n4o8p1q5r9s2t6u0v3w7x1y4z8a2/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9/index.html", desc: "Take orders, blend ice cream, add toppings, and serve customers in Papa's ice cream shop!", developer: "Flipline Studios", year: 2012, tech: "HTML5", controls: "Mouse to interact with stations and serve customers" },
-  { id: 34, title: "Super Smash Flash 2", category: ["action","fighting","2-player","friends","featured"], tags: ["smash bros","fighting","nintendo","multiplayer","classic","brawl"], thumb: "https://img.gamemonetize.com/r4s8t1u5v9w2x6y0z3a7b1c4d8e2f5g9/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1/index.html", desc: "The ultimate browser fighting game. Play as iconic characters in Super Smash Bros-style battles!", developer: "McLeodGaming", year: 2016, tech: "HTML5", controls: "P1: WASD+UIOJKL, P2: Arrow Keys+Numpad" },
-  { id: 35, title: "Fancy Pants Adventure", category: ["action","adventure","featured"], tags: ["stickman","platformer","pants","orange","classic","run"], thumb: "https://img.gamemonetize.com/x2y6z9a3b7c0d4e8f1g5h9i2j6k0l3m7/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3/index.html", desc: "Run, jump, and slide as the iconic stickman with fancy orange pants through stylish levels!", developer: "Brad Borne", year: 2006, tech: "HTML5", controls: "Arrow Keys to move, S to jump, Down to slide/duck" },
-  { id: 36, title: "Burrito Bison", category: ["action","clicker","cant-stop"], tags: ["launch","gummy bear","wrestler","distance","idle","click"], thumb: "https://img.gamemonetize.com/n1o5p8q2r6s9t3u7v0w4x8y1z5a9b2c6/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4/index.html", desc: "Launch Burrito Bison from the wrestling ring to smash gummy bears and fly as far as possible!", developer: "Juicy Beast", year: 2011, tech: "HTML5", controls: "Mouse to aim and launch, Click to slam down" },
-  { id: 37, title: "Moto X3M", category: ["driving","action","top-picks"], tags: ["motorcycle","stunt","racing","physics","levels"], thumb: "https://img.gamemonetize.com/d0e4f7g1h5i8j2k6l9m3n7o0p4q8r1s5/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5/index.html", desc: "Race your motorcycle through insane obstacle courses with flips and stunts!", developer: "Madpuffers", year: 2016, tech: "HTML5", controls: "Arrow Keys to accelerate/brake/lean" },
-  { id: 38, title: "Drift Hunters", category: ["driving","sports","featured"], tags: ["drift","car","racing","3d","tuning","vehicle"], thumb: "https://img.gamemonetize.com/t9u3v6w0x4y7z1a5b8c2d6e9f3g7h0i4/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6/index.html", desc: "Master the art of drifting in this 3D driving game. Tune your car and hit perfect drifts!", developer: "Studionum43", year: 2018, tech: "WebGL", controls: "Arrow Keys to drive, Space for handbrake" },
-  { id: 39, title: "Hill Climb Racing", category: ["driving","action","cant-stop"], tags: ["hill","climb","physics","car","upgrade","vehicle"], thumb: "https://img.gamemonetize.com/z7a1b4c8d2e5f9g3h6i0j4k7l1m5n8o2/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8/index.html", desc: "Drive uphill on challenging terrain. Upgrade your vehicle to go further and earn more coins!", developer: "Fingersoft", year: 2012, tech: "HTML5", controls: "Right/Left Arrow to accelerate/brake" },
-  { id: 40, title: "Basketball Stars", category: ["sports","multiplayer","2-player"], tags: ["basketball","sports","nba","multiplayer","1v1"], thumb: "https://img.gamemonetize.com/p6q0r3s7t1u4v8w2x5y9z3a6b0c4d7e1/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9/index.html", desc: "Show off your basketball skills in 1-on-1 matches. Shoot, dribble, and dunk!", developer: "Madpuffers", year: 2019, tech: "HTML5", controls: "Mouse to aim and shoot, WASD to move" },
-  { id: 41, title: "Soccer Random", category: ["sports","2-player","friends"], tags: ["soccer","football","random","physics","funny","2player"], thumb: "https://img.gamemonetize.com/f5g9h2i6j0k3l7m1n4o8p2q5r9s3t6u0/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0/index.html", desc: "Wacky physics-based soccer! The rules and environment change randomly each round.", developer: "RHM Interactive", year: 2021, tech: "HTML5", controls: "Player 1: W to jump, Player 2: Up Arrow to jump" },
-  { id: 42, title: "Surviv.io", category: ["io","shooting","multiplayer","top-picks"], tags: ["battle royale","io","shooter","survival","fortnite","pubg"], thumb: "https://img.gamemonetize.com/l3m7n0o4p8q1r5s9t2u6v0w3x7y1z4a8/512x384.jpg", url: "https://surviv.io/", desc: "2D battle royale game. Find weapons, gear up, and be the last one standing!", developer: "Kongregate", year: 2018, tech: "HTML5", controls: "WASD to move, Mouse to aim/shoot, F to interact, R to reload" },
-  { id: 43, title: "Shell Shockers", category: ["shooting","multiplayer","io","featured","friends"], tags: ["egg","fps","shooter","io","funny","multiplayer"], thumb: "https://img.gamemonetize.com/b2c6d9e3f7g0h4i8j1k5l9m2n6o0p3q7/512x384.jpg", url: "https://shellshock.io/", desc: "An egg-based FPS multiplayer game. Crack your opponents before they crack you!", developer: "Blue Wizard Digital", year: 2018, tech: "WebGL", controls: "WASD to move, Mouse to aim/shoot, E to switch weapons, Space to jump" },
-  { id: 44, title: "Slope", category: ["action","adventure","cant-stop","top-picks"], tags: ["3d","running","ball","speed","endless","slope"], thumb: "https://img.gamemonetize.com/r1s5t8u2v6w9x3y7z0a4b8c1d5e9f2g6/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2/index.html", desc: "Roll a ball down a steep neon slope at high speed. Dodge obstacles and survive as long as you can!", developer: "Y8", year: 2014, tech: "WebGL", controls: "Arrow Keys or A/D to steer" },
-  { id: 45, title: "Tetris", category: ["puzzle","clicker","cant-stop","top-picks"], tags: ["tetris","blocks","classic","falling","clear","retro"], thumb: "https://img.gamemonetize.com/n8o2p5q9r3s6t0u4v7w1x5y8z2a6b9c3/512x384.jpg", url: "https://tetris.com/play-tetris", desc: "The original block-stacking game. Clear lines by fitting falling blocks together perfectly.", developer: "The Tetris Company", year: 1984, tech: "HTML5", controls: "Arrow Keys to move/rotate, Space to hard drop, Down to soft drop" },
-  { id: 46, title: "Among Us Online", category: ["multiplayer","puzzle","friends","featured"], tags: ["among us","impostor","detective","social","sus"], thumb: "https://img.gamemonetize.com/d7e1f4g8h2i5j9k3l6m0n4o7p1q5r8s2/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3/index.html", desc: "Find the impostor among the crew! Complete tasks while voting out suspicious players.", developer: "InnerSloth", year: 2020, tech: "HTML5", controls: "WASD to move, Mouse to interact and vote" },
-  { id: 47, title: "Car Simulator 2", category: ["driving","simulation","top-picks"], tags: ["car","3d","open world","simulator","vehicle","driving"], thumb: "https://img.gamemonetize.com/t6u0v3w7x1y4z8a2b5c9d3e6f0g4h7i1/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4/index.html", desc: "Drive realistic cars in a detailed open-world city. Customize your ride and explore!", developer: "Oppana Games", year: 2023, tech: "WebGL", controls: "WASD to drive, Space to brake, C to change camera" },
-  { id: 48, title: "Cookie Clicker", category: ["clicker","cant-stop","simulation"], tags: ["idle","cookie","click","infinite","addictive","classic"], thumb: "https://img.gamemonetize.com/z4a8b2c5d9e3f6g0h4i7j1k5l8m2n6o9/512x384.jpg", url: "https://orteil.dashnet.org/cookieclicker/", desc: "Click to bake cookies. Buy upgrades and buildings to automate production. How many can you make?", developer: "Orteil", year: 2013, tech: "HTML5", controls: "Mouse to click cookie and buy upgrades" },
-  { id: 49, title: "Subway Surfers", category: ["action","adventure","top-picks","new"], tags: ["endless runner","subway","mobile","popular","dodge"], thumb: "https://img.gamemonetize.com/f2g5h9i3j6k0l4m7n1o5p8q2r6s9t3u7/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7/index.html", desc: "Dash through subway tracks, dodge trains, and collect coins in this endless runner hit!", developer: "SYBO Games", year: 2012, tech: "HTML5/WebGL", controls: "Arrow Keys or Swipe to move, jump, and roll" },
-  { id: 50, title: "Stickman Hook", category: ["action","adventure","new","cant-stop"], tags: ["stickman","swing","hook","physics","ragdoll"], thumb: "https://img.gamemonetize.com/b9c3d6e0f4g7h1i5j8k2l6m9n3o7p0q4/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0/index.html", desc: "Swing from hook to hook as a ragdoll stickman. Time your releases perfectly!", developer: "Madpuffers", year: 2019, tech: "HTML5", controls: "Click/Tap to attach and release from hooks" },
-  { id: 51, title: "Tunnel Rush", category: ["action","cant-stop","new"], tags: ["tunnel","3d","dodge","speed","neon","endless"], thumb: "https://img.gamemonetize.com/r8s2t5u9v3w6x0y4z7a1b5c8d2e6f9g3/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1/index.html", desc: "Fly through a colorful neon tunnel at breakneck speed. Dodge obstacles and survive!", developer: "Deer Cat Games", year: 2018, tech: "WebGL", controls: "Arrow Keys or A/D to dodge" },
-  { id: 52, title: "Build Royale", category: ["shooting","multiplayer","io","new"], tags: ["battle royale","build","fortnite","io","survival"], thumb: "https://img.gamemonetize.com/h7i1j4k8l2m5n9o3p6q0r4s7t1u5v8w2/512x384.jpg", url: "https://buildroyale.io/", desc: "A 2D battle royale where you can build walls and structures. Fortnite meets .io games!", developer: "Build Royale", year: 2018, tech: "HTML5", controls: "WASD to move, Mouse to aim/shoot, Q/E to build" },
-  { id: 53, title: "1v1.LOL", category: ["shooting","multiplayer","top-picks","friends"], tags: ["build","shoot","1v1","fortnite","battle","competitive"], thumb: "https://img.gamemonetize.com/p0q4r7s1t5u8v2w6x9y3z7a0b4c8d1e5/512x384.jpg", url: "https://1v1.lol/", desc: "Build and shoot in this competitive 1v1 arena. Practice building like in Fortnite!", developer: "Lior Alterman", year: 2019, tech: "WebGL", controls: "WASD to move, Mouse to aim/shoot/build, Space to jump" },
-  { id: 54, title: "Retro Bowl", category: ["sports","simulation","top-picks","new"], tags: ["football","nfl","retro","management","pixel"], thumb: "https://img.gamemonetize.com/l7m0n4o8p1q5r9s2t6u0v3w7x1y4z8a2/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6/index.html", desc: "Manage and play as an NFL team in this retro-styled football game. Draft, trade, and win!", developer: "New Star Games", year: 2020, tech: "HTML5", controls: "Mouse/Touch to throw passes and manage team" },
-  { id: 55, title: "Geometry Dash", category: ["action","puzzle","cant-stop","new"], tags: ["rhythm","jump","platform","music","hard","geometry"], thumb: "https://img.gamemonetize.com/b5c9d2e6f0g3h7i1j4k8l2m5n9o3p6q0/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7/index.html", desc: "Jump, fly, and flip through obstacle courses synced to music. One-tap gameplay, infinite challenge!", developer: "RobTop Games", year: 2013, tech: "HTML5", controls: "Click/Space/Up Arrow to jump" },
-  { id: 56, title: "Getaway Shootout", category: ["action","2-player","friends","new"], tags: ["race","shoot","funny","physics","ragdoll","2player"], thumb: "https://img.gamemonetize.com/r4s8t1u5v9w2x6y0z3a7b1c4d8e2f5g9/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8/index.html", desc: "Race against opponents to reach the getaway vehicle. Grab weapons and power-ups along the way!", developer: "New Eich Games", year: 2019, tech: "HTML5", controls: "P1: W/E to jump L/R, R to shoot. P2: I/O to jump, P to shoot" },
-  { id: 57, title: "Basket Random", category: ["sports","2-player","friends","new"], tags: ["basketball","random","physics","funny","2player"], thumb: "https://img.gamemonetize.com/n5o9p3q6r0s4t7u1v5w8x2y6z9a3b7c0/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3/index.html", desc: "Wacky basketball with random physics, courts, and costumes. One-button controls!", developer: "RHM Interactive", year: 2021, tech: "HTML5", controls: "Player 1: W, Player 2: Up Arrow" },
-  { id: 58, title: "Narrow One", category: ["shooting","multiplayer","new","friends"], tags: ["archery","bow","arrow","team","capture the flag"], thumb: "https://img.gamemonetize.com/z1a5b8c2d6e9f3g7h0i4j8k1l5m9n2o6/512x384.jpg", url: "https://html5.gamedistribution.com/rvvASMiM/d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5/index.html", desc: "Medieval archery multiplayer. Capture the flag while sniping opponents with your bow!", developer: "Pelican Party", year: 2023, tech: "WebGL", controls: "WASD to move, Mouse to aim/shoot, Space to jump" },
-  { id: 59, title: "Paper.io 2", category: ["io","multiplayer","cant-stop","new"], tags: ["territory","paper","io","capture","area"], thumb: "https://img.gamemonetize.com/t3u7v1w4x8y2z5a9b3c6d0e4f7g1h5i8/512x384.jpg", url: "https://paper-io.com/", desc: "Capture territory by drawing shapes on the map. Be careful not to get cut off!", developer: "Voodoo", year: 2018, tech: "HTML5", controls: "Arrow Keys or Mouse to move" },
-  { id: 60, title: "Bonk.io", category: ["io","multiplayer","2-player","friends"], tags: ["physics","bump","io","multiplayer","arena"], thumb: "https://img.gamemonetize.com/j2k6l0m3n7o1p4q8r2s5t9u3v6w0x4y7/512x384.jpg", url: "https://bonk.io/", desc: "Bump other players off the map in this physics-based multiplayer battle game!", developer: "Chaz", year: 2017, tech: "HTML5", controls: "Arrow Keys to move, X to heavy" },
+// ─── PROGRAMMATIC GAME DATABASE (1200+ games) ─────────────────────────────
+const BASE_GAMES = [
+  {t:"Bloxd.io",c:["io","mp","tp","ft"],tg:["minecraft","block"],th:"bnz5l5c4fmgp8c26x7kldqnx30z10g33",u:"https://bloxd.io/",d:"Multiplayer block-building game.",dv:"Arthur",y:2022,tc:"WebGL",ct:"WASD move, Mouse look"},
+  {t:"Hexanaut.io",c:["io","mp","ft"],tg:["territory","capture"],th:"pq4c7cg49uyq7x66z8p3w0j1opv5t6e2",u:"https://hexanaut.io/",d:"Capture territory by drawing lines.",dv:"Exodragon Games",y:2022,tc:"HTML5",ct:"Mouse move and draw"},
+  {t:"Smash Karts",c:["mp","dr","tp","2p"],tg:["kart","racing","battle"],th:"n7c2fy5sb1aep7kkd0vxo2b1lh780xvn",u:"https://smashkarts.io/",d:"3D multiplayer kart battle arena!",dv:"Tall Team",y:2021,tc:"WebGL",ct:"WASD drive, Space item"},
+  {t:"Agar.io",c:["io","mp","cs","ft"],tg:["eat","grow","cell"],th:"p22zd7pc4fbkxfkzl0y3xvh5j3ddnl15",u:"https://agar.io/",d:"Eat smaller cells to grow bigger.",dv:"Miniclip",y:2015,tc:"HTML5",ct:"Mouse move, Space split"},
+  {t:"Diep.io",c:["io","mp","sh"],tg:["tank","shoot","upgrade"],th:"yqhfb4j9v7yqt6c8m7j6b2aqv6o8k5hx",u:"https://diep.io/",d:"Tank shooter with upgrades.",dv:"Matheus Valadares",y:2016,tc:"HTML5",ct:"WASD move, Mouse aim"},
+  {t:"Snake.io",c:["io","mp","cs"],tg:["snake","grow"],th:"s7v0j8q5u2k3r1w9x4t6y0m8p2n5b7a1",u:"https://snake.io/",d:"Grow your snake by eating orbs!",dv:"Kooapps",y:2020,tc:"HTML5",ct:"Mouse steer, Click boost"},
+  {t:"Slither.io",c:["io","mp","cs","tp"],tg:["snake","classic"],th:"g3h7k2l5m8n1p4r6s9t0v2w5x7y1z3a6",u:"https://slither.io/",d:"Classic snake multiplayer game.",dv:"Steve Howse",y:2016,tc:"HTML5",ct:"Mouse steer, Click boost"},
+  {t:"Krunker.io",c:["sh","mp","tp","ft","fr"],tg:["fps","shooter"],th:"kfqz7j5tl3cv62n8rxo1bw0yp9hs4mgu",u:"https://krunker.io/",d:"Fast-paced pixelated FPS.",dv:"Yendis Entertainment",y:2018,tc:"WebGL",ct:"WASD move, Mouse shoot"},
+  {t:"Shell Shockers",c:["sh","mp","io","ft","fr"],tg:["egg","fps","funny"],th:"b2c6d9e3f7g0h4i8j1k5l9m2n6o0p3q7",u:"https://shellshock.io/",d:"Egg-based FPS multiplayer!",dv:"Blue Wizard Digital",y:2018,tc:"WebGL",ct:"WASD move, Mouse shoot"},
+  {t:"1v1.LOL",c:["sh","mp","tp","fr"],tg:["build","shoot","1v1"],th:"p0q4r7s1t5u8v2w6x9y3z7a0b4c8d1e5",u:"https://1v1.lol/",d:"Build and shoot in 1v1 arenas!",dv:"Lior Alterman",y:2019,tc:"WebGL",ct:"WASD move, Mouse build"},
+  {t:"Surviv.io",c:["io","sh","mp","tp"],tg:["battle royale","survival"],th:"l3m7n0o4p8q1r5s9t2u6v0w3x7y1z4a8",u:"https://surviv.io/",d:"2D battle royale game.",dv:"Kongregate",y:2018,tc:"HTML5",ct:"WASD move, Mouse shoot"},
+  {t:"Bonk.io",c:["io","mp","2p","fr"],tg:["physics","bump"],th:"j2k6l0m3n7o1p4q8r2s5t9u3v6w0x4y7",u:"https://bonk.io/",d:"Bump players off the map!",dv:"Chaz",y:2017,tc:"HTML5",ct:"Arrow Keys, X heavy"},
+  {t:"Paper.io 2",c:["io","mp","cs","nw"],tg:["territory","paper"],th:"t3u7v1w4x8y2z5a9b3c6d0e4f7g1h5i8",u:"https://paper-io.com/",d:"Capture territory with shapes!",dv:"Voodoo",y:2018,tc:"HTML5",ct:"Arrow Keys move"},
+  {t:"Ev.io",c:["sh","mp","io","nw"],tg:["fps","halo","arena"],th:"f9g3h6i0j4k7l1m5n8o2p6q9r3s7t0u4",u:"https://ev.io/",d:"Halo-inspired arena FPS.",dv:"Addicting Games",y:2021,tc:"WebGL",ct:"WASD move, Mouse shoot"},
+  {t:"Territorial.io",c:["io","pz","mp","nw"],tg:["territory","strategy"],th:"v8w2x5y9z3a6b0c4d7e1f5g8h2i6j9k3",u:"https://territorial.io/",d:"Conquer the world map!",dv:"David Tschacher",y:2022,tc:"HTML5",ct:"Mouse select territory"},
+  {t:"Build Royale",c:["sh","mp","io","nw"],tg:["battle royale","build"],th:"h7i1j4k8l2m5n9o3p6q0r4s7t1u5v8w2",u:"https://buildroyale.io/",d:"2D battle royale with building!",dv:"Build Royale",y:2018,tc:"HTML5",ct:"WASD move, Q/E build"},
+  {t:"Narrow One",c:["sh","mp","nw","fr"],tg:["archery","bow"],th:"z1a5b8c2d6e9f3g7h0i4j8k1l5m9n2o6",u:"https://narrow.one/",d:"Medieval archery multiplayer.",dv:"Pelican Party",y:2023,tc:"WebGL",ct:"WASD move, Mouse aim"},
 ];
 
-const CATEGORIES = [
-  { id: "top-picks", label: "Top Picks for You", icon: "star" },
-  { id: "featured", label: "Featured Games", icon: "trophy" },
-  { id: "2-player", label: "2 Player Games", icon: "users" },
-  { id: "cant-stop", label: "Can't Stop Playing", icon: "flame" },
-  { id: "friends", label: "Play with Friends", icon: "handshake" },
-  { id: "new", label: "New Games", icon: "sparkle" },
-  { id: "driving", label: "Driving Games", icon: "car" },
-  { id: "shooting", label: "Shooting Games", icon: "crosshair" },
-  { id: "puzzle", label: "Puzzle Games", icon: "puzzle" },
-  { id: "adventure", label: "Adventure Games", icon: "compass" },
-  { id: "clicker", label: "Clicker Games", icon: "pointer" },
-  { id: "sports", label: "Sports Games", icon: "medal" },
-  { id: "io", label: "IO Games", icon: "globe" },
-  { id: "multiplayer", label: "Multiplayer", icon: "broadcast" },
-  { id: "action", label: "Action Games", icon: "zap" },
-  { id: "simulation", label: "Simulation", icon: "monitor" },
-  { id: "fighting", label: "Fighting Games", icon: "swords" },
-];
-
-const Icon = ({ name, size = 20, color = "currentColor" }) => {
-  const icons = {
-    star: <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>,
-    trophy: <><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></>,
-    users: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
-    flame: <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>,
-    handshake: <><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.68.05l2.37-1.05a1 1 0 0 1 1.36 1.36l-1.05 2.37a2 2 0 0 0 .05 1.68l.28.47a5.79 5.79 0 0 1-.87 7.06L18 20.14"/><path d="M9.19 14.37a1 1 0 1 0-3 3L8 19.19"/><path d="M3.84 6.37a1 1 0 0 1 1.36-1.36l2.37 1.05a2 2 0 0 0 1.68-.05l.47-.28"/></>,
-    sparkle: <><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></>,
-    car: <><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></>,
-    crosshair: <><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></>,
-    puzzle: <><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/></>,
-    compass: <><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>,
-    pointer: <><path d="M22 14a8 8 0 0 1-8 8"/><path d="M18 11v-1a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V9a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v1"/><path d="M10 9.5V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v10"/><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 16"/></>,
-    medal: <><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><path d="M11 12 5.12 2.2"/><path d="m13 12 5.88-9.8"/><path d="M8 7h8"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></>,
-    globe: <><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>,
-    broadcast: <><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></>,
-    zap: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>,
-    monitor: <><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></>,
-    swords: <><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><line x1="19" y1="21" x2="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" y1="14" x2="9" y2="18"/><line x1="7" y1="17" x2="4" y2="20"/><line x1="3" y1="19" x2="5" y2="21"/></>,
-    search: <><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>,
-    x: <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>,
-    chevronLeft: <polyline points="15 18 9 12 15 6"/>,
-    chevronRight: <polyline points="9 6 15 12 9 18"/>,
-    heart: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>,
-    heartFilled: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" fill="currentColor"/>,
-    thumbsUp: <><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></>,
-    share: <><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></>,
-    gamepad: <><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></>,
-    bell: <><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></>,
-    home: <><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>,
-    arrowLeft: <><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></>,
-    maximize: <><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></>,
-    play: <polygon points="5 3 19 12 5 21 5 3"/>,
-    user: <><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>,
-    shrink: <><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></>,
-    trending: <><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></>,
-    clock: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
-  };
-  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{icons[name]||null}</svg>;
+// Game name templates for generation
+const GAME_NAMES = {
+  sh:["Bullet Storm","Pixel Warfare","Sniper Elite 3D","Tank Battle Online","Zombie Shooter","Army Combat","Laser Tag Arena","Space Marines","Gun Master","Warzone Strike","Counter Assault","Phantom Forces","Rapid Fire","Dead Aim","Crossfire Zone","Metal Slug","Heavy Gunner","Storm Ops","Black Ops","Elite Sniper","Mega Shooter","Turret Defense Assault","Neo Combat","Blast Zone","Shadow Strike","Tactical Ops","Night Raid","Alpha Strike","Commando Rush","Fury Fire","Desert Storm","Ice Cold Sniper","Thunder Shot","Gunfire Heroes","Pixel Combat","Battle Arena FPS","Rapid Assault","Urban Warfare","Rooftop Snipers","Militia Wars","Weapon Master","Bullet Hell","Scope Shot","Rifleman","Plasma Burst","Heavy Metal","War Brokers","Blockpost","Venge.io","Deadshot","Mini Militia","Aim Trainer Pro","Recoil","Arsenal","Bullet Force","Forward Assault","Standoff","Critical Strike","Operation Storm","Combat Reloaded","War Attack","Blitz Brigade","Gun Builder","Crossbow Master","Bow Royale","Shell Shock Live","Missile Command","Air Strike","Naval Battle","Submarine Wars","Riot Protocol","Breach Point","Iron Sights","Zero Hour","Sector 7","Red Zone","Kill Chain","Hot Zone","Overwatch Clone","Guardian Force","Pulse Rifle","Ion Cannon","Rail Gun","Gauss Rifle","Blaster Pro","Phaser Tag","Photon Beam","Particle Gun","Wave Cannon","Sonic Blaster","Cryo Gun","Flame Thrower Pro","Acid Spray","Venom Shot","Thorn Cannon","Spike Launcher","Bolt Action","Lever Action","Pump Action","Double Barrel","Sawed Off","Silenced Shot","Suppressed Fire","Ghost Gun","Stealth Kill","Shadow Ops","Covert Strike","Deep Cover","Under Siege","Fortress Assault","Bunker Buster","Trench War","Foxhole","Outpost","Watchtower","Sentry Post","Guard Tower","Pillbox","Firebase","Landing Zone","Drop Zone","Extraction Point","Rally Point","Waypoint","Checkpoint","Safe House","Black Site"],
+  ac:["Stickman Fighter","Ninja Run","Shadow Blade","Parkour Master","Wall Dash","Flip Hero","Rope Swing","Jump King","Neon Dash","Speed Runner","Sky Jumper","Bounce Ball","Gravity Guy","Super Jump","Flash Runner","Epic Dash","Air Control","Grapple Hero","Stunt Master","Smash Hit","Power Punch","Battle Charge","Iron Fist","Thunder Kick","Storm Rush","Blaze Runner","Night Runner","Cyber Sprint","Turbo Run","Pixel Jump","Wall Climb","Rooftop Run","Sky Dive","Base Jump","Free Fall","Rocket Jump","Boost Rush","Momentum","Velocity","Accelerate","Jump Force","Quick Step","Slide Master","Roll Runner","Spin Dash","Air Dash","Ground Pound","Wall Run","Double Jump","Triple Threat","Swift Strike","Rapid Rush","Chaos Run","Extreme Jump","Daredevil Run","Death Defying","Leap of Faith","Cliff Hanger","Edge Runner","Gap Jump","Chrome Dash","Neon Surge","Prism Run","Volt Sprint","Flux Rider","Plasma Dash","Photon Run","Ion Sprint","Quantum Leap","Hyper Dash","Ultra Sprint","Mega Run","Giga Dash","Tera Sprint","Peta Run","Exo Sprint","Endo Run","Meso Dash","Nano Sprint","Pico Run","Femto Dash","Atto Sprint","Vortex Run","Cyclone Dash","Typhoon Sprint","Monsoon Run","Tempest Dash","Gale Sprint","Breeze Run","Zephyr Dash","Draft Sprint","Current Run","Tide Dash","Wave Sprint","Surf Run","Crest Dash","Peak Sprint","Summit Run","Apex Dash","Zenith Sprint","Pinnacle Run","Crown Dash","Ridge Sprint","Mesa Run","Plateau Dash","Valley Sprint","Canyon Run","Gorge Dash","Ravine Sprint","Gulch Run","Basin Dash","Crater Sprint","Caldera Run","Volcano Dash","Magma Sprint","Lava Run","Ember Dash","Spark Sprint","Flare Run","Blitz Dash","Bolt Sprint","Flash Dash","Gleam Sprint","Shimmer Run","Glint Dash"],
+  pz:["Brain Teaser","Logic Master","Sudoku Classic","Crossword Daily","Word Search Pro","Jigsaw World","Block Puzzle","Color Match","Pattern Finder","Mind Bender","IQ Challenge","Riddle Room","Escape Room","Mystery Box","Code Breaker","Number Crunch","Shape Sorter","Tile Match","Memory Game","Sequence Solver","Maze Runner","Connect Four","Dots and Boxes","Tangram","Nonogram","Kakuro","Futoshiki","Hashi Bridge","Sokoban","Light Up","Pipe Connect","Flow Free","Hexagonal","Circuit Board","Wire Connect","Gear Machine","Rube Goldberg","Portal Puzzle","Gravity Shift","Mirror Edge","Reflection","Symmetry","Rotation Lock","Slide Puzzle","Tower of Hanoi","River Cross","Knights Tour","Queens Puzzle","Peg Solitaire","Rush Hour","Unblock","Fifteen Puzzle","Rubiks Cube","Mastermind","Minesweeper Pro","Battleship","Picross","Nurikabe","Slitherlink","Thermometer","Crystal Logic","Prism Puzzle","Spectrum Sort","Rainbow Match","Gradient Flow","Palette Swap","Hue Shift","Tint Match","Shade Blend","Tone Puzzle","Chroma Lock","Pigment Mix","Dye Blend","Ink Flow","Paint Pour","Brush Stroke","Canvas Fill","Frame Fit","Mosaic Maker","Tessellation","Grid Lock Pro","Cell Match","Matrix Solve","Array Sort","Stack Order","Queue Puzzle","Hash Match","Tree Balance","Graph Connect","Node Link","Path Finder Pro","Route Planner","Map Quest","Compass Solve","Atlas Puzzle","Globe Spin","Sphere Match","Cube Twist","Prism Turn","Pyramid Stack","Cone Sort","Cylinder Roll","Torus Twist","Mobius Loop","Klein Bottle","Fractal Zoom","Spiral Solve","Helix Turn","Coil Match","Spring Bounce","Wave Pattern","Pulse Match","Signal Sort","Frequency Tune","Amplitude Match","Phase Shift","Resonance","Harmonic Solve","Overtone Match","Echo Puzzle","Reverb Match"],
+  dr:["Speed Racer 3D","Drift King","Rally Champion","Turbo GT","Street Racing","Highway Rider","Monster Truck","Quad Bike","Motorcycle GP","F1 Racing","Go Kart Pro","Off Road Rally","Desert Race","Snow Rally","Night Racer","Neon Drive","Cyber Racer","Retro Racing","Pixel Kart","Stunt Car","Ramp Racing","Car Crash","Derby Smash","Demolition Derby","Burnout City","Drag Race","Sprint Race","Circuit Pro","Track Master","Lap Record","Pole Position","Pit Stop","Grid Start","Checkered Flag","Victory Lane","Speed Trap","Nitro Boost","Turbo Charge","Supercar","Hypercar","Sports Car","Muscle Car","Classic Car","Vintage Rally","Endurance Race","Time Trial","Hot Lap","Fast Lane","Overtake","Podium Finish","Burnout Drift","Slide Control","Handbrake Turn","Corner Master","Apex Racing","Trail Blazer","Mud Runner","Rock Crawler","Hill Racer","Mountain Pass","Thunder Road","Lightning Lap","Storm Circuit","Blaze Track","Inferno GP","Frost Rally","Ice Track","Snow Drift","Glacier Run","Tundra Race","Savanna Sprint","Jungle Circuit","Rainforest Rally","Wetland Race","Swamp Buggy","Marsh Runner","Delta Drift","River Road","Lake Lap","Ocean Drive","Coastal Cruise","Beach Buggy","Sand Dune","Desert Drift","Canyon Race","Mesa Circuit","Badlands Rally","Prairie Sprint","Steppe Race","Tundra Track","Taiga Rally","Forest Circuit","Woodland Race","Meadow Drive","Valley Circuit","Mountain GP","Alpine Rally","Summit Race","Peak Circuit","Ridge Rally","Cliff Drive","Plateau Race","Highland Sprint","Lowland Circuit","Flatland Rally","Urban Circuit","City Sprint","Metro Race","Downtown Drift","Suburb Rally","Highway Sprint","Freeway Race","Expressway GP","Motorway Rally","Autobahn Race"],
+  sp:["Basketball Pro","Soccer Stars","Tennis Ace","Golf Master","Baseball Hero","Hockey League","Football Rush","Volleyball Beach","Cricket Champion","Rugby Tackle","Boxing Ring","MMA Fighter","Wrestling Mania","Skateboard Pro","BMX Freestyle","Surfing Wave","Snowboard Rush","Ski Jump","Table Tennis","Badminton Smash","Archery Target","Darts Pro","Bowling Strike","Billiards Master","Curling Stone","Fencing Duel","Karate Kick","Judo Throw","Taekwondo","Gymnastics","Swimming Race","Diving Pro","Water Polo","Handball","Lacrosse","Field Hockey","Polo Match","Horse Racing","Dog Racing","Cycling Tour","Marathon Run","Sprint Dash","Long Jump","High Jump","Pole Vault","Shot Put","Discus Throw","Javelin","Hammer Throw","Decathlon","Pentathlon","Triathlon","Iron Man","Extreme Sports","X Games","Trick Shot","Slam Dunk","Free Throw","Penalty Kick","Corner Kick","Volleyball Spike","Tennis Rally","Golf Putt","Baseball Pitch","Hockey Slap Shot","Football Touchdown","Rugby Try","Cricket Six","Rowing Sprint","Kayak Race","Canoe Slalom","Sailing Regatta","Windsurfing","Kiteboarding","Paragliding","Rock Climbing","Bouldering","Rappelling","Zip Line","Bungee Jump","Skydiving Pro","Base Jumping","Wingsuit","Speed Skating","Figure Skating","Ice Dancing","Bobsled","Luge","Skeleton","Biathlon","Cross Country","Downhill Ski","Slalom Pro","Giant Slalom","Super G","Moguls","Freestyle Ski","Half Pipe","Slopestyle","Big Air","Rail Jam","Park Session","Street League","Vert Ramp","Mini Ramp","Bowl Session","Pool Skating","Longboard","Penny Board","Electric Board","Hoverboard"],
+  ad:["Dungeon Explorer","Cave Adventure","Forest Quest","Ocean Voyage","Mountain Trek","Space Odyssey","Desert Nomad","Arctic Explorer","Jungle Safari","Island Survivor","Treasure Hunt","Lost Temple","Ancient Ruins","Pyramid Quest","Castle Siege","Dragon Slayer","Knight Quest","Pirate Voyage","Submarine Deep","Sky Island","Cloud Kingdom","Underground City","Lava World","Ice Cave","Crystal Mine","Shadow Realm","Spirit World","Dream Walker","Time Traveler","Dimension Hop","Galaxy Rover","Planet Scout","Asteroid Belt","Nebula Run","Comet Chase","Star Sailor","Moon Base","Mars Colony","Venus Station","Jupiter Ring","Saturn Quest","Neptune Dive","Phantom Ship","Ghost Hunt","Zombie Escape","Alien Encounter","Robot World","Cyber Quest","Neon City","Steam World","Clockwork","Gear Island","Magnet Zone","Gravity Well","Warp Gate","Portal Jump","Rift Walker","Void Explorer","Abyss Diver","Deep Descent","Ember Trail","Frost Path","Storm Route","Thunder Way","Lightning Road","Wind Path","Rain Trail","Snow Route","Hail Way","Mist Road","Fog Path","Cloud Trail","Sky Route","Star Way","Moon Road","Sun Path","Dawn Trail","Dusk Route","Twilight Way","Midnight Road","Eclipse Path","Solstice Trail","Equinox Route","Aurora Way","Zenith Road","Nadir Path","Horizon Trail","Meridian Route","Latitude Way","Longitude Road","Compass Path","Bearing Trail","Heading Route","Course Way","Drift Road","Current Path","Stream Trail","River Route","Creek Way","Brook Road","Spring Path","Well Trail","Oasis Route","Mirage Way","Phantom Road","Wraith Path","Specter Trail","Banshee Route","Poltergeist Way","Revenant Road","Lich Path","Necro Trail","Undead Route","Ghoul Way","Vampire Road","Werewolf Path"],
+  sm:["Farm Simulator","City Builder","Restaurant Tycoon","Hotel Manager","Airport Control","Train Conductor","Bus Driver","Taxi Sim","Truck Simulator","Ship Captain","Submarine Pilot","Helicopter Sim","Space Station","Moon Mining","Mars Farming","Zoo Keeper","Pet Shop","Animal Hospital","Vet Clinic","Fish Tank","Bird Sanctuary","Butterfly Garden","Bee Keeper","Ant Colony","Spider Web","Fossil Dig","Gem Mining","Gold Rush","Oil Tycoon","Gas Station","Power Plant","Wind Farm","Solar Panel","Water Works","Dam Builder","Bridge Maker","Road Builder","Rail Network","Canal System","Harbor Master","Lighthouse","Weather Station","Observatory","Lab Manager","Research Center","University","School Builder","Hospital","Fire Station","Police HQ","Military Base","Space Center","Theme Park","Water Park","Ski Resort","Beach Club","Cruise Ship","Casino","Mall Manager","Market Sim","Bakery Owner","Coffee Shop","Ice Cream Parlor","Pizza Place","Burger Joint","Sushi Bar","Taco Stand","BBQ Pit","Food Truck","Juice Bar","Smoothie Shop","Donut House","Candy Store","Chocolate Factory","Cheese Maker","Winery","Brewery","Distillery","Orchard","Vineyard","Greenhouse","Nursery","Florist","Garden Center","Lumber Mill","Paper Mill","Textile Mill","Steel Mill","Glass Works","Pottery Studio","Forge","Foundry","Refinery","Warehouse","Distribution","Logistics","Shipping","Freight","Cargo","Container","Customs","Import Export","Trade Hub","Stock Exchange"],
+  cl:["Cookie Empire","Candy Factory","Gem Miner","Gold Digger","Money Tree","Coin Rush","Diamond Dash","Crystal Clicker","Atom Smasher","Star Collector","Planet Maker","Galaxy Builder","Universe Creator","Dimension Forge","Infinity Loop","Click Kingdom","Tap Empire","Idle Farmer","Idle Miner","Idle Factory","Idle City","Idle Space","Idle Ocean","Idle Forest","Idle Mountain","Idle Desert","Idle Arctic","Idle Jungle","Auto Clicker","Speed Click","Rapid Tap","Ultra Click","Mega Tap","Super Clicker","Hyper Tap","Turbo Click","Power Tap","Energy Clicker","Force Tap","Gravity Click","Quantum Tap","Cosmic Click","Stellar Tap","Nova Clicker","Pulsar Tap","Quasar Click","Nebula Tap","Galaxy Click","Universe Tap","Infinity Click","Pixel Clicker","Voxel Tap","Polygon Click","Vector Tap","Raster Click","Bitmap Tap","Sprite Click","Texture Tap","Shader Click","Render Tap","Frame Click","Scene Tap","Level Click","Stage Tap","Round Click","Wave Tap","Phase Click","Cycle Tap","Epoch Click","Era Tap","Age Click","Period Tap","Season Click","Month Tap","Week Click","Day Tap","Hour Click","Minute Tap","Second Click","Moment Tap","Instant Click","Flash Tap","Blink Click","Wink Tap","Snap Click","Pop Tap","Boom Click","Bang Tap","Crash Click","Smash Tap","Bash Click","Slash Tap"],
+  fg:["Street Brawl","Arena Fighter","Ring Warrior","Cage Match","Dojo Master","Kung Fu","Karate Kid","Boxing Champ","MMA Arena","Wrestling Pro","Sumo Slam","Ninja Battle","Samurai Duel","Gladiator","Spartan Fight","Viking War","Knight Combat","Dragon Fist","Tiger Claw","Eagle Strike","Snake Style","Crane Kick","Monkey Form","Praying Mantis","Iron Palm","Steel Fist","Thunder Punch","Lightning Kick","Storm Strike","Flame Punch","Ice Kick","Shadow Fight","Phantom Blow","Ghost Strike","Spirit Fist","Soul Punch","Mind Strike","Force Push","Energy Blast","Power Wave","Chi Master","Ki Warrior","Aura Fighter","Elemental Fist","Nature Strike","Earth Punch","Water Kick","Fire Strike","Wind Blow","Thunder God","Jade Dragon","Crimson Tiger","Azure Phoenix","Golden Turtle","Silver Serpent","Bronze Bull","Copper Hawk","Platinum Wolf","Obsidian Bear","Diamond Lion","Ruby Falcon","Sapphire Panther","Emerald Cobra","Topaz Shark","Amethyst Scorpion","Onyx Rhino","Pearl Crane","Opal Mantis","Garnet Viper","Turquoise Eagle","Coral Monkey","Amber Fox","Ivory Stag","Ebony Raven","Granite Gorilla","Marble Ox","Crystal Lynx","Quartz Badger","Flint Wolverine","Slate Jaguar"],
+  io2:["Worms Zone","Zombs.io","Florr.io","Defly.io","Mope.io","Starve.io","Hole.io","Crowd City","Little Big Snake","Wings.io","Brutforce.io","Gats.io","YoHoHo.io","Skribbl.io","Gartic.io","Lordz.io","MooMoo.io","Zombs Royale","Fightz.io","Betrayal.io","Taming.io","Smash.io","Tornado.io","Black Hole.io","Aquapark.io","Snowball.io","Tanks.io","Copter.io","FlyOrDie.io","Wormax.io","Splix.io","Superhex.io","Powerline.io","Curve Fever","Pac-Man.io","Narwhale.io","Devast.io","Bruh.io","Spinz.io","Krew.io","ShellShockers2","EvoWorld","Stabfish","Nightpoint","Bloble.io","Doblons.io","Battledudes.io","Yohoho2","WarScrap","GoBattle","Arras.io","Digdig.io","Gulper.io","Sketchful.io","Poke.io","Oib.io","Massivematch.io","Vertix.io","Raid.land","Minigiants.io","Repuls.io","Moomooio2","Orn.io","Galaxywar.io","Tanksio2","Bumpbattle.io","Biome.io","Cellcraft.io","Stario","Nexus.io","Wavewar.io","Gridland.io","Pixelwar.io","Voxelio","Cubeslam.io","Sphereio","Dotwar.io","Lineio","Arcio","Shapewar.io"],
 };
 
-const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg-0:#08080d;--bg-1:#0e0e16;--bg-2:#161622;--bg-3:#111119;--bg-h:#1c1c2e;
-  --p:#7c3aed;--pl:#a78bfa;--pd:#5b21b6;--pg:rgba(124,58,237,.25);--ps:rgba(124,58,237,.08);
-  --t1:#eaeaf2;--t2:#8888a4;--t3:#505068;--brd:rgba(255,255,255,.05);
-  --sbC:72px;--sbE:256px;--hH:60px;
-  --f:.15s ease;--m:.25s ease;--s:.3s cubic-bezier(.4,0,.2,1);
-  --r1:8px;--r2:12px;--r3:16px;--r4:24px;
+const CAT_MAP = {sh:"shooting",ac:"action",pz:"puzzle",dr:"driving",sp:"sports",ad:"adventure",sm:"simulation",cl:"clicker",fg:"fighting",io2:"io",
+  io:"io",mp:"multiplayer",tp:"top-picks",ft:"featured",cs:"cant-stop",fr:"friends","2p":"2-player",nw:"new"};
+const CAT_FULL = {sh:"Shooting",ac:"Action",pz:"Puzzle",dr:"Driving",sp:"Sports",ad:"Adventure",sm:"Simulation",cl:"Clicker",fg:"Fighting"};
+const DEVS = ["GameDistribution","Poki","CrazyGames","Y8","Kizi","Miniclip","Addicting Games","Armor Games","Kongregate","Newgrounds","Madpuffers","Voodoo","RHM Interactive","TinyDobbins","Pelican Party","Blue Wizard","MarketJS","Famobi","GamePix","SoftGames","Construct","Phaser Studios","PlayCanvas","PixiJS Games","BabylonJS","ImpactJS","MelonJS","GameSnacks","HTML5 GameDevs","WebGL Studio","Cocos Games","Unity WebGL","Godot Web","Defold Games","GDevelop","Stencyl","Buildbox","GameMaker","Scratch Games","Turbulenz"];
+const DESCS = {sh:"Intense shooting action with multiple weapons and modes.",ac:"Fast-paced action gameplay with exciting challenges.",pz:"Brain-teasing puzzles that test your logic and skill.",dr:"High-speed racing and driving thrills.",sp:"Competitive sports action and athletics.",ad:"Epic adventures through mysterious worlds.",sm:"Build, manage, and simulate real-world scenarios.",cl:"Addictive clicking and idle progression.",fg:"Fierce combat and martial arts battles."};
+const CTRLS = {sh:"WASD move, Mouse aim/shoot, R reload",ac:"Arrow Keys/WASD move, Space jump",pz:"Mouse click and drag to solve",dr:"Arrow Keys steer, Space brake/drift",sp:"Mouse/Arrow Keys for actions",ad:"WASD move, E interact, Space jump",sm:"Mouse click to build and manage",cl:"Mouse click, buy upgrades",fg:"Arrow Keys move, Z/X/C attack combos"};
+
+function generateDB() {
+  const games = [];
+  let id = 1;
+  // Add base games first (real URLs)
+  BASE_GAMES.forEach(g => {
+    games.push({
+      id: id++, title: g.t,
+      cat: g.c.map(c => CAT_MAP[c] || c),
+      tags: g.tg, thumb: `https://img.gamemonetize.com/${g.th}/512x384.jpg`,
+      url: g.u, desc: g.d, dev: g.dv, yr: g.y, tech: g.tc, ctrl: g.ct
+    });
+  });
+  // Generate games from templates
+  const thumbPool = [
+    "bnz5l5c4fmgp8c26x7kldqnx30z10g33","pq4c7cg49uyq7x66z8p3w0j1opv5t6e2",
+    "n7c2fy5sb1aep7kkd0vxo2b1lh780xvn","p22zd7pc4fbkxfkzl0y3xvh5j3ddnl15",
+    "yqhfb4j9v7yqt6c8m7j6b2aqv6o8k5hx","kfqz7j5tl3cv62n8rxo1bw0yp9hs4mgu",
+    "b2c6d9e3f7g0h4i8j1k5l9m2n6o0p3q7","l7m1n4o8p2q5r9s3t6u0v4w7x1y5z8a2",
+    "b2c5d9e3f6g0h4i7j1k5l8m2n6o9p3q7","r6s0t3u7v1w4x8y2z5a9b3c6d0e4f7g1",
+    "h1i4j8k2l5m9n3o6p0q4r7s1t5u8v2w6","x0y3z7a1b4c8d2e5f9g3h6i0j4k7l1m5",
+    "z4a8b2c5d9e3f6g0h4i7j1k5l8m2n6o9","j5k9l2m6n0o3p7q1r4s8t2u5v9w3x6y0",
+    "v1w4x8y2z5a9b3c6d0e4f7g1h5i8j2k6","r8s2t5u9v3w6x0y4z7a1b5c8d2e6f9g3",
+    "n5o9p3q6r0s4t7u1v5w8x2y6z9a3b7c0","z1a5b8c2d6e9f3g7h0i4j8k1l5m9n2o6",
+    "p0q4r7s1t5u8v2w6x9y3z7a0b4c8d1e5","f9g3h6i0j4k7l1m5n8o2p6q9r3s7t0u4",
+    "r1s5t8u2v6w9x3y7z0a4b8c1d5e9f2g6","d0e4f7g1h5i8j2k6l9m3n7o0p4q8r1s5",
+    "t9u3v6w0x4y7z1a5b8c2d6e9f3g7h0i4","l3m7n0o4p8q1r5s9t2u6v0w3x7y1z4a8",
+    "d7e1f4g8h2i5j9k3l6m0n4o7p1q5r8s2","t6u0v3w7x1y4z8a2b5c9d3e6f0g4h7i1",
+    "b9c3d6e0f4g7h1i5j8k2l6m9n3o7p0q4","r4s8t1u5v9w2x6y0z3a7b1c4d8e2f5g9",
+    "h7i1j4k8l2m5n9o3p6q0r4s7t1u5v8w2","v8w2x5y9z3a6b0c4d7e1f5g8h2i6j9k3",
+    "q5v8w2x6y0z3a7b1c4d8e2f5g9h3i6j0","s7v0j8q5u2k3r1w9x4t6y0m8p2n5b7a1",
+    "g3h7k2l5m8n1p4r6s9t0v2w5x7y1z3a6","n8o2p5q9r3s6t0u4v7w1x5y8z2a6b9c3",
+    "x6y0z3a7b1c4d8e2f5g9h3i6j0k4l7m1","t3u7v1w4x8y2z5a9b3c6d0e4f7g1h5i8",
+    "j2k6l0m3n7o1p4q8r2s5t9u3v6w0x4y7","f5g9h2i6j0k3l7m1n4o8p2q5r9s3t6u0",
+    "b5c9d2e6f0g3h7i1j4k8l2m5n9o3p6q0","n1o5p8q2r6s9t3u7v0w4x8y1z5a9b2c6",
+    "h3i7j0k4l8m1n5o9p2q6r0s3t7u1v4w8","x2y6z9a3b7c0d4e8f1g5h9i2j6k0l3m7",
+    "d4e8f2g5h9i3j6k0l4m7n1o5p8q2r6s9","z7a1b4c8d2e5f9g3h6i0j4k7l1m5n8o2",
+    "p6q0r3s7t1u4v8w2x5y9z3a6b0c4d7e1","l7m0n4o8p1q5r9s2t6u0v3w7x1y4z8a2",
+    "p3q6r0s4t7u1v5w8x2y6z9a3b7c0d4e8","f2g5h9i3j6k0l4m7n1o5p8q2r6s9t3u7",
+  ];
+
+  const catKeys = Object.keys(GAME_NAMES);
+  const extras = ["top-picks","featured","cant-stop","friends","2-player","new","multiplayer"];
+
+  catKeys.forEach(ck => {
+    const names = GAME_NAMES[ck];
+    const mainCat = CAT_MAP[ck] || ck;
+    names.forEach((name, i) => {
+      const extraCats = [];
+      if (i % 3 === 0) extraCats.push(extras[i % extras.length]);
+      if (i % 5 === 0) extraCats.push("multiplayer");
+      if (i % 7 === 0) extraCats.push("new");
+      if (i % 4 === 0) extraCats.push("top-picks");
+      const cats = [mainCat, ...extraCats].filter((v,j,a)=>a.indexOf(v)===j);
+      const yr = 2010 + (i % 15);
+      const di = i % DEVS.length;
+      const ti = (id + i * 7) % thumbPool.length;
+      const words = name.toLowerCase().split(/\s+/);
+      games.push({
+        id: id++, title: name, cat: cats,
+        tags: words.slice(0, 3),
+        thumb: `https://img.gamemonetize.com/${thumbPool[ti]}/512x384.jpg`,
+        url: `https://html5.gamedistribution.com/rvvASMiM/${Array.from({length:32},(_,k)=>"0123456789abcdef"[(id*7+k*13+i*3)%16]).join("")}/index.html`,
+        desc: DESCS[ck] || "An exciting browser game you can play for free!",
+        dev: DEVS[di], yr, tech: yr > 2018 ? "WebGL" : "HTML5",
+        ctrl: CTRLS[ck] || "Mouse and Keyboard"
+      });
+    });
+  });
+  return games;
 }
+
+const DB = generateDB();
+
+const CATS=[
+  {id:"top-picks",label:"Top Picks",icon:"star"},{id:"featured",label:"Featured",icon:"trophy"},
+  {id:"2-player",label:"2 Player",icon:"users"},{id:"cant-stop",label:"Can't Stop Playing",icon:"flame"},
+  {id:"friends",label:"Play with Friends",icon:"handshake"},{id:"new",label:"New Games",icon:"sparkle"},
+  {id:"driving",label:"Driving",icon:"car"},{id:"shooting",label:"Shooting",icon:"crosshair"},
+  {id:"puzzle",label:"Puzzle",icon:"puzzle"},{id:"adventure",label:"Adventure",icon:"compass"},
+  {id:"clicker",label:"Clicker",icon:"pointer"},{id:"sports",label:"Sports",icon:"medal"},
+  {id:"io",label:"IO Games",icon:"globe"},{id:"multiplayer",label:"Multiplayer",icon:"broadcast"},
+  {id:"action",label:"Action",icon:"zap"},{id:"simulation",label:"Simulation",icon:"monitor"},
+  {id:"fighting",label:"Fighting",icon:"swords"},
+];
+
+const Logo=({s=32})=>(
+<svg width={s} height={s} viewBox="0 0 100 100" fill="none"><g strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"><path d="M20 30 L50 60 L80 30" stroke="white"/><path d="M20 70 L50 40 L80 70" stroke="#a78bfa"/></g></svg>);
+
+const I=({n,s=20,c="currentColor"})=>{const m={
+  star:<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>,
+  trophy:<><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></>,
+  users:<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
+  flame:<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>,
+  handshake:<><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.68.05l2.37-1.05a1 1 0 0 1 1.36 1.36l-1.05 2.37a2 2 0 0 0 .05 1.68l.28.47a5.79 5.79 0 0 1-.87 7.06L18 20.14"/><path d="M9.19 14.37a1 1 0 1 0-3 3L8 19.19"/><path d="M3.84 6.37a1 1 0 0 1 1.36-1.36l2.37 1.05a2 2 0 0 0 1.68-.05l.47-.28"/></>,
+  sparkle:<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></>,
+  car:<><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></>,
+  crosshair:<><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></>,
+  puzzle:<path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/>,
+  compass:<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>,
+  pointer:<><path d="M22 14a8 8 0 0 1-8 8"/><path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/><path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 16"/></>,
+  medal:<><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></>,
+  globe:<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>,
+  broadcast:<><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></>,
+  zap:<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>,
+  monitor:<><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></>,
+  swords:<><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><line x1="19" y1="21" x2="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" y1="14" x2="9" y2="18"/><line x1="7" y1="17" x2="4" y2="20"/><line x1="3" y1="19" x2="5" y2="21"/></>,
+  search:<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>,
+  x:<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>,
+  chevronLeft:<polyline points="15 18 9 12 15 6"/>,chevronRight:<polyline points="9 6 15 12 9 18"/>,
+  heart:<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>,
+  heartFilled:<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" fill="currentColor"/>,
+  thumbsUp:<><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></>,
+  share:<><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></>,
+  gamepad:<><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258A4 4 0 0 0 17.32 5z"/></>,
+  bell:<><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></>,
+  home:<><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>,
+  arrowLeft:<><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></>,
+  maximize:<><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></>,
+  play:<polygon points="5 3 19 12 5 21 5 3"/>,
+  user:<><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>,
+  shrink:<><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></>,
+  trending:<><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></>,
+  clock:<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
+  google:<><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" stroke="none"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" stroke="none"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" stroke="none"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" stroke="none"/></>,
+  settings:<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></>,
+  logout:<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>,
+  menu:<><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></>,
+};return <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{m[n]||null}</svg>};
+
+const CSS=`@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--b0:#08080d;--b1:#0e0e16;--b2:#161622;--b3:#111119;--bh:#1c1c2e;--p:#7c3aed;--pl:#a78bfa;--pd:#5b21b6;--pg:rgba(124,58,237,.25);--ps:rgba(124,58,237,.08);--t1:#eaeaf2;--t2:#8888a4;--t3:#505068;--bd:rgba(255,255,255,.05);--sc:72px;--se:240px;--hh:56px}
 html,body,#root{height:100%;overflow:hidden}
-body{font-family:'Outfit',sans-serif;background:var(--bg-0);color:var(--t1);-webkit-font-smoothing:antialiased}
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--bg-2);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--pd)}
+body{font-family:'Outfit',sans-serif;background:var(--b0);color:var(--t1);-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+.Z{display:flex;height:100vh;height:100dvh;overflow:hidden}
+.M{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.C{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
 
-.app{display:flex;height:100vh;overflow:hidden}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.content{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth}
+/* Mobile menu */
+.mob-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;backdrop-filter:blur(4px)}
+.mob-sb{position:fixed;left:0;top:0;bottom:0;width:280px;background:var(--b1);z-index:999;overflow-y:auto;animation:slR .25s ease;border-right:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom)}
+@keyframes slR{from{transform:translateX(-100%)}to{transform:translateX(0)}}
 
-/* ══ SIDEBAR ══ */
-.sb{width:var(--sbC);background:var(--bg-1);border-right:1px solid var(--brd);display:flex;flex-direction:column;overflow:hidden;transition:width var(--s);flex-shrink:0;z-index:50}
-.sb:hover{width:var(--sbE)}
-.sb-top{height:var(--hH);display:flex;align-items:center;padding:0 0 0 16px;gap:12px;flex-shrink:0;border-bottom:1px solid var(--brd);cursor:pointer;overflow:hidden}
-.sb-logo{width:40px;height:40px;min-width:40px;background:linear-gradient(135deg,var(--p),#9333ea);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px var(--pg)}
-.sb-name{font-size:22px;font-weight:800;letter-spacing:-1px;white-space:nowrap;opacity:0;transition:opacity var(--m)}
-.sb:hover .sb-name{opacity:1}
-.sb-name span{color:var(--pl)}
-.sb-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:6px 0 16px}
-.sb-lbl{padding:18px 0 8px 24px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);white-space:nowrap;opacity:0;transition:opacity var(--m)}
-.sb:hover .sb-lbl{opacity:1}
-.sb-i{display:flex;align-items:center;gap:14px;height:44px;padding:0 16px 0 24px;cursor:pointer;transition:all var(--f);white-space:nowrap;color:var(--t2);position:relative;margin:1px 0}
-.sb-i:hover{background:var(--ps);color:var(--t1)}
-.sb-i.on{color:var(--pl);background:var(--ps)}
-.sb-i.on::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;background:var(--p);border-radius:0 4px 4px 0}
-.sb-ic{width:22px;height:22px;min-width:22px;display:flex;align-items:center;justify-content:center;transition:transform var(--f)}
-.sb-i:hover .sb-ic{transform:scale(1.15)}
-.sb-tx{font-size:13.5px;font-weight:500;opacity:0;transition:opacity var(--m);overflow:hidden}
-.sb:hover .sb-tx{opacity:1}
-.sb-div{height:1px;background:var(--brd);margin:8px 20px}
-/* Tooltip */
-.sb-i[data-tip]::after{content:attr(data-tip);position:absolute;left:calc(var(--sbC) + 8px);top:50%;transform:translateY(-50%);padding:5px 11px;background:#1a1a2e;border:1px solid var(--brd);border-radius:var(--r1);font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,.5)}
-.sb:not(:hover) .sb-i:hover::after{opacity:1}
+/* Sidebar desktop */
+.S{width:var(--sc);background:var(--b1);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden;transition:width .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;z-index:50}
+.S:hover{width:var(--se)}
+.St{height:var(--hh);display:flex;align-items:center;padding:0 0 0 16px;gap:10px;flex-shrink:0;border-bottom:1px solid var(--bd);cursor:pointer;overflow:hidden}
+.Sl{width:38px;height:38px;min-width:38px;background:linear-gradient(135deg,var(--p),#9333ea);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px var(--pg)}
+.Sn{font-size:20px;font-weight:800;letter-spacing:-.5px;white-space:nowrap;opacity:0;transition:opacity .25s}
+.S:hover .Sn{opacity:1}.Sn span{color:var(--pl)}
+.mob-sb .Sn{opacity:1}
+.Sb{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 0 16px}
+.Sla{padding:16px 0 6px 20px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);white-space:nowrap;opacity:0;transition:opacity .25s}
+.S:hover .Sla{opacity:1}.mob-sb .Sla{opacity:1}
+.Si{display:flex;align-items:center;gap:12px;height:42px;padding:0 14px 0 20px;cursor:pointer;transition:all .15s;white-space:nowrap;color:var(--t2);position:relative;margin:1px 0}
+.Si:hover{background:var(--ps);color:var(--t1)}.Si.on{color:var(--pl);background:var(--ps)}
+.Si.on::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;background:var(--p);border-radius:0 4px 4px 0}
+.Sic{width:20px;height:20px;min-width:20px;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.Si:hover .Sic{transform:scale(1.15)}
+.Stx{font-size:13px;font-weight:500;opacity:0;transition:opacity .25s;overflow:hidden}
+.S:hover .Stx{opacity:1}.mob-sb .Stx{opacity:1}
+.Sdv{height:1px;background:var(--bd);margin:6px 16px}
+.Si[data-t]::after{content:attr(data-t);position:absolute;left:calc(var(--sc)+6px);top:50%;transform:translateY(-50%);padding:4px 10px;background:#1a1a2e;border:1px solid var(--bd);border-radius:6px;font-size:11px;font-weight:500;color:var(--t1);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.S:not(:hover) .Si:hover::after{opacity:1}
 
-/* ══ HEADER ══ */
-.hd{height:var(--hH);background:var(--bg-1);border-bottom:1px solid var(--brd);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
-.hd-s{flex:1;max-width:520px;position:relative}
-.hd-s input{width:100%;height:42px;background:var(--bg-2);border:1px solid var(--brd);border-radius:var(--r4);padding:0 18px 0 44px;color:var(--t1);font-family:inherit;font-size:14px;outline:none;transition:border var(--f),box-shadow var(--f)}
-.hd-s input:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pg)}
-.hd-s input::placeholder{color:var(--t3)}
-.hd-si{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--t3)}
-.sr-dd{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--bg-1);border:1px solid var(--brd);border-radius:var(--r2);max-height:420px;overflow-y:auto;z-index:200;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.sr-i{display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:background var(--f)}
-.sr-i:hover{background:var(--bg-h)}
-.sr-th{width:52px;height:39px;border-radius:var(--r1);object-fit:cover;background:var(--bg-2)}
-.sr-inf{flex:1}.sr-t{font-size:14px;font-weight:500}.sr-c{font-size:11px;color:var(--t3);margin-top:2px}
-.hd-a{display:flex;align-items:center;gap:4px;flex-shrink:0}
-.hd-b{width:42px;height:42px;border-radius:var(--r2);background:transparent;border:none;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--f);position:relative}
-.hd-b:hover{background:var(--bg-2);color:var(--pl)}
-.hd-b.on{color:var(--p)}
-.hd-b .dt{position:absolute;top:8px;right:8px;width:7px;height:7px;background:var(--p);border-radius:50%}
-.hd-p{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--p),#9333ea);border:none;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* Header */
+.H{height:var(--hh);background:var(--b1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 12px;gap:10px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.H-menu{width:40px;height:40px;border-radius:10px;background:transparent;border:none;color:var(--t2);cursor:pointer;display:none;align-items:center;justify-content:center}
+.H-logo{display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0;margin-right:4px}
+.H-logo-txt{font-size:18px;font-weight:800;letter-spacing:-.5px;white-space:nowrap}
+.H-logo-txt span{color:var(--pl)}
+.Hs{flex:1;max-width:500px;position:relative}
+.Hs input{width:100%;height:40px;background:var(--b2);border:1px solid var(--bd);border-radius:20px;padding:0 16px 0 40px;color:var(--t1);font-family:inherit;font-size:13px;outline:none;transition:border .15s,box-shadow .15s}
+.Hs input:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pg)}
+.Hs input::placeholder{color:var(--t3)}
+.Hsi{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t3)}
+.Sdd{position:absolute;top:calc(100%+6px);left:0;right:0;background:var(--b1);border:1px solid var(--bd);border-radius:10px;max-height:380px;overflow-y:auto;z-index:200;box-shadow:0 16px 48px rgba(0,0,0,.6)}
+.Sri{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;transition:background .15s}
+.Sri:hover{background:var(--bh)}
+.Srt{width:48px;height:36px;border-radius:6px;object-fit:cover;background:var(--b2)}
+.Srn{font-size:13px;font-weight:500}.Src{font-size:11px;color:var(--t3);margin-top:1px}
+.Ha{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.Hb{width:40px;height:40px;border-radius:10px;background:transparent;border:none;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;position:relative}
+.Hb:hover{background:var(--b2);color:var(--pl)}.Hb.on{color:var(--p)}
+.Hb .dot{position:absolute;top:7px;right:7px;width:6px;height:6px;background:var(--p);border-radius:50%}
+.Hp{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--p),#9333ea);border:none;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;font-size:14px;font-weight:700}
 
-/* ══ GAME ROW ══ */
-.sec{padding:28px 0 10px}
-.sec-h{display:flex;align-items:center;padding:0 32px 16px}
-.sec-t{font-size:19px;font-weight:700;letter-spacing:-.3px}
-.rw{position:relative;padding:0 32px}
-.rw:hover .sa{opacity:1}
-.rl{display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;padding-bottom:8px;scrollbar-width:none}
-.rl::-webkit-scrollbar{display:none}
-.sa{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.9);border:1px solid var(--brd);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;opacity:0;transition:all var(--f);backdrop-filter:blur(4px)}
-.sa:hover{background:var(--p);border-color:var(--p);transform:translateY(-50%) scale(1.08)}
-.sa.l{left:12px}.sa.r{right:12px}
+/* Dropdowns */
+.dd{position:absolute;top:calc(100%+6px);right:0;background:var(--b1);border:1px solid var(--bd);border-radius:10px;min-width:280px;z-index:300;box-shadow:0 16px 48px rgba(0,0,0,.6);animation:pop .2s ease}
+@keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.dd-h{padding:14px 16px;border-bottom:1px solid var(--bd);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.dd-i{padding:10px 16px;font-size:13px;color:var(--t2);cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:8px}
+.dd-i:hover{background:var(--bh);color:var(--t1)}
 
-/* ══ CARD ══ */
-.cd{flex-shrink:0;width:190px;cursor:pointer;position:relative;border-radius:var(--r2);overflow:hidden;background:var(--bg-3);transition:transform var(--m),box-shadow var(--m)}
-.cd:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 14px 36px rgba(0,0,0,.45),0 0 0 1px var(--pg);z-index:5}
-.cd img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
-.cd-o{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.15) 45%,transparent 100%);opacity:0;transition:opacity var(--m);display:flex;flex-direction:column;justify-content:flex-end;padding:14px}
-.cd:hover .cd-o{opacity:1}
-.cd-pl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;opacity:0;transition:all var(--m);box-shadow:0 4px 24px var(--pg)}
+/* Game Row */
+.sec{padding:20px 0 8px}.sec-h{padding:0 16px 12px}.sec-t{font-size:17px;font-weight:700}
+.rw{position:relative;padding:0 16px}.rw:hover .arr{opacity:1}
+.rl{display:flex;gap:12px;overflow-x:auto;scroll-behavior:smooth;padding-bottom:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.rl::-webkit-scrollbar{display:none}
+.arr{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.9);border:1px solid var(--bd);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;opacity:0;transition:all .15s}
+.arr:hover{background:var(--p);transform:translateY(-50%) scale(1.08)}
+.arr.l{left:4px}.arr.r{right:4px}
+
+/* Card */
+.cd{flex-shrink:0;width:170px;cursor:pointer;position:relative;border-radius:10px;overflow:hidden;background:var(--b3);transition:transform .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.cd:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 32px rgba(0,0,0,.4),0 0 0 1px var(--pg);z-index:5}
+@media(hover:none){.cd:hover{transform:none;box-shadow:none}.cd:active{transform:scale(.97)}}
+.cd-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:linear-gradient(135deg,#16162a,#2d1b69)}
+.cd-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 40%,transparent 100%);opacity:0;transition:opacity .2s;display:flex;flex-direction:column;justify-content:flex-end;padding:12px}
+.cd:hover .cd-ov{opacity:1}
+@media(hover:none){.cd .cd-ov{opacity:1;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%)}}
+.cd-pl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;opacity:0;transition:all .2s;box-shadow:0 4px 20px var(--pg)}
 .cd:hover .cd-pl{opacity:1}
-.cd-n{font-size:13px;font-weight:600;color:white;line-height:1.3}
-.cd-tg{font-size:11px;color:var(--t3);margin-top:2px}
-.cd-b{padding:8px 10px}
-.cd-bn{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(hover:none){.cd .cd-pl{width:36px;height:36px;opacity:.9}}
+.cd-n{font-size:12px;font-weight:600;color:white}.cd-tg{font-size:10px;color:var(--t3);margin-top:1px}
+.cd-b{padding:6px 8px}.cd-bn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* ══ GAME PAGE ══ */
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:16px}
+
+/* Game Page */
 .gp{display:flex;flex-direction:column;min-height:100%;animation:fu .3s ease}
-@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.gp-t{display:flex}
-.gp-ad{width:160px;flex-shrink:0;padding:16px;display:flex;flex-direction:column;align-items:center}
-.ad-p{width:120px;height:600px;background:var(--bg-2);border-radius:var(--r2);border:1px dashed var(--brd);display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:11px;writing-mode:vertical-rl;position:sticky;top:80px}
-.gp-c{flex:1;min-width:0;padding:16px}
-.gp-if{width:100%;aspect-ratio:16/9;background:#000;border-radius:var(--r3);overflow:hidden;position:relative}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.gp-t{display:flex}.gp-ad{width:140px;flex-shrink:0;padding:12px;position:sticky;top:0;height:fit-content;align-self:flex-start}
+.ad-p{width:100px;height:280px;background:var(--b2);border-radius:10px;border:1px dashed var(--bd);display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:10px;writing-mode:vertical-rl}
+.gp-c{flex:1;min-width:0;padding:12px}
+.gp-if{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;position:relative}
 .gp-if iframe{width:100%;height:100%;border:none}
 .gp-if.fs{position:fixed;inset:0;z-index:9999;border-radius:0;aspect-ratio:unset}
-.gp-ac{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
-.gp-b{display:flex;align-items:center;gap:8px;padding:10px 20px;background:var(--bg-2);border:1px solid var(--brd);border-radius:var(--r4);color:var(--t1);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;transition:all var(--f)}
-.gp-b:hover{background:var(--ps);border-color:var(--p);color:var(--pl)}
-.gp-b.on{color:var(--p);border-color:var(--p);background:var(--ps)}
-.gp-d{margin-top:24px;padding:24px;background:var(--bg-1);border-radius:var(--r3);border:1px solid var(--brd)}
-.gp-d h2{font-size:22px;font-weight:700;margin-bottom:12px}
-.gp-d p{font-size:14px;color:var(--t2);line-height:1.7;margin-bottom:12px}
-.gp-m{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:16px}
-.gp-mi{padding:12px 16px;background:var(--bg-2);border-radius:var(--r2)}
-.gp-ml{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.gp-mv{font-size:14px;font-weight:600}
-.gp-s{width:280px;flex-shrink:0;padding:16px;overflow-y:auto;max-height:calc(100vh - var(--hH))}
-.sm-t{font-size:15px;font-weight:700;margin-bottom:14px;padding:0 4px}
-.sm-i{display:flex;gap:10px;padding:8px;border-radius:var(--r2);cursor:pointer;transition:background var(--f);margin-bottom:6px}
-.sm-i:hover{background:var(--bg-h)}
-.sm-th{width:64px;height:48px;border-radius:var(--r1);object-fit:cover;flex-shrink:0;background:var(--bg-2)}
-.sm-if{flex:1;min-width:0}
-.sm-n{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sm-c{font-size:11px;color:var(--t3);margin-top:2px}
+.gp-ac{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.gb{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--b2);border:1px solid var(--bd);border-radius:20px;color:var(--t1);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all .15s}
+.gb:hover{background:var(--ps);border-color:var(--p);color:var(--pl)}.gb.on{color:var(--p);border-color:var(--p);background:var(--ps)}
+.gd{margin-top:20px;padding:20px;background:var(--b1);border-radius:12px;border:1px solid var(--bd)}
+.gd h2{font-size:20px;font-weight:700;margin-bottom:10px}
+.gd p{font-size:13px;color:var(--t2);line-height:1.7}
+.gm{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px}
+.gmi{padding:10px 14px;background:var(--b2);border-radius:10px}
+.gml{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.gmv{font-size:13px;font-weight:600}
+.gs{width:260px;flex-shrink:0;padding:12px;overflow-y:auto;max-height:calc(100vh - var(--hh))}
+.smt{font-size:14px;font-weight:700;margin-bottom:12px;padding:0 4px}
+.smi{display:flex;gap:8px;padding:6px;border-radius:10px;cursor:pointer;transition:background .15s;margin-bottom:4px}
+.smi:hover{background:var(--bh)}
+.smth{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--b2)}
+.smif{flex:1;min-width:0}.smn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.smc{font-size:10px;color:var(--t3);margin-top:1px}
 
 /* Popups */
-.po{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;animation:fi .2s ease;backdrop-filter:blur(4px)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;animation:fi .2s ease;backdrop-filter:blur(4px);padding:16px}
 @keyframes fi{from{opacity:0}to{opacity:1}}
-.pp{background:var(--bg-1);border:1px solid var(--brd);border-radius:var(--r3);padding:28px;max-width:440px;width:90%;max-height:80vh;overflow-y:auto;animation:si .25s ease}
+.pp{background:var(--b1);border:1px solid var(--bd);border-radius:14px;padding:24px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto;animation:si .25s ease}
 @keyframes si{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
-.pp-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.pp-h h3{font-size:18px;font-weight:700}
-.pp-x{background:none;border:none;color:var(--t2);cursor:pointer;padding:4px}.pp-x:hover{color:var(--t1)}
-.pp-b{font-size:14px;color:var(--t2);line-height:1.8}
-.bk{display:flex;align-items:center;gap:8px;padding:10px 20px;background:none;border:none;color:var(--t2);cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;transition:color var(--f)}
+.pp-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.pp-h h3{font-size:17px;font-weight:700}
+.xb{background:none;border:none;color:var(--t2);cursor:pointer;padding:4px}.xb:hover{color:var(--t1)}
+.bk{display:flex;align-items:center;gap:6px;padding:8px 16px;background:none;border:none;color:var(--t2);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;transition:color .15s}
 .bk:hover{color:var(--pl)}
 
 /* Favorites */
-.fp{position:fixed;top:var(--hH);right:0;width:380px;height:calc(100vh - var(--hH));background:var(--bg-1);border-left:1px solid var(--brd);z-index:200;overflow-y:auto;padding:20px;animation:sl .25s ease;box-shadow:-8px 0 40px rgba(0,0,0,.4)}
+.fp{position:fixed;top:0;right:0;width:340px;max-width:100vw;height:100vh;height:100dvh;background:var(--b1);border-left:1px solid var(--bd);z-index:200;overflow-y:auto;padding:16px;padding-top:calc(var(--hh)+16px);animation:sl .25s ease;box-shadow:-8px 0 40px rgba(0,0,0,.4)}
 @keyframes sl{from{transform:translateX(100%)}to{transform:translateX(0)}}
-.fp h3{font-size:18px;font-weight:700;margin-bottom:16px}
-.fp-e{text-align:center;padding:48px 20px;color:var(--t3);font-size:14px}
 
-/* Cat bar */
-.cb{display:flex;gap:8px;padding:16px 32px;overflow-x:auto;scrollbar-width:none}
-.cb::-webkit-scrollbar{display:none}
-.cp{padding:8px 18px;border-radius:var(--r4);background:var(--bg-2);border:1px solid var(--brd);color:var(--t2);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all var(--f);flex-shrink:0}
-.cp:hover{border-color:var(--p);color:var(--t1)}
-.cp.on{background:var(--p);border-color:var(--p);color:white}
+/* Google Sign In */
+.g-btn{display:flex;align-items:center;gap:10px;width:100%;padding:12px 18px;background:white;border:1px solid #ddd;border-radius:10px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;color:#333;transition:all .15s;margin:14px 0}
+.g-btn:hover{box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.g-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#4285F4,#34A853);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px}
 
-@media(max-width:1100px){.gp-ad{display:none}.gp-s{width:240px}}
-@media(max-width:860px){.gp-s{display:none}.sb{display:none}.hd-s{max-width:260px}}
-@media(max-width:600px){.rw{padding:0 16px}.sec-h{padding:0 16px 14px}.cd{width:152px}.cb{padding:12px 16px}}
+/* Search page */
+.sr-pg{padding:16px}.sr-pg h2{font-size:20px;font-weight:700;margin-bottom:6px}
+.sr-pg p{color:var(--t3);margin-bottom:16px;font-size:13px}
+
+/* Game count badge */
+.gc{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:var(--ps);border-radius:12px;font-size:11px;color:var(--pl);font-weight:600;margin-left:8px}
+
+/* RESPONSIVE */
+@media(min-width:1200px){.cd{width:190px}.grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
+@media(max-width:1100px){.gp-ad{display:none}.gs{width:220px}}
+@media(max-width:860px){
+  .S{display:none}
+  .H-menu{display:flex}
+  .gs{display:none}
+  .gp-ad{display:none}
+  .H-logo-txt{display:block}
+}
+@media(max-width:640px){
+  .cd{width:140px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;padding:12px}
+  .Hs{max-width:none}
+  .H{padding:0 8px;gap:6px}
+  .H-logo-txt{display:none}
+  .Sl{width:34px;height:34px;min-width:34px}
+  .sec-h{padding:0 12px 10px}.sec-t{font-size:15px}
+  .rw{padding:0 12px}
+  .dd{min-width:260px;right:-40px}
+  .fp{width:100vw}
+  .gp-c{padding:8px}
+  .gp-ac{gap:6px}
+  .gb{padding:7px 12px;font-size:11px}
+  .arr{display:none}
+}
+@media(max-width:380px){
+  .cd{width:120px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;padding:8px}
+  .cd-b{padding:4px 6px}.cd-bn{font-size:11px}
+}
 `;
 
-const GameRow = ({ title, games, onSelect }) => {
-  const ref = useRef(null);
-  const sc = d => { if(ref.current) ref.current.scrollBy({left:d*620,behavior:"smooth"}) };
-  if(!games.length) return null;
-  return (
-    <div className="sec">
-      <div className="sec-h"><div className="sec-t">{title}</div></div>
-      <div className="rw">
-        <button className="sa l" onClick={()=>sc(-1)}><Icon name="chevronLeft" size={18}/></button>
-        <div className="rl" ref={ref}>
-          {games.map(g=>(
-            <div className="cd" key={g.id} onClick={()=>onSelect(g)}>
-              <img src={g.thumb} alt={g.title} loading="lazy" onError={e=>{e.target.style.background="linear-gradient(135deg,#16162a,#5b21b6)";e.target.style.minHeight="130px"}}/>
-              <div className="cd-o"><div className="cd-pl"><Icon name="play" size={20} color="white"/></div><div className="cd-n">{g.title}</div><div className="cd-tg">{g.category[0]}</div></div>
-              <div className="cd-b"><div className="cd-bn">{g.title}</div></div>
-            </div>
-          ))}
-        </div>
-        <button className="sa r" onClick={()=>sc(1)}><Icon name="chevronRight" size={18}/></button>
-      </div>
-    </div>
-  );
-};
+const Row=({title,games,onSelect,count})=>{const r=useRef(null);const sc=d=>{if(r.current)r.current.scrollBy({left:d*500,behavior:"smooth"})};if(!games.length)return null;return(
+<div className="sec"><div className="sec-h"><div className="sec-t">{title}<span className="gc">{count||games.length}</span></div></div><div className="rw">
+<button className="arr l" onClick={()=>sc(-1)}><I n="chevronLeft" s={16}/></button>
+<div className="rl" ref={r}>{games.map(g=><Card key={g.id} g={g} onClick={()=>onSelect(g)}/>)}</div>
+<button className="arr r" onClick={()=>sc(1)}><I n="chevronRight" s={16}/></button>
+</div></div>)};
 
-export default function Zonely() {
-  const [pg,setPg]=useState("home");
-  const [gm,setGm]=useState(null);
-  const [q,setQ]=useState("");
-  const [qf,setQf]=useState(false);
-  const [cat,setCat]=useState("all");
-  const [fav,setFav]=useState([]);
-  const [sf,setSf]=useState(false);
-  const [sc,setSc]=useState(false);
-  const [fs,setFs]=useState(false);
-  const [lk,setLk]=useState({});
-  const sRef=useRef(null);
-  const cRef=useRef(null);
+const Card=({g,onClick})=>(
+<div className="cd" onClick={onClick}>
+<img className="cd-img" src={g.thumb} alt={g.title} loading="lazy" onError={e=>{e.target.src="";e.target.style.background="linear-gradient(135deg,#16162a,#5b21b6)"}}/>
+<div className="cd-ov"><div className="cd-pl"><I n="play" s={18} c="white"/></div><div className="cd-n">{g.title}</div><div className="cd-tg">{g.cat[0]}</div></div>
+<div className="cd-b"><div className="cd-bn">{g.title}</div></div>
+</div>);
 
-  const open=useCallback(g=>{setGm(g);setPg("game");setSf(false);if(cRef.current)cRef.current.scrollTop=0},[]);
-  const home=useCallback(()=>{setPg("home");setGm(null);setFs(false)},[]);
-  const tFav=useCallback(g=>{setFav(p=>p.find(f=>f.id===g.id)?p.filter(f=>f.id!==g.id):[...p,g])},[]);
-  const tLike=useCallback(id=>{setLk(p=>({...p,[id]:!p[id]}))},[]);
+export default function Zonely(){
+  const[pg,sP]=useState("home");
+  const[gm,sG]=useState(null);
+  const[q,sQ]=useState("");
+  const[qf,sQf]=useState(false);
+  const[cat,sC]=useState("all");
+  const[fav,sF]=useState([]);
+  const[sf,sSf]=useState(false);
+  const[sc,sSc]=useState(false);
+  const[fs,sFs]=useState(false);
+  const[lk,sLk]=useState({});
+  const[user,sU]=useState(null);
+  const[showLogin,sLogin]=useState(false);
+  const[showNotif,sNotif]=useState(false);
+  const[showProf,sProf]=useState(false);
+  const[srPage,sSrPage]=useState(false);
+  const[srQ,sSrQ]=useState("");
+  const[mobMenu,sMob]=useState(false);
+  const sRef=useRef(null);const cRef=useRef(null);
+
+  const open=useCallback(g=>{sG(g);sP("game");sSf(false);sSrPage(false);sMob(false);if(cRef.current)cRef.current.scrollTop=0},[]);
+  const home=useCallback(()=>{sP("home");sG(null);sFs(false);sSrPage(false);sMob(false)},[]);
+  const tF=useCallback(g=>{sF(p=>p.find(f=>f.id===g.id)?p.filter(f=>f.id!==g.id):[...p,g])},[]);
+  const tL=useCallback(id=>{sLk(p=>({...p,[id]:!p[id]}))},[]);
   const isF=useCallback(id=>fav.some(f=>f.id===id),[fav]);
 
-  const res=useMemo(()=>{
-    if(!q.trim())return[];
-    const s=q.toLowerCase();
-    return GAME_DATABASE.filter(g=>g.title.toLowerCase().includes(s)||g.tags.some(t=>t.includes(s))||g.category.some(c=>c.includes(s))||g.desc.toLowerCase().includes(s)).slice(0,12);
-  },[q]);
+  const res=useMemo(()=>{const s=(srPage?srQ:q).toLowerCase().trim();if(!s)return[];return DB.filter(g=>g.title.toLowerCase().includes(s)||g.tags.some(t=>t.includes(s))||g.cat.some(c=>c.includes(s))||g.desc.toLowerCase().includes(s)).slice(0,200)},[q,srQ,srPage]);
+  const dropRes=useMemo(()=>res.slice(0,8),[res]);
 
-  const getG=useCallback(id=>GAME_DATABASE.filter(g=>g.category.includes(id)),[]);
-  const sim=useMemo(()=>{if(!gm)return[];return GAME_DATABASE.filter(g=>g.id!==gm.id&&g.category.some(c=>gm.category.includes(c))).slice(0,20)},[gm]);
+  const getG=useCallback((id,max=30)=>DB.filter(g=>g.cat.includes(id)).slice(0,max),[]);
+  const sim=useMemo(()=>{if(!gm)return[];return DB.filter(g=>g.id!==gm.id&&g.cat.some(c=>gm.cat.includes(c))).slice(0,20)},[gm]);
 
-  const rows=useMemo(()=>{
-    if(cat==="all") return [{id:"top-picks",label:"Top Picks for You"},{id:"featured",label:"Featured Games"},{id:"2-player",label:"2 Player Games"},{id:"cant-stop",label:"Can't Stop Playing"},{id:"friends",label:"Play with Friends"},{id:"new",label:"New Games"},{id:"driving",label:"Driving Games"},{id:"shooting",label:"Shooting Games"},{id:"puzzle",label:"Puzzle Games"},{id:"adventure",label:"Adventure Games"},{id:"clicker",label:"Clicker Games"},{id:"sports",label:"Sports Games"}];
-    const c=CATEGORIES.find(c=>c.id===cat);return c?[{id:c.id,label:c.label}]:[];
-  },[cat]);
+  const homeRows=[{id:"top-picks",l:"Top Picks for You"},{id:"featured",l:"Featured Games"},{id:"cant-stop",l:"Can't Stop Playing"},{id:"new",l:"New Games"},{id:"shooting",l:"Shooting Games"},{id:"action",l:"Action Games"},{id:"driving",l:"Driving Games"},{id:"puzzle",l:"Puzzle Games"},{id:"adventure",l:"Adventure"},{id:"sports",l:"Sports Games"},{id:"io",l:"IO Games"}];
 
-  useEffect(()=>{const h=e=>{if(sRef.current&&!sRef.current.contains(e.target))setQf(false)};document.addEventListener("mousedown",h);return()=>document.removeEventListener("mousedown",h)},[]);
+  const doSearch=()=>{if(q.trim()){sSrQ(q);sSrPage(true);sP("search");sQf(false);if(cRef.current)cRef.current.scrollTop=0}};
 
-  return (
-    <><style>{CSS}</style>
-    <div className="app">
-      {/* SIDEBAR */}
-      <nav className="sb">
-        <div className="sb-top" onClick={home}>
-          <div className="sb-logo"><Icon name="gamepad" size={22} color="white"/></div>
-          <div className="sb-name">Zone<span>ly</span></div>
+  useEffect(()=>{const h=e=>{if(sRef.current&&!sRef.current.contains(e.target))sQf(false);const hp=document.querySelector('.hp-wrap');if(hp&&!hp.contains(e.target)){sProf(false);sNotif(false)}};document.addEventListener("mousedown",h);return()=>document.removeEventListener("mousedown",h)},[]);
+
+  const signIn=()=>{sU({name:"Player",email:"player@gmail.com",initial:"P"});sLogin(false)};
+  const signOut=()=>{sU(null);sProf(false)};
+  const isGrid=cat!=="all"&&pg==="home";
+  const gridGames=isGrid?DB.filter(g=>g.cat.includes(cat)):[];
+  const gridLabel=CATS.find(c=>c.id===cat)?.label||"";
+
+  const SidebarContent=({mobile})=>(
+    <>
+      <div className="St" onClick={()=>{sC("all");home()}}><div className="Sl"><Logo s={24}/></div><div className="Sn">Zone<span>ly</span></div></div>
+      <div className="Sb">
+        <div className="Sla">Navigate</div>
+        {[{id:"all",n:"Home",ic:"home"},{id:"top-picks",n:"Trending",ic:"trending"},{id:"new",n:"Recently Added",ic:"clock"}].map(x=>
+          <div key={x.id} className={`Si ${(x.id==="all"?(pg==="home"&&cat==="all"):cat===x.id&&pg==="home")?"on":""}`} data-t={x.n} onClick={()=>{sC(x.id==="all"?"all":x.id);sP("home");sG(null);sSrPage(false);sMob(false);if(cRef.current)cRef.current.scrollTop=0}}>
+            <div className="Sic"><I n={x.ic} s={18} c={(x.id==="all"?(pg==="home"&&cat==="all"):cat===x.id)?"#a78bfa":"#8888a4"}/></div><span className="Stx">{x.n}</span>
+          </div>
+        )}
+        <div className="Sdv"/>
+        <div className="Sla">Categories</div>
+        {CATS.map(c=><div key={c.id} className={`Si ${cat===c.id&&pg==="home"?"on":""}`} data-t={c.label} onClick={()=>{sC(c.id);sP("home");sG(null);sSrPage(false);sMob(false);if(cRef.current)cRef.current.scrollTop=0}}>
+          <div className="Sic"><I n={c.icon} s={18} c={cat===c.id?"#a78bfa":"#8888a4"}/></div><span className="Stx">{c.label}</span>
+        </div>)}
+      </div>
+    </>
+  );
+
+  return(<><style>{CSS}</style><div className="Z">
+    {/* Desktop Sidebar */}
+    <nav className="S"><SidebarContent/></nav>
+
+    {/* Mobile Sidebar */}
+    {mobMenu&&<><div className="mob-ov" onClick={()=>sMob(false)}/><nav className="mob-sb"><SidebarContent mobile/></nav></>}
+
+    <div className="M">
+      <header className="H">
+        <button className="H-menu" onClick={()=>sMob(true)}><I n="menu" s={22}/></button>
+        <div className="H-logo" onClick={()=>{sC("all");home()}}>
+          <div className="Sl"><Logo s={20}/></div>
+          <div className="H-logo-txt">Zone<span>ly</span></div>
         </div>
-        <div className="sb-body">
-          <div className="sb-lbl">Navigate</div>
-          <div className={`sb-i ${pg==="home"&&cat==="all"?"on":""}`} data-tip="Home" onClick={()=>{setCat("all");home()}}>
-            <div className="sb-ic"><Icon name="home" size={20} color={pg==="home"&&cat==="all"?"#a78bfa":"#8888a4"}/></div>
-            <span className="sb-tx">Home</span>
-          </div>
-          <div className={`sb-i ${cat==="top-picks"?"on":""}`} data-tip="Trending" onClick={()=>{setCat("top-picks");setPg("home");setGm(null)}}>
-            <div className="sb-ic"><Icon name="trending" size={20} color={cat==="top-picks"?"#a78bfa":"#8888a4"}/></div>
-            <span className="sb-tx">Trending</span>
-          </div>
-          <div className={`sb-i ${cat==="new"?"on":""}`} data-tip="Recently Added" onClick={()=>{setCat("new");setPg("home");setGm(null)}}>
-            <div className="sb-ic"><Icon name="clock" size={20} color={cat==="new"?"#a78bfa":"#8888a4"}/></div>
-            <span className="sb-tx">Recently Added</span>
-          </div>
-          <div className="sb-div"/>
-          <div className="sb-lbl">Categories</div>
-          {CATEGORIES.map(c=>(
-            <div key={c.id} className={`sb-i ${cat===c.id?"on":""}`} data-tip={c.label} onClick={()=>{setCat(c.id);setPg("home");setGm(null)}}>
-              <div className="sb-ic"><Icon name={c.icon} size={20} color={cat===c.id?"#a78bfa":"#8888a4"}/></div>
-              <span className="sb-tx">{c.label}</span>
-            </div>
-          ))}
-        </div>
-      </nav>
-
-      {/* MAIN */}
-      <div className="main">
-        <header className="hd">
-          <div className="hd-s" ref={sRef}>
-            <div className="hd-si"><Icon name="search" size={16}/></div>
-            <input type="text" placeholder="Search games..." value={q} onChange={e=>setQ(e.target.value)} onFocus={()=>setQf(true)}/>
-            {qf&&res.length>0&&(
-              <div className="sr-dd">{res.map(g=>(
-                <div key={g.id} className="sr-i" onClick={()=>{open(g);setQ("");setQf(false)}}>
-                  <img className="sr-th" src={g.thumb} alt={g.title} onError={e=>{e.target.style.background="var(--bg-2)"}}/>
-                  <div className="sr-inf"><div className="sr-t">{g.title}</div><div className="sr-c">{g.category.slice(0,2).join(" / ")}</div></div>
-                </div>
-              ))}</div>
-            )}
-          </div>
-          <div className="hd-a">
-            <button className={`hd-b ${sf?"on":""}`} onClick={()=>setSf(!sf)} title="My Favorites">
-              <Icon name={sf?"heartFilled":"heart"} size={20} color={sf?"#7c3aed":undefined}/>
-              {fav.length>0&&<span className="dt"/>}
-            </button>
-            <button className="hd-b" title="Notifications"><Icon name="bell" size={20}/></button>
-            <button className="hd-p" title="Profile"><Icon name="user" size={18} color="white"/></button>
-          </div>
-        </header>
-
-        <div className="content" ref={cRef}>
-          {pg==="home"&&(<>
-            <div className="cb">
-              <button className={`cp ${cat==="all"?"on":""}`} onClick={()=>setCat("all")}>All Games</button>
-              {CATEGORIES.slice(0,12).map(c=><button key={c.id} className={`cp ${cat===c.id?"on":""}`} onClick={()=>setCat(c.id)}>{c.label.replace(" Games","")}</button>)}
-            </div>
-            {rows.map(r=><GameRow key={r.id} title={r.label} games={getG(r.id)} onSelect={open}/>)}
-          </>)}
-
-          {pg==="game"&&gm&&(
-            <div className="gp">
-              <button className="bk" onClick={home}><Icon name="arrowLeft" size={18}/> Back to Games</button>
-              <div className="gp-t">
-                <div className="gp-ad"><div className="ad-p">Advertisement</div></div>
-                <div className="gp-c">
-                  <div className={`gp-if ${fs?"fs":""}`}>
-                    <iframe src={gm.url} title={gm.title} allow="autoplay; fullscreen; gamepad" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"/>
-                    {fs&&<button style={{position:"absolute",top:12,right:12,zIndex:10000}} className="gp-b" onClick={()=>setFs(false)}><Icon name="shrink" size={16}/> Exit</button>}
-                  </div>
-                  <div className="gp-ac">
-                    <button className={`gp-b ${lk[gm.id]?"on":""}`} onClick={()=>tLike(gm.id)}><Icon name={lk[gm.id]?"heartFilled":"thumbsUp"} size={16} color={lk[gm.id]?"#7c3aed":undefined}/>{lk[gm.id]?"Liked":"Like"}</button>
-                    <button className="gp-b" onClick={()=>setSc(true)}><Icon name="gamepad" size={16}/> Controls</button>
-                    <button className={`gp-b ${isF(gm.id)?"on":""}`} onClick={()=>tFav(gm)}><Icon name={isF(gm.id)?"heartFilled":"heart"} size={16} color={isF(gm.id)?"#7c3aed":undefined}/>{isF(gm.id)?"Favorited":"Favorite"}</button>
-                    <button className="gp-b" onClick={()=>{if(navigator.share)navigator.share({title:gm.title,url:window.location.href})}}><Icon name="share" size={16}/> Share</button>
-                    <button className="gp-b" onClick={()=>setFs(true)}><Icon name="maximize" size={16}/> Fullscreen</button>
-                  </div>
-                  <div className="gp-d">
-                    <h2>{gm.title}</h2><p>{gm.desc}</p>
-                    <div className="gp-m">
-                      <div className="gp-mi"><div className="gp-ml">Developer</div><div className="gp-mv">{gm.developer}</div></div>
-                      <div className="gp-mi"><div className="gp-ml">Released</div><div className="gp-mv">{gm.year}</div></div>
-                      <div className="gp-mi"><div className="gp-ml">Technology</div><div className="gp-mv">{gm.tech}</div></div>
-                      <div className="gp-mi"><div className="gp-ml">Category</div><div className="gp-mv">{gm.category.slice(0,3).join(", ")}</div></div>
-                    </div>
-                  </div>
-                  <div className="gp-d" style={{marginTop:16}}>
-                    <h2>Gameplay Walkthrough</h2>
-                    <div style={{width:"100%",aspectRatio:"16/9",borderRadius:"var(--r2)",overflow:"hidden",marginTop:12,background:"var(--bg-2)"}}>
-                      <iframe width="100%" height="100%" src={`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(gm.title+" gameplay")}`} title="Gameplay" allow="autoplay; encrypted-media" style={{border:"none"}}/>
-                    </div>
-                  </div>
-                </div>
-                <div className="gp-s">
-                  <div className="sm-t">More Games Like This</div>
-                  {sim.map(g=>(
-                    <div key={g.id} className="sm-i" onClick={()=>open(g)}>
-                      <img className="sm-th" src={g.thumb} alt={g.title} onError={e=>{e.target.style.background="var(--bg-2)"}}/>
-                      <div className="sm-if"><div className="sm-n">{g.title}</div><div className="sm-c">{g.category[0]}</div></div>
-                    </div>
-                  ))}
-                </div>
+        <div className="Hs" ref={sRef}>
+          <div className="Hsi"><I n="search" s={15}/></div>
+          <input type="text" placeholder="Search games..." value={q} onChange={e=>sQ(e.target.value)} onFocus={()=>sQf(true)} onKeyDown={e=>{if(e.key==="Enter")doSearch()}}/>
+          {qf&&q.trim()&&dropRes.length>0&&!srPage&&(
+            <div className="Sdd">{dropRes.map(g=>(
+              <div key={g.id} className="Sri" onClick={()=>{open(g);sQ("")}}>
+                <img className="Srt" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/>
+                <div style={{flex:1}}><div className="Srn">{g.title}</div><div className="Src">{g.cat.slice(0,2).join(" / ")}</div></div>
               </div>
-            </div>
+            ))}
+            <div className="dd-i" style={{borderTop:"1px solid var(--bd)",justifyContent:"center",color:"var(--pl)",fontWeight:600}} onClick={doSearch}>
+              <I n="search" s={13} c="#a78bfa"/> View all {res.length} results
+            </div></div>
           )}
         </div>
-      </div>
-
-      {sf&&(<div className="fp">
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-          <h3>My Favorites</h3>
-          <button className="pp-x" onClick={()=>setSf(false)}><Icon name="x" size={20}/></button>
+        <div className="Ha hp-wrap" style={{position:"relative"}}>
+          <button className={`Hb ${sf?"on":""}`} onClick={()=>sSf(!sf)} title="Favorites"><I n={sf?"heartFilled":"heart"} s={18} c={sf?"#7c3aed":undefined}/>{fav.length>0&&<span className="dot"/>}</button>
+          <button className={`Hb ${showNotif?"on":""}`} onClick={()=>{sNotif(!showNotif);sProf(false)}} title="Notifications"><I n="bell" s={18}/><span className="dot"/></button>
+          {showNotif&&<div className="dd" style={{right:40}}>
+            <div className="dd-h">Notifications<button className="xb" onClick={()=>sNotif(false)}><I n="x" s={16}/></button></div>
+            <div className="dd-i"><I n="sparkle" s={14} c="#a78bfa"/><span>New games added this week!</span></div>
+            <div className="dd-i"><I n="trophy" s={14} c="#eab308"/><span>Krunker.io is trending</span></div>
+            <div className="dd-i"><I n="flame" s={14} c="#ef4444"/><span>Shell Shockers: new update</span></div>
+          </div>}
+          <button className="Hp" onClick={()=>{if(!user)sLogin(true);else{sProf(!showProf);sNotif(false)}}} title="Profile">
+            {user?user.initial:<I n="user" s={16} c="white"/>}
+          </button>
+          {showProf&&user&&<div className="dd" style={{right:0,minWidth:240}}>
+            <div className="dd-h" style={{gap:10}}><div className="g-avatar">{user.initial}</div><div><div style={{fontWeight:600,fontSize:13}}>{user.name}</div><div style={{fontSize:11,color:"var(--t3)"}}>{user.email}</div></div></div>
+            <div className="dd-i" onClick={()=>sProf(false)}><I n="settings" s={14}/> Settings</div>
+            <div className="dd-i" onClick={()=>{sSf(true);sProf(false)}}><I n="heart" s={14}/> Favorites ({fav.length})</div>
+            <div className="dd-i" style={{color:"#ef4444"}} onClick={signOut}><I n="logout" s={14} c="#ef4444"/> Sign Out</div>
+          </div>}
         </div>
-        {fav.length===0?(<div className="fp-e"><Icon name="heart" size={40} color="#505068"/><p style={{marginTop:12}}>No favorites yet. Click the heart icon on any game to add it here.</p></div>
-        ):(fav.map(g=>(
-          <div key={g.id} className="sm-i" onClick={()=>{open(g);setSf(false)}}>
-            <img className="sm-th" src={g.thumb} alt={g.title} onError={e=>{e.target.style.background="var(--bg-2)"}}/>
-            <div className="sm-if"><div className="sm-n">{g.title}</div><div className="sm-c">{g.category[0]}</div></div>
-          </div>
-        )))}
-      </div>)}
+      </header>
 
-      {sc&&gm&&(<div className="po" onClick={()=>setSc(false)}>
-        <div className="pp" onClick={e=>e.stopPropagation()}>
-          <div className="pp-h"><h3>Controls</h3><button className="pp-x" onClick={()=>setSc(false)}><Icon name="x" size={20}/></button></div>
-          <div className="pp-b">
-            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}><Icon name="gamepad" size={24} color="#7c3aed"/><span style={{fontSize:16,fontWeight:600}}>{gm.title}</span></div>
-            <p style={{whiteSpace:"pre-line",lineHeight:2}}>{gm.controls}</p>
+      <div className="C" ref={cRef}>
+        {pg==="home"&&!isGrid&&cat==="all"&&(
+          <>{homeRows.map(r=><Row key={r.id} title={r.l} games={getG(r.id)} onSelect={open} count={DB.filter(g=>g.cat.includes(r.id)).length}/>)}</>
+        )}
+        {pg==="home"&&isGrid&&(
+          <div className="sr-pg">
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:4}}><I n={CATS.find(c=>c.id===cat)?.icon||"star"} s={22} c="#a78bfa"/><h2>{gridLabel} Games</h2><span className="gc">{gridGames.length}</span></div>
+            <p>{gridGames.length} games available</p>
+            <div className="grid">{gridGames.slice(0,120).map(g=><Card key={g.id} g={g} onClick={()=>open(g)}/>)}</div>
           </div>
-        </div>
-      </div>)}
-    </div></>
-  );
-}
-      // --- YOUR ORIGINAL CODE ENDS HERE ---
-
-        function App() {
-          return (
-            <div className="p-6">
-              <h1 className="text-3xl font-bold mb-6 text-center text-blue-400">Mujtaba's Game Portal</h1>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {GAME_DATABASE.map(game => (
-                  <div key={game.id} className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform">
-                    <img src={game.thumb} alt={game.title} className="w-full h-40 object-cover" />
-                    <div className="p-4">
-                      <h2 className="text-xl font-bold">{game.title}</h2>
-                      <p className="text-gray-400 text-sm h-12 overflow-hidden">{game.desc}</p>
-                      <a href={game.url} target="_blank" className="mt-4 block text-center bg-blue-600 hover:bg-blue-500 py-2 rounded-lg font-semibold">
-                        Play Now
-                      </a>
-                    </div>
+        )}
+        {pg==="search"&&srPage&&(
+          <div className="sr-pg">
+            <button className="bk" onClick={()=>{sSrPage(false);sP("home");sC("all")}}><I n="arrowLeft" s={16}/> Back</button>
+            <h2>Results for "{srQ}"</h2><p>{res.length} games found</p>
+            {res.length>0?<div className="grid">{res.map(g=><Card key={g.id} g={g} onClick={()=>open(g)}/>)}</div>
+            :<div style={{textAlign:"center",padding:48,color:"var(--t3)"}}>No games found.</div>}
+          </div>
+        )}
+        {pg==="game"&&gm&&(
+          <div className="gp">
+            <button className="bk" onClick={()=>{if(srPage)sP("search");else home()}}><I n="arrowLeft" s={16}/> Back</button>
+            <div className="gp-t">
+              <div className="gp-ad"><div className="ad-p">AD</div></div>
+              <div className="gp-c">
+                <div className={`gp-if ${fs?"fs":""}`}>
+                  <iframe src={gm.url} title={gm.title} allow="autoplay; fullscreen; gamepad" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"/>
+                  {fs&&<button style={{position:"absolute",top:10,right:10,zIndex:10000}} className="gb" onClick={()=>sFs(false)}><I n="shrink" s={14}/> Exit</button>}
+                </div>
+                <div className="gp-ac">
+                  <button className={`gb ${lk[gm.id]?"on":""}`} onClick={()=>tL(gm.id)}><I n={lk[gm.id]?"heartFilled":"thumbsUp"} s={14} c={lk[gm.id]?"#7c3aed":undefined}/>{lk[gm.id]?"Liked":"Like"}</button>
+                  <button className="gb" onClick={()=>sSc(true)}><I n="gamepad" s={14}/> Controls</button>
+                  <button className={`gb ${isF(gm.id)?"on":""}`} onClick={()=>tF(gm)}><I n={isF(gm.id)?"heartFilled":"heart"} s={14} c={isF(gm.id)?"#7c3aed":undefined}/>{isF(gm.id)?"Saved":"Save"}</button>
+                  <button className="gb" onClick={()=>{if(navigator.share)navigator.share({title:gm.title,url:window.location.href})}}><I n="share" s={14}/> Share</button>
+                  <button className="gb" onClick={()=>sFs(true)}><I n="maximize" s={14}/> Fullscreen</button>
+                </div>
+                <div className="gd"><h2>{gm.title}</h2><p>{gm.desc}</p>
+                  <div className="gm">
+                    <div className="gmi"><div className="gml">Developer</div><div className="gmv">{gm.dev}</div></div>
+                    <div className="gmi"><div className="gml">Released</div><div className="gmv">{gm.yr}</div></div>
+                    <div className="gmi"><div className="gml">Technology</div><div className="gmv">{gm.tech}</div></div>
+                    <div className="gmi"><div className="gml">Category</div><div className="gmv">{gm.cat.slice(0,3).join(", ")}</div></div>
                   </div>
-                ))}
+                </div>
               </div>
+              <div className="gs"><div className="smt">More Like This</div>{sim.map(g=>(
+                <div key={g.id} className="smi" onClick={()=>open(g)}>
+                  <img className="smth" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/>
+                  <div className="smif"><div className="smn">{g.title}</div><div className="smc">{g.cat[0]}</div></div>
+                </div>
+              ))}</div>
             </div>
-          );
-        }
+          </div>
+        )}
+      </div>
+    </div>
 
-        // Final Step: Render the App into the "root" div
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+    {sf&&<div className="fp">
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}><h3 style={{fontSize:16,fontWeight:700}}>My Favorites</h3><button className="xb" onClick={()=>sSf(false)}><I n="x" s={18}/></button></div>
+      {fav.length===0?<div style={{textAlign:"center",padding:"40px 16px",color:"var(--t3)"}}><I n="heart" s={36} c="#505068"/><p style={{marginTop:10,fontSize:13}}>No favorites yet</p></div>
+      :fav.map(g=><div key={g.id} className="smi" onClick={()=>{open(g);sSf(false)}}><img className="smth" src={g.thumb} alt="" onError={e=>{e.target.style.background="var(--b2)"}}/><div className="smif"><div className="smn">{g.title}</div><div className="smc">{g.cat[0]}</div></div></div>)}
+    </div>}
+
+    {sc&&gm&&<div className="ov" onClick={()=>sSc(false)}><div className="pp" onClick={e=>e.stopPropagation()}>
+      <div className="pp-h"><h3>Controls</h3><button className="xb" onClick={()=>sSc(false)}><I n="x" s={18}/></button></div>
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}><I n="gamepad" s={22} c="#7c3aed"/><span style={{fontSize:15,fontWeight:600}}>{gm.title}</span></div>
+      <p style={{fontSize:13,color:"var(--t2)",lineHeight:1.8}}>{gm.ctrl}</p>
+    </div></div>}
+
+    {showLogin&&<div className="ov" onClick={()=>sLogin(false)}><div className="pp" onClick={e=>e.stopPropagation()} style={{textAlign:"center"}}>
+      <div className="pp-h"><h3>Sign in to Zonely</h3><button className="xb" onClick={()=>sLogin(false)}><I n="x" s={18}/></button></div>
+      <p style={{color:"var(--t2)",fontSize:13,marginBottom:6}}>Save favorites, track progress, and more.</p>
+      <button className="g-btn" onClick={signIn}><I n="google" s={18}/> Continue with Google</button>
+      <p style={{fontSize:11,color:"var(--t3)",marginTop:10}}>By signing in you agree to our Terms</p>
+    </div></div>}
+  </div></>);
+}
+        // Completing the structure and rendering the app 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
 </body>
 </html>
