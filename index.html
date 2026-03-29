@@ -138,25 +138,23 @@ body.sbo #main{margin-left:var(--sw)}
 .arr.l{left:-13px}.arr.r{right:-13px}
 
 /* GAME CARD */
-.const GameCard = ({ isRow = false, game }) => {
-  return (
-    <div 
-      className={`relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:z-10 bg-cg-grey ${isRow ? 'min-w-[200px]' : 'w-full'} aspect-video`}
-    >
-      {/* Thumbnail Only - Video logic removed */}
-      <img 
-        src={game.th} 
-        alt={game.t} 
-        className="w-full h-full object-cover" 
-        onerror="this.onerror=null; this.src='https://placehold.co/512x512/1a1a2e/7c3aed?text=' + encodeURIComponent('${game.t}')"
-      />
-      
-      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
-        <p className="text-xs font-bold truncate">{game.t}</p>
-      </div>
-    </div>
-  );
-};
+.gc{
+  flex-shrink:0;width:192px;cursor:pointer;
+  border-radius:var(--r);overflow:hidden;background:var(--bg3);
+  transition:transform .25s cubic-bezier(.4,0,.2,1),box-shadow .25s;
+}
+.gc:hover{transform:scale(1.04);box-shadow:0 8px 28px rgba(124,58,237,.2)}
+.hgrid .gc,.rgrid .gc,.cgrid .gc{width:auto}
+.gt{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#0a0a14}
+.gt img{width:100%;height:100%;object-fit:cover;display:block}
+.gbadge{
+  position:absolute;top:7px;left:7px;
+  background:var(--purple);color:#fff;
+  font-size:9px;font-weight:700;letter-spacing:.4px;
+  padding:2px 7px;border-radius:5px;text-transform:uppercase;
+}
+.gcn{padding:8px 10px 5px;font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gcm{padding:0 10px 9px;font-size:11px;color:var(--muted)}
 
 /* RESULTS / CAT GRIDS */
 .rgrid,.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:12px}
@@ -450,7 +448,7 @@ const G=[
    ctrl:[["Move","W A S D"],["Jump","Space"],["Place Block","Left Click"],["Break","Right Click"]]},
 
   {id:2,t:"Krunker.io",cats:["io","shooting","top-picks"],tags:["fps","shooter","multiplayer","gun"],
-   th:"https://imgs.crazygames.com/rocketgoal-io_16x9/20260108075807/rocketgoal-io_16x9-cover?metadata=none&quality=75&width=273&fit=crop&dpr=2",
+   th:"https://img.gamedistribution.com/3d36ff6f3b434b7a9591b4e40a0dfaa8-512x512.jpeg",
    url:"https://krunker.io",dev:"Yendis Entertainment",yr:2018,tech:"WebGL",yt:"9nT0-xAuNWM",
    desc:"Lightning-fast browser FPS. Choose your class, grab weapons, and dominate the leaderboard across multiple game modes.",
    ctrl:[["Move","W A S D"],["Aim","Mouse"],["Shoot","Left Click"],["Jump","Space"],["Crouch","C"]]},
@@ -761,16 +759,19 @@ function buildHome(){
 }
 
 function card(g){
-return`<div class="gc" onclick="playGame(${g.id})">
-${g.cats.includes("new")?'<span class="gbadge">New</span>':""}
-<div class="gt"><img src="${g.th}" alt="${g.t}" loading="lazy"
-onerror="this.onerror=null; this.src='https://placehold.co/512x512/1a1a2e/7c3aed?text=' + encodeURIComponent('${g.t}')"></div>
-<div class="gcn">${g.t}</div>
-<div class="gcm">${g.dev} &middot; ${g.yr}</div>
-</div>`;
+  return`<div class="gc" onclick="playGame(${g.id})">
+    ${g.cats.includes("new")?'<span class="gbadge">New</span>':""}
+    <div class="gt"><img src="${g.th}" alt="${g.t}" loading="lazy"
+      onerror="this.style.opacity=0"></div>
+    <div class="gcn">${g.t}</div>
+    <div class="gcm">${g.dev} &middot; ${g.yr}</div>
+  </div>`;
 }
 
-
+function scrollR(id,a){
+  const el=document.getElementById(id);
+  if(el)el.scrollBy({left:a,behavior:"smooth"});
+}
 
 // ════════════════════════════════════
 //  PLAY GAME
@@ -791,15 +792,16 @@ function playGame(id){
     <span class="gmi"><i class="fa-solid fa-globe"></i>Browser Playable</span>`;
   document.getElementById("ytf").src=`https://www.youtube.com/embed/${cur.yt}?rel=0`;
   const sim=G.filter(g=>g.id!==cur.id&&g.cats.some(c=>cur.cats.includes(c))).slice(0,14);
- document.getElementById("siml").innerHTML=sim.map(g=>`
-<div class="simcard" onclick="playGame(${g.id})">
-<img class="simthumb" src="${g.th}" alt="${g.t}" onerror="this.onerror=null; this.src='https://placehold.co/150x100/1a1a2e/7c3aed?text=' + encodeURIComponent('${g.t}')">
-<div class="siminfo">
-<div class="simname">${g.t}</div>
-<div class="simmeta">${g.dev} &middot; ${g.yr}</div>
-</div>
-</div>`).join("");
-
+  document.getElementById("siml").innerHTML=sim.map(g=>`
+    <div class="simcard" onclick="playGame(${g.id})">
+      <img class="simthumb" src="${g.th}" alt="${g.t}" onerror="this.style.display='none'">
+      <div class="siminfo">
+        <div class="simname">${g.t}</div>
+        <div class="simmeta">${g.dev} &middot; ${g.yr}</div>
+      </div>
+    </div>`).join("");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
 
 // ════════════════════════════════════
 //  FULLSCREEN
@@ -939,13 +941,14 @@ function updateFC(){document.getElementById("fc").textContent=favs.length}
 // ════════════════════════════════════
 function openFavs(){
   const fgs=favs.map(id=>G.find(g=>g.id===id)).filter(Boolean);
-document.getElementById("fmg").innerHTML=fgs.length
-?fgs.map(g=>`
-<div class="fitem" onclick="playGame(${g.id});closeFM()">
-<img src="${g.th}" alt="${g.t}" onerror="this.onerror=null; this.src='https://placehold.co/512x512/1a1a2e/7c3aed?text=' + encodeURIComponent('${g.t}')">
-<div class="filab">${g.t}</div>
-</div>`).join("")
-:`<div class="empty" style="grid-column:1/-1"><i class="fa-regular fa-heart"></i>No favorites yet. Like a game to save it here.</div>`;
+  document.getElementById("fmg").innerHTML=fgs.length
+    ?fgs.map(g=>`
+        <div class="fitem" onclick="playGame(${g.id});closeFM()">
+          <img src="${g.th}" alt="${g.t}" onerror="this.style.display='none'">
+          <div class="filab">${g.t}</div>
+        </div>`).join("")
+    :`<div class="empty" style="grid-column:1/-1"><i class="fa-regular fa-heart"></i>No favorites yet. Like a game to save it here.</div>`;
+  document.getElementById("fm").classList.add("on");
 }
 function closeFM(){document.getElementById("fm").classList.remove("on")}
 
@@ -996,4 +999,3 @@ window.addEventListener("DOMContentLoaded",init);
 </script>
 </body>
 </html>
-
