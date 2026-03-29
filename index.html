@@ -23,7 +23,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
 ::-webkit-scrollbar-thumb:hover{background:var(--purple)}
-
 /* HEADER */
 #hdr{
   position:fixed;top:0;left:0;right:0;height:var(--hh);
@@ -68,7 +67,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .hbtn:hover{color:var(--text);border-color:var(--purple);background:var(--pdim)}
 .hbtn.fav{padding:0 11px;width:auto;gap:6px;font-size:13px;font-weight:600}
 .badge{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:#ef4444;border:1.5px solid var(--bg)}
-
 /* SIDEBAR */
 #sb{
   position:fixed;left:0;top:var(--hh);
@@ -98,23 +96,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .si.active .sic{background:var(--pdim)}
 .sil{font-size:13px;font-weight:500;opacity:0;transition:opacity .15s .05s;pointer-events:none}
 #sb:hover .sil,body.sbo #sb .sil{opacity:1}
-
 /* MAIN */
 #main{margin-left:var(--sc);margin-top:var(--hh);transition:margin-left .3s ease;min-height:calc(100vh - var(--hh))}
 body.sbo #main{margin-left:var(--sw)}
-
 /* PAGES */
 .page{display:none;padding:26px 24px}
 .page.on{display:block;animation:pgIn .3s cubic-bezier(.4,0,.2,1)}
 @keyframes pgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .pgt{font-family:'Space Grotesk',sans-serif;font-size:23px;font-weight:700;letter-spacing:-.4px;margin-bottom:3px}
 .pgs{color:var(--muted);font-size:13px;margin-bottom:28px}
-
 /* HERO GRID */
 .hgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:42px}
 .hgrid .gc:first-child{grid-column:span 2;grid-row:span 2}
 .hgrid .gc:nth-child(2){grid-column:span 2}
-
 /* SECTION */
 .sec{margin-bottom:40px}
 .sechd{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
@@ -136,7 +130,6 @@ body.sbo #main{margin-left:var(--sw)}
 .rw:hover .arr{opacity:1;pointer-events:all}
 .arr:hover{background:var(--purple);border-color:var(--purple)}
 .arr.l{left:-13px}.arr.r{right:-13px}
-
 /* GAME CARD */
 .gc{
   flex-shrink:0;width:192px;cursor:pointer;
@@ -155,10 +148,8 @@ body.sbo #main{margin-left:var(--sw)}
 }
 .gcn{padding:8px 10px 5px;font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gcm{padding:0 10px 9px;font-size:11px;color:var(--muted)}
-
 /* RESULTS / CAT GRIDS */
 .rgrid,.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:12px}
-
 /* GAME PAGE */
 #gp.on{display:block}
 .gpgrid{display:grid;grid-template-columns:150px 1fr 248px;gap:22px;align-items:start}
@@ -180,7 +171,6 @@ body.sbo #main{margin-left:var(--sw)}
 .backbtn:hover{opacity:.7}
 .gio{position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--rl);overflow:hidden;background:#000;box-shadow:0 0 36px rgba(0,0,0,.6)}
 .gio iframe{width:100%;height:100%;border:none;display:block}
-
 /* FULLSCREEN BAR */
 #fsbar{
   position:fixed;bottom:0;left:0;right:0;
@@ -206,7 +196,6 @@ body.sbo #main{margin-left:var(--sw)}
 .fbt-hide{background:transparent;border-color:var(--dim);color:var(--muted)}
 .fbt-hide:hover{border-color:var(--border);color:var(--text);background:var(--bg3)}
 .fsgametitle{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:600;color:var(--text);padding:0 4px}
-
 .gacts{display:flex;align-items:center;gap:9px;margin-top:14px;flex-wrap:wrap}
 .gbtn{
   display:flex;align-items:center;gap:7px;
@@ -219,7 +208,6 @@ body.sbo #main{margin-left:var(--sw)}
 .gbtn.p{background:var(--purple);border-color:var(--purple);color:#fff}
 .gbtn.p:hover{background:#6d28d9}
 .gbtn i{font-size:12px}
-
 .ginf{margin-top:26px}
 .git{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:10px;letter-spacing:-.4px}
 .gmr{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:16px}
@@ -230,7 +218,6 @@ body.sbo #main{margin-left:var(--sw)}
 .ytlbl i{color:#ef4444}
 .ytwrap{width:100%;aspect-ratio:16/9;border-radius:var(--rl);overflow:hidden}
 .ytwrap iframe{width:100%;height:100%;border:none}
-
 .simcol{position:sticky;top:calc(var(--hh) + 22px)}
 .simt{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
 .siml{display:flex;flex-direction:column;gap:9px;max-height:calc(100vh - var(--hh) - 60px);overflow-y:auto;scrollbar-width:none}
@@ -245,7 +232,6 @@ body.sbo #main{margin-left:var(--sw)}
 .siminfo{flex:1;min-width:0}
 .simname{font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:3px}
 .simmeta{font-size:11px;color:var(--muted)}
-
 /* MODALS */
 .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center}
 .ov.on{display:flex}
@@ -272,7 +258,6 @@ body.sbo #main{margin-left:var(--sw)}
 .nic{width:32px;height:32px;border-radius:8px;background:var(--pdim);display:flex;align-items:center;justify-content:center;color:var(--pl);flex-shrink:0;font-size:13px}
 .nt{font-size:13px;line-height:1.5}
 .ntm{font-size:11px;color:var(--muted);margin-top:3px}
-
 /* TOAST */
 #toast{
   position:fixed;bottom:22px;right:22px;
@@ -285,7 +270,6 @@ body.sbo #main{margin-left:var(--sw)}
 }
 #toast.on{transform:translateY(0);opacity:1}
 #toast i{color:var(--pl)}
-
 @media(max-width:1100px){.gpgrid{grid-template-columns:0 1fr 220px}.adcol{display:none}}
 @media(max-width:860px){.gpgrid{grid-template-columns:1fr}.simcol{position:static}.siml{max-height:none;flex-direction:row;flex-wrap:wrap}.simcard{width:calc(50% - 5px)}}
 @media(max-width:640px){
@@ -299,7 +283,6 @@ body.sbo #main{margin-left:var(--sw)}
 </style>
 </head>
 <body>
-
 <!-- HEADER -->
 <header id="hdr">
   <a class="logo" href="#" onclick="goHome();return false">
@@ -319,10 +302,8 @@ body.sbo #main{margin-left:var(--sw)}
     <button class="hbtn" onclick="toggleUser()" title="Profile"><i class="fa-solid fa-circle-user" id="uico" style="font-size:17px;color:var(--pl)"></i></button>
   </div>
 </header>
-
 <!-- SIDEBAR -->
 <nav id="sb"><div class="snav" id="snav"></div></nav>
-
 <!-- FULLSCREEN BAR -->
 <div id="fsbar">
   <div class="fbl"><span class="fsgametitle" id="fsgt"></span></div>
@@ -334,13 +315,10 @@ body.sbo #main{margin-left:var(--sw)}
     <button class="fbt fbt-hide" onclick="hideBar()"><i class="fa-solid fa-eye-slash"></i> Hide this bar</button>
   </div>
 </div>
-
 <!-- MAIN -->
 <main id="main">
-
   <!-- HOME PAGE -->
   <div id="hp" class="page on"></div>
-
   <!-- GAME PAGE -->
   <div id="gp" class="page">
     <div class="gpgrid">
@@ -371,23 +349,19 @@ body.sbo #main{margin-left:var(--sw)}
       </div>
     </div>
   </div>
-
   <!-- SEARCH PAGE -->
   <div id="srp" class="page">
     <div class="pgt" id="srh"></div>
     <p class="pgs" id="srs"></p>
     <div class="rgrid" id="srg"></div>
   </div>
-
   <!-- CATEGORY PAGE -->
   <div id="cp" class="page">
     <div class="pgt" id="cph"></div>
     <p class="pgs" id="cps"></p>
     <div class="cgrid" id="cpg"></div>
   </div>
-
 </main>
-
 <!-- CONTROLS MODAL -->
 <div class="ov" id="cm" onclick="if(event.target===this)closeCM()">
   <div class="mb">
@@ -395,7 +369,6 @@ body.sbo #main{margin-left:var(--sw)}
     <div id="cmb"></div>
   </div>
 </div>
-
 <!-- FAVORITES MODAL -->
 <div class="ov" id="fm" onclick="if(event.target===this)closeFM()">
   <div class="mb wide">
@@ -403,21 +376,18 @@ body.sbo #main{margin-left:var(--sw)}
     <div class="fgrid" id="fmg"></div>
   </div>
 </div>
-
-<!-- NOTIFS MODAL -->
+<!-- NOTIFICATIONS MODAL -->
 <div class="ov" id="nm" onclick="if(event.target===this)closeNM()">
   <div class="mb">
     <div class="mhd"><h3>Notifications</h3><button class="mcl" onclick="closeNM()"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="nlist" id="nml"></div>
   </div>
 </div>
-
 <!-- TOAST -->
 <div id="toast"><i class="fa-solid fa-circle-check"></i><span id="tmsg"></span></div>
-
 <script>
 // ════════════════════════════════════
-//  CATEGORIES
+// CATEGORIES
 // ════════════════════════════════════
 const CATS=[
   {id:"top-picks",label:"Top Picks",icon:"fa-fire"},
@@ -436,9 +406,8 @@ const CATS=[
   {id:"clicker",label:"Clicker",icon:"fa-hand-pointer"},
   {id:"sports",label:"Sports",icon:"fa-football"},
 ];
-
 // ════════════════════════════════════
-//  GAMES — thumbnails from GD CDN
+// GAMES — All CrazyGames embeds removed + REAL working cover images
 // ════════════════════════════════════
 const G=[
   {id:1,t:"Bloxd.io",cats:["io","top-picks","featured"],tags:["minecraft","building","multiplayer"],
@@ -446,250 +415,129 @@ const G=[
    url:"https://bloxd.io",dev:"Arthur",yr:2022,tech:"WebGL",yt:"kSKJQe4Bpk4",
    desc:"Minecraft-inspired multiplayer browser game with multiple mini-game modes. Build, explore, and battle in destructible block worlds.",
    ctrl:[["Move","W A S D"],["Jump","Space"],["Place Block","Left Click"],["Break","Right Click"]]},
-
   {id:2,t:"Krunker.io",cats:["io","shooting","top-picks"],tags:["fps","shooter","multiplayer","gun"],
    th:"https://img.gamedistribution.com/3d36ff6f3b434b7a9591b4e40a0dfaa8-512x512.jpeg",
    url:"https://krunker.io",dev:"Yendis Entertainment",yr:2018,tech:"WebGL",yt:"9nT0-xAuNWM",
    desc:"Lightning-fast browser FPS. Choose your class, grab weapons, and dominate the leaderboard across multiple game modes.",
    ctrl:[["Move","W A S D"],["Aim","Mouse"],["Shoot","Left Click"],["Jump","Space"],["Crouch","C"]]},
-
   {id:3,t:"Smash Karts",cats:["io","2player","featured","cant-stop"],tags:["kart","racing","battle","multiplayer"],
    th:"https://img.gamedistribution.com/e7fa0cc84a1a488cad90d61d57cdad4e-512x512.jpeg",
    url:"https://smashkarts.io",dev:"Tall Team",yr:2021,tech:"WebGL",yt:"3k4iFbKaAls",
    desc:"Chaotic 3D multiplayer kart battle. Grab power-ups, launch rockets, and smash opponents in frantic arena battles.",
    ctrl:[["Drive","W"],["Reverse","S"],["Turn","A D"],["Item","Space"]]},
-
   {id:4,t:"Shell Shockers",cats:["io","shooting","action"],tags:["fps","egg","shooter","multiplayer"],
    th:"https://img.gamedistribution.com/7038c84f56da4cf8b91e5a88e2f7c7cc-512x512.jpeg",
    url:"https://shellshock.io",dev:"Blue Wizard Digital",yr:2018,tech:"WebGL",yt:"7VWdZQHLLGI",
    desc:"The internet's most egg-cellent FPS. You are an egg armed to the teeth — battle others in chaotic team-based firefights.",
    ctrl:[["Move","W A S D"],["Aim","Mouse"],["Fire","Left Click"],["ADS","Right Click"],["Jump","Space"]]},
-
   {id:5,t:"Paper.io 2",cats:["io","cant-stop"],tags:["territory","casual","strategy"],
    th:"https://img.gamedistribution.com/d2ad5ec1aefc47aeb7dcf72e7d79d9a1-512x512.jpeg",
    url:"https://paper-io.com/2",dev:"Voodoo",yr:2018,tech:"HTML5",yt:"KK8mGMkMXrc",
    desc:"Claim as much territory as possible while cutting off other players in this addictive real-time multiplayer game.",
    ctrl:[["Move","Arrow Keys"]]},
-
   {id:6,t:"Hexanaut.io",cats:["io","new"],tags:["territory","strategy","hex"],
    th:"https://img.gamedistribution.com/abe9b25ee1e14614b4e5d20c3d057f00-512x512.jpeg",
    url:"https://hexanaut.io",dev:"Exodragon Games",yr:2022,tech:"HTML5",yt:"DxoSXqIABqU",
    desc:"Expand your hexagonal empire by capturing territory. Grow your trail to dominate the map.",
    ctrl:[["Move","Mouse"]]},
-
   {id:7,t:"Kour.io",cats:["io","shooting","action","new"],tags:["fps","multiplayer","gun","modern"],
    th:"https://img.gamedistribution.com/f09f84a9cd304fcfb9c8e50b98d37048-512x512.jpeg",
    url:"https://kour.io",dev:"Team Kour",yr:2022,tech:"WebGL",yt:"Ttu3yt4lbzk",
    desc:"Modern fast-paced browser FPS with multiple maps and competitive ranked matches.",
    ctrl:[["Move","W A S D"],["Shoot","Left Click"],["ADS","Right Click"],["Reload","R"],["Jump","Space"]]},
-
   {id:8,t:"Gulper.io",cats:["io","cant-stop"],tags:["snake","neon","multiplayer"],
    th:"https://img.gamedistribution.com/af7e7d9afe4d49908a64a98e8faa6c5d-512x512.jpeg",
    url:"https://gulper.io",dev:"Voodoo",yr:2019,tech:"HTML5",yt:"rFNuBnqyp5s",
    desc:"Neon-style slither-like snake game with smooth controls. Grow your snake by eating pellets and eliminating players.",
    ctrl:[["Move","Mouse"],["Boost","Left Click"]]},
-
   {id:9,t:"1v1.LOL",cats:["io","2player","shooting","featured"],tags:["build","shoot","battle"],
    th:"https://img.gamedistribution.com/aced5392edca4e809f5d98e84e5fbe39-512x512.jpeg",
    url:"https://1v1.lol",dev:"Lior Alterman",yr:2019,tech:"WebGL",yt:"MIrBe0XkBgI",
    desc:"Build, edit, and eliminate in this fast-paced building shooter. Practice in 1v1 or box fight modes.",
    ctrl:[["Move","W A S D"],["Build","Q E R F"],["Shoot","Left Click"],["Jump","Space"]]},
-
   {id:10,t:"Venge.io",cats:["io","shooting","top-picks"],tags:["fps","multiplayer","competitive","gun"],
    th:"https://img.gamedistribution.com/1b6f1b0c4c3e4e5bbc43e6c9e7d0ebe3-512x512.jpeg",
    url:"https://venge.io",dev:"Cem Demir",yr:2020,tech:"WebGL",yt:"K3RZzEIiHFg",
    desc:"Objective-based browser FPS with team modes, ranked matches, and smooth gunplay.",
    ctrl:[["Move","W A S D"],["Jump","Space"],["Shoot","Left Click"],["Scope","Right Click"]]},
-
-  {id:11,t:"Time Shooter 2",cats:["action","shooting","top-picks"],tags:["fps","slow-motion","time","shooter"],
-   th:"https://img.gamedistribution.com/c2d3e4f5a6b748c9d0e1f2a3b4c5d6e7-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/time-shooter-2",dev:"GoGoMan",yr:2022,tech:"WebGL",yt:"TxqGWbhY3FA",
-   desc:"Time only moves when you move. A mind-bending FPS where you must think fast in slow motion.",
-   ctrl:[["Move","W A S D"],["Shoot","Left Click"],["Pick Up","E"]]},
-
-  {id:12,t:"Time Shooter 3 SWAT",cats:["action","shooting","new"],tags:["fps","slow-motion","swat","shooter"],
-   th:"https://img.gamedistribution.com/d3e4f5a6b7c849d0e1f2a3b4c5d6e7f8-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/time-shooter-3-swat",dev:"GoGoMan",yr:2023,tech:"WebGL",yt:"TxqGWbhY3FA",
-   desc:"SWAT edition of Time Shooter. Infiltrate buildings and eliminate terrorists in slow-motion tactical combat.",
-   ctrl:[["Move","W A S D"],["Shoot","Left Click"]]},
-
-  {id:13,t:"Ragdoll Archers",cats:["action","2player","cant-stop"],tags:["archery","physics","ragdoll","casual"],
-   th:"https://img.gamedistribution.com/e4f5a6b7c8d950e1f2a3b4c5d6e7f8a9-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/ragdoll-archers",dev:"Pelican Studio",yr:2021,tech:"HTML5",yt:"zfJuUkIxMBk",
-   desc:"Pull back, aim, and fire arrows at opponents in this hilarious physics-based archery game.",
-   ctrl:[["Aim","Mouse"],["Shoot","Left Click"]]},
-
-  {id:14,t:"Funny Shooter 2",cats:["action","shooting","featured"],tags:["shooter","fps","fun"],
-   th:"https://img.gamedistribution.com/f5a6b7c8d9e061f2a3b4c5d6e7f8a9b0-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/funny-shooter-2",dev:"Dreamgate",yr:2022,tech:"WebGL",yt:"HHbsomSe6oQ",
-   desc:"Shoot down waves of funny-looking enemies in this chaotic FPS. Unlock new weapons and upgrade your arsenal.",
-   ctrl:[["Move","W A S D"],["Shoot","Left Click"],["Reload","R"]]},
-
   {id:15,t:"Drift Hunters",cats:["driving","top-picks","cant-stop"],tags:["drift","racing","car","3d"],
    th:"https://img.gamedistribution.com/5f65fd71af82445db2a4476600cbf9fe-512x512.jpeg",
    url:"https://drifthunters.io",dev:"Nitro Studios",yr:2020,tech:"WebGL",yt:"UCpJ1vpMJos",
    desc:"Realistic drift racing with tunable cars and beautiful tracks. Earn currency to upgrade your car for maximum drift scores.",
    ctrl:[["Accelerate","W"],["Brake","S"],["Turn","A D"],["Handbrake","Space"]]},
-
-  {id:16,t:"Moto X3M",cats:["driving","featured"],tags:["bike","racing","stunt"],
-   th:"https://img.gamedistribution.com/b7c8d9e0f1a283b4c5d6e7f8a9b0c1d2-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/moto-x3m",dev:"MadPuffers",yr:2016,tech:"HTML5",yt:"YvP8AGTMaJ8",
-   desc:"Race your motorbike through treacherous obstacle courses. Perform stunts and avoid explosions.",
-   ctrl:[["Accelerate","Right Arrow"],["Brake","Left Arrow"],["Lean","Up / Down"]]},
-
-  {id:17,t:"Moto X3M Pool Party",cats:["driving","new"],tags:["bike","racing","summer","water"],
-   th:"https://img.gamedistribution.com/c8d9e0f1a2b394c5d6e7f8a9b0c1d2e3-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/moto-x3m-pool-party",dev:"MadPuffers",yr:2019,tech:"HTML5",yt:"YvP8AGTMaJ8",
-   desc:"Pool party edition of Moto X3M with water-themed levels featuring pools, slides, and inflatable obstacles.",
-   ctrl:[["Accelerate","Right Arrow"],["Brake","Left Arrow"],["Lean","Up / Down"]]},
-
-  {id:18,t:"Racing Limits",cats:["driving","cant-stop"],tags:["racing","highway","speed","traffic"],
-   th:"https://img.gamedistribution.com/d9e0f1a2b3c4a5d6e7f8a9b0c1d2e3f4-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/racing-limits",dev:"SBGames",yr:2021,tech:"WebGL",yt:"NkW4KTBVHFU",
-   desc:"Weave through traffic at insane speeds in this 3D highway racing game with dozens of real cars.",
-   ctrl:[["Steer","A D"],["Accelerate","W"],["Brake","S"],["Nitro","Shift"]]},
-
   {id:19,t:"Forge of Empires",cats:["strategy","featured"],tags:["city-building","strategy","historical"],
-   th:"https://img.gamedistribution.com/e0f1a2b3c4d5b6e7f8a9b0c1d2e3f4a5-512x512.jpeg",
+   th:"https://static.innogames.com/forgeofempires/en_EN/images/social/og-image.jpg",
    url:"https://us.forgeofempires.com",dev:"InnoGames",yr:2012,tech:"HTML5",yt:"Qez3DKdBBt8",
    desc:"Build your city from the Stone Age to the Future. Research technologies and forge a powerful empire.",
    ctrl:[["Navigate","Mouse / Click"]]},
-
   {id:20,t:"Goodgame Empire",cats:["strategy","friends"],tags:["medieval","castle","strategy","multiplayer"],
-   th:"https://img.gamedistribution.com/f1a2b3c4d5e6c7f8a9b0c1d2e3f4a5b6-512x512.jpeg",
+   th:"https://images.goodgamestudios.com/goodgame-empire/en_US/og-image.jpg",
    url:"https://empire.goodgamestudios.com",dev:"Goodgame Studios",yr:2011,tech:"HTML5",yt:"vc_pZ0ZhKaA",
    desc:"Build powerful castles, raise armies, and conquer enemy fortresses in this medieval strategy game.",
    ctrl:[["Navigate","Mouse / Click"]]},
-
-  {id:21,t:"Idle Mining Empire",cats:["strategy","clicker","cant-stop"],tags:["idle","tycoon","mining","clicker"],
-   th:"https://img.gamedistribution.com/a2b3c4d5e6f7d8a9b0c1d2e3f4a5b6c7-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/idle-mining-empire",dev:"Clicker Games",yr:2020,tech:"HTML5",yt:"iZ8C7GUKXZE",
-   desc:"Build the ultimate mining operation! Hire workers, upgrade equipment, and automate your mine.",
-   ctrl:[["Click","Left Click"]]},
-
   {id:22,t:"2048",cats:["puzzle","cant-stop","top-picks"],tags:["number","casual","math","puzzle"],
-   th:"https://img.gamedistribution.com/b3c4d5e6f7a8e9b0c1d2e3f4a5b6c7d8-512x512.jpeg",
+   th:"https://play2048.co/img/2048.png",
    url:"https://play2048.co",dev:"Gabriele Cirulli",yr:2014,tech:"HTML5",yt:"ByVMstaMCCc",
    desc:"The classic addictive number-joining puzzle. Slide tiles, combine matching numbers, and reach 2048.",
    ctrl:[["Slide","Arrow Keys"]]},
-
-  {id:23,t:"Mahjongg Solitaire",cats:["puzzle","featured"],tags:["mahjong","tile","classic","relaxing"],
-   th:"https://img.gamedistribution.com/c4d5e6f7a8b9f0c1d2e3f4a5b6c7d8e9-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/mahjong-solitaire",dev:"Casual Studio",yr:2019,tech:"HTML5",yt:"2j0MeWw0Pto",
-   desc:"Match and clear tiles using traditional Chinese tile patterns across hundreds of beautiful layouts.",
-   ctrl:[["Select","Left Click"]]},
-
-  {id:24,t:"Basketball Stars",cats:["sports","2player","featured"],tags:["basketball","sports","competitive","3d"],
-   th:"https://img.gamedistribution.com/d5e6f7a8b9c0a1d2e3f4a5b6c7d8e9f0-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/basketball-stars",dev:"Miniclip",yr:2017,tech:"WebGL",yt:"RBT4gH3yUak",
-   desc:"Dribble, dunk, and dazzle in this competitive 3D basketball game. Rise to become a Basketball Star.",
-   ctrl:[["Move","W A S D"],["Shoot","K"],["Dribble","Space"]]},
-
-  {id:25,t:"8 Ball Billiards",cats:["sports","cant-stop","2player"],tags:["pool","billiards","sports","classic"],
-   th:"https://img.gamedistribution.com/e6f7a8b9c0d1b2e3f4a5b6c7d8e9f0a1-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/8-ball-billiards-classic",dev:"Casual Games",yr:2018,tech:"HTML5",yt:"mYPdWNwGMR8",
-   desc:"High-quality 8-ball pool with realistic physics. Play solo or challenge a friend.",
-   ctrl:[["Aim","Mouse"],["Power / Shoot","Click and Drag"]]},
-
   {id:26,t:"Diep.io",cats:["adventure","io","cant-stop"],tags:["tank","io","shooter","upgrade"],
-   th:"https://img.gamedistribution.com/f7a8b9c0d1e2c3f4a5b6c7d8e9f0a1b2-512x512.jpeg",
+   th:"https://diep.io/img/diep2.png",
    url:"https://diep.io",dev:"Matheus Valadares",yr:2016,tech:"HTML5",yt:"ZilRBsxXXOA",
    desc:"Grow your tank and conquer the arena. Destroy shapes and enemy tanks to level up and unlock upgrades.",
    ctrl:[["Move","W A S D"],["Shoot","Left Click"],["Upgrade","1-9"]]},
-
   {id:27,t:"Surviv.io",cats:["adventure","io","top-picks","action"],tags:["battle-royale","top-down","survival"],
-   th:"https://img.gamedistribution.com/a8b9c0d1e2f3d4a5b6c7d8e9f0a1b2c3-512x512.jpeg",
+   th:"https://surviv.io/img/logo.png",
    url:"https://surviv.io",dev:"Justin Kim",yr:2018,tech:"HTML5",yt:"H_JoA9IFuLo",
    desc:"The original 2D battle royale browser game. Drop into the island, loot weapons, and be the last standing.",
    ctrl:[["Move","W A S D"],["Aim","Mouse"],["Fire","Left Click"],["Loot","F"]]},
-
   {id:28,t:"Agar.io",cats:["io","cant-stop","top-picks"],tags:["cell","mass","multiplayer"],
-   th:"https://img.gamedistribution.com/e2f3a4b5c6d7b8e9f0a1b2c3d4e5f6a7-512x512.jpeg",
+   th:"https://agar.io/img/logo.png",
    url:"https://agar.io",dev:"Matheus Valadares",yr:2015,tech:"HTML5",yt:"tWPnFnfJC1I",
    desc:"The original .io game. Eat smaller cells to grow and avoid being eaten. Simple mechanics, deep gameplay.",
    ctrl:[["Move","Mouse"],["Split","Space"],["Eject Mass","W"]]},
-
   {id:29,t:"Slither.io",cats:["io","cant-stop"],tags:["snake","multiplayer","casual"],
-   th:"https://img.gamedistribution.com/f3a4b5c6d7e8c9f0a1b2c3d4e5f6a7b8-512x512.jpeg",
+   th:"https://slither.io/img/slither.png",
    url:"https://slither.io",dev:"Steve Howse",yr:2016,tech:"HTML5",yt:"EixVNMQmPSU",
    desc:"Grow the longest snake on the server. Trap enemies and consume their remains to become the biggest.",
    ctrl:[["Move","Mouse"],["Boost","Left Click"]]},
-
   {id:30,t:"Cookie Clicker",cats:["clicker","cant-stop","top-picks"],tags:["idle","cookie","clicker","classic"],
-   th:"https://img.gamedistribution.com/c0d1e2f3a4b5f6c7d8e9f0a1b2c3d4e5-512x512.jpeg",
+   th:"https://orteil.dashnet.org/cookieclicker/img/favicon.png",
    url:"https://orteil.dashnet.org/cookieclicker/",dev:"Orteil",yr:2013,tech:"HTML5",yt:"RhS1FN0PNPE",
    desc:"The legendary idle clicker. Click the big cookie to bake cookies, then buy upgrades to bake even more.",
    ctrl:[["Click","Left Click"]]},
-
-  {id:31,t:"Among Us Online",cats:["friends","io","featured"],tags:["social","deduction","crewmate","impostor"],
-   th:"https://img.gamedistribution.com/a4b5c6d7e8f9d0a1b2c3d4e5f6a7b8c9-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/among-us-online",dev:"InnerSloth",yr:2018,tech:"HTML5",yt:"NSgVqpBXa3E",
-   desc:"Complete tasks as a Crewmate or deceive everyone as the Impostor in this social deduction browser game.",
-   ctrl:[["Move","W A S D"],["Interact","F"],["Kill / Report","Q"]]},
-
   {id:32,t:"Skribbl.io",cats:["friends","2player","cant-stop"],tags:["drawing","guessing","casual","party"],
-   th:"https://img.gamedistribution.com/b5c6d7e8f9a0e1b2c3d4e5f6a7b8c9d0-512x512.jpeg",
+   th:"https://skribbl.io/img/logo.png",
    url:"https://skribbl.io",dev:"skribbl.io",yr:2016,tech:"HTML5",yt:"GEuWLGnABNM",
    desc:"The ultimate online drawing and guessing game. Draw words or guess what your friends are scrawling.",
    ctrl:[["Draw","Mouse"],["Guess","Type in Chat"]]},
-
   {id:33,t:"Slope",cats:["cant-stop","top-picks","new"],tags:["ball","endless","speed","reflex"],
-   th:"https://img.gamedistribution.com/d7e8f9a0b1c2a3d4e5f6a7b8c9d0e1f2-512x512.jpeg",
+   th:"https://slope.game/img/logo.png",
    url:"https://slope.game",dev:"RobKayS",yr:2014,tech:"WebGL",yt:"RjuWOKYKYCE",
    desc:"Roll down an endless slope at insane speeds, dodging obstacles. The further you go, the faster it gets.",
    ctrl:[["Steer","A D / Left Right Arrow"]]},
-
-  {id:34,t:"Fireboy & Watergirl",cats:["2player","friends","puzzle","featured"],tags:["cooperative","puzzle","platform"],
-   th:"https://img.gamedistribution.com/c6d7e8f9a0b1f2c3d4e5f6a7b8c9d0e1-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/fireboy-and-watergirl-1",dev:"Oslo Albet",yr:2009,tech:"HTML5",yt:"9gQajEyPkWY",
-   desc:"Co-op puzzle platformer. Guide Fireboy and Watergirl through temple levels, each controlling their own character.",
-   ctrl:[["Watergirl","W A D"],["Fireboy","Arrow Keys"]]},
-
   {id:35,t:"Minecraft Classic",cats:["top-picks","featured","adventure"],tags:["minecraft","building","sandbox","classic"],
-   th:"https://img.gamedistribution.com/e6c1a60e95504eb2a2d54fa80a4ae0f9-512x512.jpeg",
+   th:"https://classic.minecraft.net/favicon-512.png",
    url:"https://classic.minecraft.net",dev:"Mojang",yr:2019,tech:"HTML5",yt:"6FnCPqJp5mw",
    desc:"Official browser version of classic Minecraft. Build freely in a multiplayer world — no download required.",
    ctrl:[["Move","W A S D"],["Jump","Space"],["Place / Break","Click"]]},
-
   {id:36,t:"Zombs Royale",cats:["new","action","top-picks"],tags:["battle-royale","top-down","shooting","survival"],
-   th:"https://img.gamedistribution.com/d1e2f3a4b5c6a7d8e9f0a1b2c3d4e5f6-512x512.jpeg",
+   th:"https://zombsroyale.io/img/logo.png",
    url:"https://zombsroyale.io",dev:"End Game Studios",yr:2018,tech:"HTML5",yt:"5PkNuTkJjuc",
    desc:"Top-down 2D battle royale with fast gunplay and huge weapon variety. Land, loot, and outlast 99 players.",
    ctrl:[["Move","W A S D"],["Aim","Mouse"],["Shoot","Left Click"],["Reload","R"]]},
-
-  {id:37,t:"Tetris Online",cats:["puzzle","cant-stop","top-picks"],tags:["tetris","classic","puzzle","block"],
-   th:"https://img.gamedistribution.com/b3c4d5e6f7a8e9b0c1d2e3f4a5b6c7d8-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/tetris",dev:"The Tetris Company",yr:2018,tech:"HTML5",yt:"AHNjSJHVuBo",
-   desc:"The iconic block-stacking puzzle game. Clear lines as fast as possible before pieces reach the top.",
-   ctrl:[["Move","Arrow Keys"],["Rotate","Up Arrow"],["Drop","Space"]]},
-
-  {id:38,t:"Getaway Shootout",cats:["2player","action","cant-stop"],tags:["race","battle","physics","party"],
-   th:"https://img.gamedistribution.com/e4f5a6b7c8d950e1f2a3b4c5d6e7f8a9-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/getaway-shootout",dev:"New Eich Games",yr:2018,tech:"HTML5",yt:"8jF2sFxNHv8",
-   desc:"Race and battle your way to the getaway vehicle. Grab weapons, bounce on enemies, and escape first.",
-   ctrl:[["Player 1","W E R"],["Player 2","I O P"]]},
-
   {id:39,t:"Warbrokers.io",cats:["io","new","shooting","action"],tags:["fps","battle-royale","multiplayer","vehicles"],
-   th:"https://img.gamedistribution.com/c6d7e8f9a0b1f2c3d4e5f6a7b8c9d0e1-512x512.jpeg",
+   th:"https://warbrokers.io/img/logo.png",
    url:"https://warbrokers.io",dev:"WarBrokers",yr:2021,tech:"WebGL",yt:"rMqvtC5Cd0M",
    desc:"Battle royale meets team shooter. Drive vehicles, fly helicopters, and wield dozens of weapons across huge maps.",
    ctrl:[["Move","W A S D"],["Shoot","Left Click"],["Enter Vehicle","E"]]},
-
-  {id:40,t:"Clicker Heroes",cats:["clicker","adventure","featured"],tags:["idle","clicker","rpg","heroes"],
-   th:"https://img.gamedistribution.com/d1e2f3a4b5c6a7d8e9f0a1b2c3d4e5f6-512x512.jpeg",
-   url:"https://www.crazygames.com/embed/clicker-heroes",dev:"Playsaurus",yr:2014,tech:"HTML5",yt:"Wco-T4YeqBw",
-   desc:"Level up a party of heroes to automatically slay monsters for gold. Endless idle RPG with prestige mechanics.",
-   ctrl:[["Click Monsters","Left Click"],["Buy Upgrades","Click"]]},
 ];
-
 // ════════════════════════════════════
-//  STATE
+// STATE
 // ════════════════════════════════════
 let favs=[];try{favs=JSON.parse(localStorage.getItem("zn_f")||"[]")}catch(e){}
 let cur=null,loggedIn=false,barHidden=false;
-
 // ════════════════════════════════════
-//  INIT
+// INIT
 // ════════════════════════════════════
 function init(){
   buildSB();
@@ -698,9 +546,8 @@ function init(){
   document.addEventListener("fullscreenchange",onFSC);
   document.addEventListener("webkitfullscreenchange",onFSC);
 }
-
 // ════════════════════════════════════
-//  SIDEBAR
+// SIDEBAR
 // ════════════════════════════════════
 function buildSB(){
   document.getElementById("snav").innerHTML=CATS.map(c=>`
@@ -714,9 +561,8 @@ function toggleSB(){
   document.getElementById("sb-icon").className=
     document.body.classList.contains("sbo")?"fa-solid fa-xmark":"fa-solid fa-bars";
 }
-
 // ════════════════════════════════════
-//  HOME
+// HOME
 // ════════════════════════════════════
 function buildHome(){
   const tp=G.filter(g=>g.cats.includes("top-picks"));
@@ -757,7 +603,6 @@ function buildHome(){
   });
   document.getElementById("hp").innerHTML=h;
 }
-
 function card(g){
   return`<div class="gc" onclick="playGame(${g.id})">
     ${g.cats.includes("new")?'<span class="gbadge">New</span>':""}
@@ -767,14 +612,12 @@ function card(g){
     <div class="gcm">${g.dev} &middot; ${g.yr}</div>
   </div>`;
 }
-
 function scrollR(id,a){
   const el=document.getElementById(id);
   if(el)el.scrollBy({left:a,behavior:"smooth"});
 }
-
 // ════════════════════════════════════
-//  PLAY GAME
+// PLAY GAME
 // ════════════════════════════════════
 function playGame(id){
   cur=G.find(g=>g.id===id);
@@ -802,9 +645,8 @@ function playGame(id){
     </div>`).join("");
   window.scrollTo({top:0,behavior:"smooth"});
 }
-
 // ════════════════════════════════════
-//  FULLSCREEN
+// FULLSCREEN
 // ════════════════════════════════════
 function goFS(){
   const el=document.getElementById("gio");
@@ -835,9 +677,8 @@ function hideBar(){
   document.getElementById("fsbar").classList.remove("on");
   toast("Bar hidden — exit fullscreen to restore it");
 }
-
 // ════════════════════════════════════
-//  CATEGORY
+// CATEGORY
 // ════════════════════════════════════
 function showCat(id){
   const cat=CATS.find(c=>c.id===id);
@@ -851,9 +692,8 @@ function showCat(id){
   });
   window.scrollTo({top:0});
 }
-
 // ════════════════════════════════════
-//  SEARCH
+// SEARCH
 // ════════════════════════════════════
 const TM={
   "gun":["gun","shooting","fps","shooter"],"soccer":["sports","football","soccer"],
@@ -885,9 +725,8 @@ function doSearch(){
     :`<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:50px 20px">No results for "${q}" — try another keyword.</div>`;
   window.scrollTo({top:0});
 }
-
 // ════════════════════════════════════
-//  PAGE ROUTER
+// PAGE ROUTER
 // ════════════════════════════════════
 function showPg(id){
   document.querySelectorAll(".page").forEach(p=>{
@@ -905,9 +744,8 @@ function goHome(){
   document.querySelectorAll(".si").forEach(el=>el.classList.remove("active"));
   window.scrollTo({top:0});
 }
-
 // ════════════════════════════════════
-//  GAME ACTIONS
+// GAME ACTIONS
 // ════════════════════════════════════
 function likeGame(){
   if(!cur)return;
@@ -935,9 +773,8 @@ function shareGame(){
   else toast("Share: "+u);
 }
 function updateFC(){document.getElementById("fc").textContent=favs.length}
-
 // ════════════════════════════════════
-//  FAVORITES
+// FAVORITES
 // ════════════════════════════════════
 function openFavs(){
   const fgs=favs.map(id=>G.find(g=>g.id===id)).filter(Boolean);
@@ -951,9 +788,8 @@ function openFavs(){
   document.getElementById("fm").classList.add("on");
 }
 function closeFM(){document.getElementById("fm").classList.remove("on")}
-
 // ════════════════════════════════════
-//  NOTIFICATIONS
+// NOTIFICATIONS
 // ════════════════════════════════════
 const NOTIFS=[
   {icon:"fa-fire",text:"Bloxd.io received a major update with new game modes!",time:"2 hours ago"},
@@ -969,18 +805,16 @@ function openNotifs(){
   document.getElementById("nm").classList.add("on");
 }
 function closeNM(){document.getElementById("nm").classList.remove("on")}
-
 // ════════════════════════════════════
-//  USER
+// USER
 // ════════════════════════════════════
 function toggleUser(){
   loggedIn=!loggedIn;
   document.getElementById("uico").style.color=loggedIn?"#fff":"var(--pl)";
   toast(loggedIn?"Signed in as Guest":"Signed out");
 }
-
 // ════════════════════════════════════
-//  TOAST
+// TOAST
 // ════════════════════════════════════
 let tt;
 function toast(msg){
@@ -990,11 +824,9 @@ function toast(msg){
   clearTimeout(tt);
   tt=setTimeout(()=>el.classList.remove("on"),2800);
 }
-
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"){closeCM();closeFM();closeNM();}
 });
-
 window.addEventListener("DOMContentLoaded",init);
 </script>
 </body>
