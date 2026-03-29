@@ -164,9 +164,10 @@
       display: flex; align-items: center; justify-content: center;
       border-radius: 8px; font-size: 15px;
       background: var(--bg3);
+      color: var(--purple-light);
       transition: background 0.2s;
     }
-    .snav-item:hover .snav-icon { background: var(--bg4); }
+    .snav-item:hover .snav-icon { background: var(--bg4); color: var(--purple-light); }
     .snav-item.active .snav-icon { background: var(--purple-dim); color: var(--purple-light); }
     .snav-label { font-size: 13.5px; font-weight: 500; opacity: 0; transition: opacity 0.2s 0.05s; }
     #sidebar:hover .snav-label, body.sidebar-open #sidebar .snav-label { opacity: 1; }
@@ -507,6 +508,16 @@
     <span class="logo-text">Zonely</span>
   </a>
 
+  <button id="sidebar-toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar" style="
+    width:38px;height:38px;border-radius:10px;
+    background:var(--bg3);border:1px solid var(--border);
+    color:var(--purple-light);font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex-shrink:0;transition:all 0.2s;margin-left:8px;
+  ">
+    <i class="fa-solid fa-bars" id="sidebar-toggle-icon"></i>
+  </button>
+
   <div class="search-wrap">
     <i class="fa-solid fa-magnifying-glass"></i>
     <input id="search-input" type="text" placeholder="Search games — try 'gun', 'soccer', 'racing'..."
@@ -522,9 +533,8 @@
       <i class="fa-solid fa-heart"></i>
       <span id="fav-count">0</span>
     </button>
-    <button class="hbtn user-btn" onclick="toggleUser()">
-      <div class="user-avatar" id="user-avatar">G</div>
-      <span id="user-label">Sign in</span>
+    <button class="hbtn" onclick="toggleUser()" title="Profile" style="width:38px">
+      <i class="fa-solid fa-circle-user" id="user-icon" style="font-size:18px;color:var(--purple-light)"></i>
     </button>
   </div>
 </header>
@@ -1096,11 +1106,22 @@ function closeNotifs() { document.getElementById("notif-modal").classList.remove
 // ═══════════════════════════════════════════
 //  USER
 // ═══════════════════════════════════════════
+function toggleSidebar() {
+  document.body.classList.toggle("sidebar-open");
+  const icon = document.getElementById("sidebar-toggle-icon");
+  if (document.body.classList.contains("sidebar-open")) {
+    icon.className = "fa-solid fa-xmark";
+  } else {
+    icon.className = "fa-solid fa-bars";
+  }
+}
+
 function toggleUser() {
   userLoggedIn = !userLoggedIn;
-  document.getElementById("user-avatar").textContent = userLoggedIn ? "A" : "G";
-  document.getElementById("user-label").textContent = userLoggedIn ? "Alex R." : "Sign in";
-  toast(userLoggedIn ? "Signed in as Alex Rivera" : "Signed out");
+  const icon = document.getElementById("user-icon");
+  icon.style.color = userLoggedIn ? "#fff" : "var(--purple-light)";
+  icon.className = userLoggedIn ? "fa-solid fa-circle-user" : "fa-solid fa-circle-user";
+  toast(userLoggedIn ? "Signed in as Guest User" : "Signed out");
 }
 
 // ═══════════════════════════════════════════
