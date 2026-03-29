@@ -138,25 +138,23 @@ body.sbo #main{margin-left:var(--sw)}
 .arr.l{left:-13px}.arr.r{right:-13px}
 
 /* GAME CARD */
-.const GameCard = ({ isRow = false, game }) => {
-  return (
-    <div 
-      className={`relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:z-10 bg-cg-grey ${isRow ? 'min-w-[200px]' : 'w-full'} aspect-video`}
-    >
-      {/* Thumbnail Only - Video logic removed */}
-      <img 
-        src={game.th} 
-        alt={game.t} 
-        className="w-full h-full object-cover" 
-        onerror="this.onerror=null; this.src='https://placehold.co/512x512/1a1a2e/7c3aed?text=' + encodeURIComponent('${game.t}')"
-      />
-      
-      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
-        <p className="text-xs font-bold truncate">{game.t}</p>
-      </div>
-    </div>
-  );
-};
+.gc{
+  flex-shrink:0;width:192px;cursor:pointer;
+  border-radius:var(--r);overflow:hidden;background:var(--bg3);
+  transition:transform .25s cubic-bezier(.4,0,.2,1),box-shadow .25s;
+}
+.gc:hover{transform:scale(1.04);box-shadow:0 8px 28px rgba(124,58,237,.2)}
+.hgrid .gc,.rgrid .gc,.cgrid .gc{width:auto}
+.gt{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#0a0a14}
+.gt img{width:100%;height:100%;object-fit:cover;display:block}
+.gbadge{
+  position:absolute;top:7px;left:7px;
+  background:var(--purple);color:#fff;
+  font-size:9px;font-weight:700;letter-spacing:.4px;
+  padding:2px 7px;border-radius:5px;text-transform:uppercase;
+}
+.gcn{padding:8px 10px 5px;font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gcm{padding:0 10px 9px;font-size:11px;color:var(--muted)}
 
 /* RESULTS / CAT GRIDS */
 .rgrid,.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:12px}
@@ -628,7 +626,7 @@ const G=[
    ctrl:[["Move","W A S D"],["Interact","F"],["Kill / Report","Q"]]},
 
   {id:32,t:"Skribbl.io",cats:["friends","2player","cant-stop"],tags:["drawing","guessing","casual","party"],
-   th:"https://img.gamedistribution.com/b5c6d7e8f9a0e1b2c3d4e5f6a7b8c9d0-512x512.jpeg",
+   th:"https://amongusfree.io/data/image/game/skribblio.jpg",
    url:"https://skribbl.io",dev:"skribbl.io",yr:2016,tech:"HTML5",yt:"GEuWLGnABNM",
    desc:"The ultimate online drawing and guessing game. Draw words or guess what your friends are scrawling.",
    ctrl:[["Draw","Mouse"],["Guess","Type in Chat"]]},
@@ -771,6 +769,97 @@ onerror="this.onerror=null; this.src='https://placehold.co/512x512/1a1a2e/7c3aed
 
 
 // ════════════════════════════════════
+//  STATE
+// ════════════════════════════════════
+let favs=[];try{favs=JSON.parse(localStorage.getItem("zn_f")||"[]")}catch(e){}
+let cur=null,loggedIn=false,barHidden=false;
+
+// ════════════════════════════════════
+//  INIT
+// ════════════════════════════════════
+function init(){
+  buildSB();
+  buildHome();
+  updateFC();
+  document.addEventListener("fullscreenchange",onFSC);
+  document.addEventListener("webkitfullscreenchange",onFSC);
+}
+
+// ════════════════════════════════════
+//  SIDEBAR
+// ════════════════════════════════════
+function buildSB(){
+  document.getElementById("snav").innerHTML=CATS.map(c=>`
+    <div class="si" onclick="showCat('${c.id}')">
+      <div class="sic"><i class="fa-solid ${c.icon}"></i></div>
+      <span class="sil">${c.label}</span>
+    </div>`).join("");
+}
+function toggleSB(){
+  document.body.classList.toggle("sbo");
+  document.getElementById("sb-icon").className=
+    document.body.classList.contains("sbo")?"fa-solid fa-xmark":"fa-solid fa-bars";
+}
+
+// ════════════════════════════════════
+//  HOME
+// ════════════════════════════════════
+function buildHome(){
+  const tp=G.filter(g=>g.cats.includes("top-picks"));
+  let h=`
+    <div class="pgt">Welcome to Zonely</div>
+    <p class="pgs">Thousands of free browser games — no download required</p>
+    <div class="sec">
+      <div class="sechd">
+        <span class="sect">Top Picks For You</span>
+        <button class="va" onclick="showCat('top-picks')">View All <i class="fa-solid fa-chevron-right" style="font-size:10px"></i></button>
+      </div>
+      <div class="hgrid">${tp.slice(0,7).map(g=>card(g)).join("")}</div>
+    </div>`;
+  [
+    {id:"featured",lb:"Featured Games"},{id:"io",lb:"IO & Multiplayer"},
+    {id:"2player",lb:"2 Player Games"},{id:"cant-stop",lb:"Can't Stop Playing"},
+    {id:"friends",lb:"Play with Friends"},{id:"new",lb:"New Games"},
+    {id:"action",lb:"Action & Shooters"},{id:"driving",lb:"Driving Games"},
+    {id:"shooting",lb:"Shooting Games"},{id:"puzzle",lb:"Puzzle Games"},
+    {id:"adventure",lb:"Adventure Games"},{id:"strategy",lb:"Strategy & Management"},
+    {id:"clicker",lb:"Clicker Games"},{id:"sports",lb:"Sports Games"},
+  ].forEach(s=>{
+    const gs=G.filter(g=>g.cats.includes(s.id));
+    if(!gs.length)return;
+    const rid="r_"+s.id;
+    h+=`
+      <div class="sec">
+        <div class="sechd">
+          <span class="sect">${s.lb}</span>
+          <button class="va" onclick="showCat('${s.id}')">View All <i class="fa-solid fa-chevron-right" style="font-size:10px"></i></button>
+        </div>
+        <div class="rw">
+          <button class="arr l" onclick="scrollR('${rid}',-480)"><i class="fa-solid fa-chevron-left"></i></button>
+          <div class="sr" id="${rid}">${gs.map(g=>card(g)).join("")}</div>
+          <button class="arr r" onclick="scrollR('${rid}',480)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>`;
+  });
+  document.getElementById("hp").innerHTML=h;
+}
+
+function card(g){
+  return`<div class="gc" onclick="playGame(${g.id})">
+    ${g.cats.includes("new")?'<span class="gbadge">New</span>':""}
+    <div class="gt"><img src="${g.th}" alt="${g.t}" loading="lazy"
+      onerror="this.style.opacity=0"></div>
+    <div class="gcn">${g.t}</div>
+    <div class="gcm">${g.dev} &middot; ${g.yr}</div>
+  </div>`;
+}
+
+function scrollR(id,a){
+  const el=document.getElementById(id);
+  if(el)el.scrollBy({left:a,behavior:"smooth"});
+}
+
+// ════════════════════════════════════
 //  PLAY GAME
 // ════════════════════════════════════
 function playGame(id){
@@ -789,15 +878,16 @@ function playGame(id){
     <span class="gmi"><i class="fa-solid fa-globe"></i>Browser Playable</span>`;
   document.getElementById("ytf").src=`https://www.youtube.com/embed/${cur.yt}?rel=0`;
   const sim=G.filter(g=>g.id!==cur.id&&g.cats.some(c=>cur.cats.includes(c))).slice(0,14);
- document.getElementById("siml").innerHTML=sim.map(g=>`
-<div class="simcard" onclick="playGame(${g.id})">
-<img class="simthumb" src="${g.th}" alt="${g.t}" onerror="this.onerror=null; this.src='https://placehold.co/150x100/1a1a2e/7c3aed?text=' + encodeURIComponent('${g.t}')">
-<div class="siminfo">
-<div class="simname">${g.t}</div>
-<div class="simmeta">${g.dev} &middot; ${g.yr}</div>
-</div>
-</div>`).join("");
-
+  document.getElementById("siml").innerHTML=sim.map(g=>`
+    <div class="simcard" onclick="playGame(${g.id})">
+      <img class="simthumb" src="${g.th}" alt="${g.t}" onerror="this.style.display='none'">
+      <div class="siminfo">
+        <div class="simname">${g.t}</div>
+        <div class="simmeta">${g.dev} &middot; ${g.yr}</div>
+      </div>
+    </div>`).join("");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
 
 // ════════════════════════════════════
 //  FULLSCREEN
@@ -937,13 +1027,14 @@ function updateFC(){document.getElementById("fc").textContent=favs.length}
 // ════════════════════════════════════
 function openFavs(){
   const fgs=favs.map(id=>G.find(g=>g.id===id)).filter(Boolean);
-document.getElementById("fmg").innerHTML=fgs.length
-?fgs.map(g=>`
-<div class="fitem" onclick="playGame(${g.id});closeFM()">
-<img src="${g.th}" alt="${g.t}" onerror="this.onerror=null; this.src='https://placehold.co/512x512/1a1a2e/7c3aed?text=' + encodeURIComponent('${g.t}')">
-<div class="filab">${g.t}</div>
-</div>`).join("")
-:`<div class="empty" style="grid-column:1/-1"><i class="fa-regular fa-heart"></i>No favorites yet. Like a game to save it here.</div>`;
+  document.getElementById("fmg").innerHTML=fgs.length
+    ?fgs.map(g=>`
+        <div class="fitem" onclick="playGame(${g.id});closeFM()">
+          <img src="${g.th}" alt="${g.t}" onerror="this.style.display='none'">
+          <div class="filab">${g.t}</div>
+        </div>`).join("")
+    :`<div class="empty" style="grid-column:1/-1"><i class="fa-regular fa-heart"></i>No favorites yet. Like a game to save it here.</div>`;
+  document.getElementById("fm").classList.add("on");
 }
 function closeFM(){document.getElementById("fm").classList.remove("on")}
 
@@ -994,4 +1085,3 @@ window.addEventListener("DOMContentLoaded",init);
 </script>
 </body>
 </html>
-
